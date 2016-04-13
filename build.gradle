@@ -1,0 +1,189 @@
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1"
+        classpath "com.bmuschko:gradle-docker-plugin:2.6.8"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
+apply plugin: "com.bmuschko.docker-remote-api"
+
+apply from: "$rootDir/gradle/additional-artifacts.gradle"
+apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/documentation.gradle"
+apply from: "$rootDir/gradle/publishing.gradle"
+apply from: "$rootDir/gradle/release.gradle"
+
+dependencies {
+    compile ('org.apache.jclouds:jclouds-core:1.9.2') 
+    compile ('org.apache.jclouds.driver:jclouds-okhttp:1.9.2') 
+    compile ('com.google.auto.service:auto-service:1.0-rc2') 
+    compile ('com.google.auto.value:auto-value:1.1')
+    
+    testCompile ('org.apache.jclouds:jclouds-core:1.9.2:tests')
+    testCompile ('org.testng:testng:6.8.21') 
+    testCompile ('org.assertj:assertj-core:1.7.0') 
+    testCompile ('com.squareup.okhttp:mockwebserver:2.2.0') 
+    testCompile ('org.apache.jclouds.driver:jclouds-slf4j:1.9.2') 
+    testCompile ('ch.qos.logback:logback-core:1.1.2') 
+    testCompile ('ch.qos.logback:logback-classic:1.1.2')
+}
+
+ext.compatibilityVersion = '1.7'
+sourceCompatibility = compatibilityVersion
+targetCompatibility = compatibilityVersion
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Jenkins REST client',
+                   'Implementation-Version': version,
+                   'Built-By': System.getProperty('user.name'),
+                   'Built-Date': new Date(),
+                   'Built-JDK': System.getProperty('java.version'),
+                   'Built-Gradle': gradle.gradleVersion
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ["-Xlint:-options"]
+}
+
+task mockTest(type: Test) {
+    useTestNG() 
+	include "**/*MockTest.class"
+	testLogging {
+		showStandardStreams = true
+		events 'started', 'passed', 'failed'
+	}
+}
+
+task integTest(type: Test, dependsOn: ['mockTest']) {
+    useTestNG() 
+    include "**/**LiveTest.class"
+    testLogging {
+        showStandardStreams = true
+        events 'started', 'passed', 'failed'
+    } 
+    doFirst {
+    	String runtimeURL = bootstrapDocker ? "http://${getLocalHost()}:8080" : "${testJenkinsEndpoint}"
+    	systemProperties = ["test.jenkins.endpoint" : runtimeURL]
+    }
+}
+
+if (bootstrapDocker) {
+	def integTestTask = project.tasks.getByName('integTest')
+	integTestTask.dependsOn('startNode')
+	integTestTask.finalizedBy('teardownNode')
+}
+
+artifactory {
+	contextUrl = artifactoryURL
+	publish {
+		repository {
+			repoKey = version.endsWith('-SNAPSHOT') ? snapshotRepository : releaseRepository
+			username = artifactoryUser
+			password = artifactoryPassword
+			maven = true
+		}
+		defaults {
+			publications ('artifactoryJava')
+		}
+	}
+}
+
+publishing {
+	publications {
+		artifactoryJava(MavenPublication) {
+			from components.java
+			artifact sourcesJar
+			artifact javadocJar
+		}
+	}
+}
+
+docker {
+    url = testDockerEndpoint
+}
+
+ext.jenkinsContainerName = "jenkins-integ-test"
+
+task inspectNode(type: com.bmuschko.gradle.docker.tasks.container.DockerInspectContainer) {
+    targetContainerId { jenkinsContainerName }
+}
+
+task pullImage(type: com.bmuschko.gradle.docker.tasks.image.DockerPullImage) {
+    repository = testJenkinsImage
+    tag = testJenkinsTag
+}
+
+task stopNode(type: com.bmuschko.gradle.docker.tasks.container.DockerStopContainer) {
+    onlyIf { checkNode() }
+    dependsOn pullImage
+    targetContainerId { jenkinsContainerName }
+    timeout = 30
+}
+
+task removeNode(type: com.bmuschko.gradle.docker.tasks.container.DockerRemoveContainer) {
+    onlyIf { checkNode() }
+    dependsOn stopNode
+    targetContainerId { jenkinsContainerName }
+    removeVolumes = true
+    force = true
+}
+
+task createNode(type: com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer) {
+    dependsOn removeNode
+    targetImageId { pullImage.repository + ":" + pullImage.tag }
+    containerName = jenkinsContainerName
+    portBindings = ['8080:8080']
+}
+
+task startNode(type: com.bmuschko.gradle.docker.tasks.container.DockerStartContainer) {
+    dependsOn createNode
+    targetContainerId { createNode.getContainerId() }
+    doLast {
+    	logger.quiet "Sleeping for 20 seconds to allow container to init..."
+    	sleep(20000)
+    }
+}
+
+task postTestStopNode(type: com.bmuschko.gradle.docker.tasks.container.DockerStopContainer) {
+    targetContainerId { jenkinsContainerName }
+    timeout = 30
+}
+
+task teardownNode(type: com.bmuschko.gradle.docker.tasks.container.DockerRemoveContainer) {
+    dependsOn postTestStopNode
+    targetContainerId { jenkinsContainerName }
+    removeVolumes = true
+    force = true
+}
+
+public boolean checkNode() {
+	boolean containerFound = false
+	try {
+		Task inspect = project.tasks.getByName("inspectNode")
+		inspect.execute()
+		containerFound = true
+	} catch (Exception e) {
+		// println e.message
+	}
+	containerFound
+}
+
+public String getLocalHost() {
+    InetAddress.getLocalHost().getHostAddress()
+}
+

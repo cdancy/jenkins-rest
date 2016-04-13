@@ -1,0 +1,21 @@
+# Directories #
+######################
+build
+bin
+out 
+.gradle
+
+# OS generated files #
+######################
+.DS_Store
+
+# IDE generated files #
+######################
+.settings/
+.classpath
+.project
+.README* 
+.idea 
+*.iml 
+*.ipr
+*.iws

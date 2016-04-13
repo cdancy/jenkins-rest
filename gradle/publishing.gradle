@@ -1,0 +1,85 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+    }
+}
+
+apply plugin: 'maven-publish'
+apply plugin: com.jfrog.bintray.gradle.BintrayPlugin
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('name', 'Etcd Rest')
+                root.appendNode('description', 'Java client for working with Etcd REST API.')
+                root.appendNode('url', 'https://github.com/cdancy/etcd-rest')
+                root.appendNode('inceptionYear', '2016')
+
+                def scm = root.appendNode('scm')
+                scm.appendNode('url', 'https://github.com/cdancy/etcd-rest')
+                scm.appendNode('connection', 'scm:https://cdancy@github.com/cdancy/etcd-rest.git')
+                scm.appendNode('developerConnection', 'scm:git://github.com/cdancy/etcd-rest.git')
+
+                def license = root.appendNode('licenses').appendNode('license')
+                license.appendNode('name', 'The Apache Software License, Version 2.0')
+                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
+                license.appendNode('distribution', 'repo')
+
+                def developers = root.appendNode('developers')
+                def cdancy = developers.appendNode('developer')
+                cdancy.appendNode('id', 'cdancy')
+                cdancy.appendNode('name', 'Christopher Dancy')
+                cdancy.appendNode('email', 'christoforever@gmail.com')
+            }
+        }
+    }
+}
+
+bintray {
+
+    user = project.bintrayUsername
+    key = project.bintrayKey
+    publications = ['mavenJava']
+    publish = true
+
+    pkg {
+        repo = 'java-libraries'
+        name = 'etcd-rest'
+        desc = 'Java client for working with Etcd REST API.'
+        websiteUrl = "https://github.com/cdancy/${project.name}"
+        issueTrackerUrl = "https://github.com/cdancy/${project.name}/issues"
+        vcsUrl = "https://github.com/cdancy/${project.name}.git"
+        licenses = ['Apache-2.0']
+        labels = ['java', 'etcd', 'client', 'rest']
+        publicDownloadNumbers = true
+        githubRepo = "cdancy/${project.name}"
+        githubReleaseNotesFile = 'RELEASE_NOTES.md'
+
+        version {
+        	released  = new Date()
+            vcsTag = "v${project.version}"
+            attributes = ['etcd-rest': ["${project.group}:${project.name}:${project.version}"]]
+
+            gpg {
+                sign = true
+                passphrase = resolveProperty('GPG_PASSPHRASE', 'gpgPassphrase')
+            }
+        }
+    }
+}
+
+String resolveProperty(String envVarKey, String projectPropKey) {
+    String propValue = System.getenv()[envVarKey]
+    if(propValue) { return propValue }
+    hasProperty(projectPropKey) ? getProperty(projectPropKey) : null
+}

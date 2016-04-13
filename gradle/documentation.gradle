@@ -1,0 +1,27 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.ajoberstar:gradle-git:$depVersions.gradleGit"
+    }
+}
+
+apply plugin: org.ajoberstar.gradle.git.ghpages.GithubPagesPlugin
+
+githubPages {
+    repoUri = 'https://github.com/cdancy/etcd-rest.git'
+
+    pages {
+        from(javadoc.outputs.files) {
+            into 'docs/javadoc'
+        }
+    }
+    credentials {
+    	username = project.githubUsername
+    	password = project.githubPassword
+    }
+}
+
+publishGhPages.dependsOn javadoc

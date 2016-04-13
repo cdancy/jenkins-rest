@@ -1,0 +1,133 @@
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.bmuschko:gradle-docker-plugin:2.6.8"
+    }
+}
+
+apply plugin: "com.bmuschko.docker-remote-api"
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ["-Xlint:-options"]
+}
+
+task mockTest(type: Test) {
+    useTestNG() 
+	include "**/*MockTest.class"
+	testLogging {
+		showStandardStreams = true
+		events 'started', 'passed', 'failed'
+	}
+}
+
+task integTest(type: Test, dependsOn: ['mockTest']) {
+    useTestNG() 
+    include "**/**LiveTest.class"
+    testLogging {
+		showStandardStreams = true
+        events 'started', 'passed', 'failed'
+    } 
+    doFirst {
+    	String runtimeURL = bootstrapDocker ? "http://${getLocalHost()}:2379" : "${testEtcdEndpoint}"
+    	systemProperties = ["test.etcd.endpoint" : runtimeURL]
+    }
+}
+
+if (bootstrapDocker) {
+	def integTestTask = project.tasks.getByName('integTest')
+	integTestTask.dependsOn('startNode')
+	integTestTask.finalizedBy('teardownNode')
+}
+
+
+docker {
+    url = testDockerEndpoint
+}
+
+ext.etcdContainerName = "etcd-integ-test"
+
+task inspectNode(type: com.bmuschko.gradle.docker.tasks.container.DockerInspectContainer) {
+    targetContainerId { etcdContainerName }
+}
+
+task pullEtcdImage(type: com.bmuschko.gradle.docker.tasks.image.DockerPullImage) {
+    repository = testEtcdImage
+    tag = testEtcdTag
+}
+
+task stopNode(type: com.bmuschko.gradle.docker.tasks.container.DockerStopContainer) {
+	onlyIf { checkNode() }
+    dependsOn pullEtcdImage
+    targetContainerId { etcdContainerName }
+    timeout = 30
+}
+
+task removeNode(type: com.bmuschko.gradle.docker.tasks.container.DockerRemoveContainer) {
+	onlyIf { checkNode() }
+    dependsOn stopNode
+    targetContainerId { etcdContainerName }
+    removeVolumes = true
+    force = true
+}
+
+task createNode(type: com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer) {
+    dependsOn removeNode
+    targetImageId { pullEtcdImage.repository + ":" + pullEtcdImage.tag }
+    containerName = etcdContainerName
+    portBindings = ['2379:2379', '2380:2380']
+    binds = ['/usr/share/ca-certificates/' : '/etc/ssl/certs']
+    cmd = ['-name', 'etcd0', 
+    '-advertise-client-urls', "http://${getLocalHost()}:2379",
+    '-listen-client-urls', 'http://0.0.0.0:2379',
+    '-initial-advertise-peer-urls', "http://${getLocalHost()}:2380",
+    '-listen-peer-urls', 'http://0.0.0.0:2380',
+    '-initial-cluster-token', 'etcd-cluster-1',
+    '-initial-cluster', "etcd0=http://${getLocalHost()}:2380",
+    '-initial-cluster-state', 'new']
+}
+
+task startNode(type: com.bmuschko.gradle.docker.tasks.container.DockerStartContainer) {
+    dependsOn createNode
+    targetContainerId { createNode.getContainerId() }
+    doLast {
+    	logger.quiet "Sleeping for 5 seconds to allow cluster to init..."
+    	sleep(5000)
+    }
+}
+
+task postTestStopNode(type: com.bmuschko.gradle.docker.tasks.container.DockerStopContainer) {
+    targetContainerId { etcdContainerName }
+    timeout = 30
+}
+
+task teardownNode(type: com.bmuschko.gradle.docker.tasks.container.DockerRemoveContainer) {
+    dependsOn postTestStopNode
+    targetContainerId { etcdContainerName }
+    removeVolumes = true
+    force = true
+}
+
+public boolean checkNode() {
+	boolean containerFound = false
+	try {
+		Task inspect = project.tasks.getByName("inspectNode")
+		inspect.execute()
+		containerFound = true
+	} catch (Exception e) {
+		// println e.message
+	}
+	containerFound
+}
+
+public String getLocalHost() {
+    InetAddress.getLocalHost().getHostAddress()
+}
+
