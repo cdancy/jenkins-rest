@@ -11,7 +11,7 @@ buildscript {
 apply plugin: org.ajoberstar.gradle.git.ghpages.GithubPagesPlugin
 
 githubPages {
-    repoUri = 'https://github.com/cdancy/etcd-rest.git'
+    repoUri = 'https://github.com/cdancy/jenkins-rest.git'
 
     pages {
         from(javadoc.outputs.files) {
