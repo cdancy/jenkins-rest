@@ -19,25 +19,24 @@ package com.cdancy.jenkins.rest.features;
 
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
+import javax.ws.rs.HEAD;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
-import com.cdancy.jenkins.rest.domain.system.Version;
+import com.cdancy.jenkins.rest.domain.system.SystemInfo;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthentication;
-import com.cdancy.jenkins.rest.parsers.JenkinsHeaderVersion;
+import com.cdancy.jenkins.rest.parsers.SystemInfoFromJenkinsHeaders;
 
 @RequestFilters(JenkinsAuthentication.class)
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("/")
 public interface SystemApi {
 
-   @Named("system:version")
-   @Path("/overallLoad/api/json")
-   @ResponseParser(JenkinsHeaderVersion.class)
-   @GET
-   Version version();
+   @Named("system:info")
+   @ResponseParser(SystemInfoFromJenkinsHeaders.class)
+   @HEAD
+   SystemInfo systemInfo();
 }

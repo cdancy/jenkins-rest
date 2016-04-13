@@ -12,7 +12,8 @@ Client's can be built like so:
       .credentials("admin:password") // Optional.
       .build();
 
-      Version version = client.api().systemApi().version();
+      SystemInfo systemInfo = client.api().systemApi().systemInfo();
+      assertTrue(systemInfo.jenkinsVersion().equals("1.642.4"));
       
 ## Latest release
 
