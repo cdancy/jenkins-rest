@@ -1,3 +1,3 @@
-### Version 1.0.0 (TBA)
+### Version 0.0.1 (April 14, 2016)
 
-* TODO
+* init for jenkins-rest
