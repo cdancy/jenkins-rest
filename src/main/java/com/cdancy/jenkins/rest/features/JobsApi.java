@@ -53,4 +53,14 @@ public interface JobsApi {
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
    @POST
    boolean delete(@PathParam("name") String jobName);
+
+   @Named("jobs:enable")
+   @Path("/job/{name}/enable")
+   @POST
+   boolean enable(@PathParam("name") String jobName);
+
+   @Named("jobs:disable")
+   @Path("/job/{name}/disable")
+   @POST
+   boolean disable(@PathParam("name") String jobName);
 }

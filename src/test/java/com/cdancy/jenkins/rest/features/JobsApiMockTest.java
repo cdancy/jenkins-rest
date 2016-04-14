@@ -98,4 +98,68 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
          server.shutdown();
       }
    }
+
+   public void testEnableJob() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(200));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         boolean success = api.enable("DevTest");
+         assertTrue(success);
+         assertSent(server, "POST", "/job/DevTest/enable");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testEnableJobAlreadyEnabled() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(200));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         boolean success = api.enable("DevTest");
+         assertTrue(success);
+         assertSent(server, "POST", "/job/DevTest/enable");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testDisableJob() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(200));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         boolean success = api.disable("DevTest");
+         assertTrue(success);
+         assertSent(server, "POST", "/job/DevTest/disable");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testDisableJobAlreadyEnabled() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(200));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         boolean success = api.disable("DevTest");
+         assertTrue(success);
+         assertSent(server, "POST", "/job/DevTest/disable");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
 }

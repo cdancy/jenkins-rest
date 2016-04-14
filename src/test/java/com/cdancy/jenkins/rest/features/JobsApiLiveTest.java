@@ -41,6 +41,30 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
    }
 
    @Test(dependsOnMethods = "testCreateJobThatAlreadyExists")
+   public void testDisableJob() {
+      boolean success = api().disable("DevTest");
+      assertTrue(success);
+   }
+
+   @Test(dependsOnMethods = "testDisableJob")
+   public void testDisableJobAlreadyDisabled() {
+      boolean success = api().disable("DevTest");
+      assertTrue(success);
+   }
+
+   @Test(dependsOnMethods = "testDisableJobAlreadyDisabled")
+   public void testEnableJob() {
+      boolean success = api().enable("DevTest");
+      assertTrue(success);
+   }
+
+   @Test(dependsOnMethods = "testEnableJob")
+   public void testEnableJobAlreadyEnabled() {
+      boolean success = api().enable("DevTest");
+      assertTrue(success);
+   }
+
+   @Test(dependsOnMethods = "testEnableJobAlreadyEnabled")
    public void testDeleteJob() {
       boolean success = api().delete("DevTest");
       assertTrue(success);
