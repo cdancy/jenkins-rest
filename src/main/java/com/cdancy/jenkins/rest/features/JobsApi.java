@@ -38,13 +38,13 @@ import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthentication;
 
 @RequestFilters(JenkinsAuthentication.class)
-@Consumes(MediaType.APPLICATION_JSON)
 @Path("/")
 public interface JobsApi {
 
    @Named("jobs:create")
    @Path("/createItem")
    @Produces(MediaType.APPLICATION_XML)
+   @Consumes(MediaType.WILDCARD)
    @Fallback(JenkinsFallbacks.FalseOn400AndJobAlreadyExists.class)
    @Payload("{configXML}")
    @POST
@@ -61,7 +61,7 @@ public interface JobsApi {
    @Path("/job/{name}/config.xml")
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
    @Produces(MediaType.APPLICATION_XML)
-   @Consumes(MediaType.WILDCARD)
+   @Consumes(MediaType.TEXT_HTML)
    @Payload("{configXML}")
    @POST
    boolean config(@PathParam("name") String jobName, @PayloadParam(value = "configXML") String configXML);
@@ -76,22 +76,26 @@ public interface JobsApi {
    @Named("jobs:set-description")
    @Path("/job/{name}/description")
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
+   @Consumes(MediaType.TEXT_HTML)
    @POST
    boolean description(@PathParam("name") String jobName, @FormParam("description") String description);
 
    @Named("jobs:delete")
    @Path("/job/{name}/doDelete")
    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
+   @Consumes(MediaType.TEXT_HTML)
    @POST
    boolean delete(@PathParam("name") String jobName);
 
    @Named("jobs:enable")
    @Path("/job/{name}/enable")
+   @Consumes(MediaType.TEXT_HTML)
    @POST
    boolean enable(@PathParam("name") String jobName);
 
    @Named("jobs:disable")
    @Path("/job/{name}/disable")
+   @Consumes(MediaType.TEXT_HTML)
    @POST
    boolean disable(@PathParam("name") String jobName);
 }

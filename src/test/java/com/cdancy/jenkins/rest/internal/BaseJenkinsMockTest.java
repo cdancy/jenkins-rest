@@ -95,13 +95,24 @@ public class BaseJenkinsMockTest {
       return request;
    }
 
-   protected RecordedRequest assertSentWithXMLFormData(MockWebServer server, String method, String path, String body)
-         throws InterruptedException {
+   protected RecordedRequest assertSentWithFormData(MockWebServer server, String method, String path, String body,
+         String acceptType) throws InterruptedException {
       RecordedRequest request = server.takeRequest();
       assertThat(request.getMethod()).isEqualTo(method);
       assertThat(request.getPath()).isEqualTo(path);
       assertThat(request.getUtf8Body()).isEqualTo(body);
-      assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(MediaType.APPLICATION_JSON);
+      assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(acceptType);
+      assertThat(request.getHeader(HttpHeaders.CONTENT_TYPE)).isEqualTo(MediaType.APPLICATION_FORM_URLENCODED);
+      return request;
+   }
+
+   protected RecordedRequest assertSentWithXMLFormDataAccept(MockWebServer server, String method, String path,
+         String body, String acceptType) throws InterruptedException {
+      RecordedRequest request = server.takeRequest();
+      assertThat(request.getMethod()).isEqualTo(method);
+      assertThat(request.getPath()).isEqualTo(path);
+      assertThat(request.getUtf8Body()).isEqualTo(body);
+      assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(acceptType);
       assertThat(request.getHeader(HttpHeaders.CONTENT_TYPE)).isEqualTo(MediaType.APPLICATION_XML);
       return request;
    }

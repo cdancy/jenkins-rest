@@ -21,6 +21,8 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
+import javax.ws.rs.core.MediaType;
+
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
@@ -44,7 +46,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       try {
          boolean success = api.create("DevTest", configXML);
          assertTrue(success);
-         assertSentWithXMLFormData(server, "POST", "/createItem?name=DevTest", configXML);
+         assertSentWithXMLFormDataAccept(server, "POST", "/createItem?name=DevTest", configXML, MediaType.WILDCARD);
       } finally {
          etcdJavaApi.close();
          server.shutdown();
@@ -62,7 +64,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       try {
          boolean success = api.create("DevTest", configXML);
          assertFalse(success);
-         assertSentWithXMLFormData(server, "POST", "/createItem?name=DevTest", configXML);
+         assertSentWithXMLFormDataAccept(server, "POST", "/createItem?name=DevTest", configXML, MediaType.WILDCARD);
       } finally {
          etcdJavaApi.close();
          server.shutdown();
@@ -111,7 +113,8 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       try {
          boolean success = api.description("DevTest", "whatever");
          assertTrue(success);
-         assertSentWithFormData(server, "POST", "/job/DevTest/description", "description=whatever");
+         assertSentWithFormData(server, "POST", "/job/DevTest/description", "description=whatever",
+               MediaType.TEXT_HTML);
       } finally {
          etcdJavaApi.close();
          server.shutdown();
@@ -127,7 +130,8 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       try {
          boolean success = api.description("DevTest", "whatever");
          assertFalse(success);
-         assertSentWithFormData(server, "POST", "/job/DevTest/description", "description=whatever");
+         assertSentWithFormData(server, "POST", "/job/DevTest/description", "description=whatever",
+               MediaType.TEXT_HTML);
       } finally {
          etcdJavaApi.close();
          server.shutdown();
@@ -178,7 +182,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       try {
          boolean success = api.config("DevTest", configXML);
          assertTrue(success);
-         assertSentAccept(server, "POST", "/job/DevTest/config.xml", "*/*");
+         assertSentAccept(server, "POST", "/job/DevTest/config.xml", MediaType.TEXT_HTML);
       } finally {
          etcdJavaApi.close();
          server.shutdown();
@@ -195,7 +199,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       try {
          boolean success = api.config("DevTest", configXML);
          assertFalse(success);
-         assertSentAccept(server, "POST", "/job/DevTest/config.xml", "*/*");
+         assertSentAccept(server, "POST", "/job/DevTest/config.xml", MediaType.TEXT_HTML);
       } finally {
          etcdJavaApi.close();
          server.shutdown();
@@ -211,7 +215,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       try {
          boolean success = api.delete("DevTest");
          assertTrue(success);
-         assertSent(server, "POST", "/job/DevTest/doDelete");
+         assertSentAccept(server, "POST", "/job/DevTest/doDelete", MediaType.TEXT_HTML);
       } finally {
          etcdJavaApi.close();
          server.shutdown();
@@ -227,7 +231,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       try {
          boolean success = api.delete("DevTest");
          assertFalse(success);
-         assertSent(server, "POST", "/job/DevTest/doDelete");
+         assertSentAccept(server, "POST", "/job/DevTest/doDelete", MediaType.TEXT_HTML);
       } finally {
          etcdJavaApi.close();
          server.shutdown();
@@ -243,7 +247,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       try {
          boolean success = api.enable("DevTest");
          assertTrue(success);
-         assertSent(server, "POST", "/job/DevTest/enable");
+         assertSentAccept(server, "POST", "/job/DevTest/enable", MediaType.TEXT_HTML);
       } finally {
          etcdJavaApi.close();
          server.shutdown();
@@ -259,7 +263,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       try {
          boolean success = api.enable("DevTest");
          assertTrue(success);
-         assertSent(server, "POST", "/job/DevTest/enable");
+         assertSentAccept(server, "POST", "/job/DevTest/enable", MediaType.TEXT_HTML);
       } finally {
          etcdJavaApi.close();
          server.shutdown();
@@ -275,7 +279,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       try {
          boolean success = api.disable("DevTest");
          assertTrue(success);
-         assertSent(server, "POST", "/job/DevTest/disable");
+         assertSentAccept(server, "POST", "/job/DevTest/disable", MediaType.TEXT_HTML);
       } finally {
          etcdJavaApi.close();
          server.shutdown();
@@ -291,7 +295,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       try {
          boolean success = api.disable("DevTest");
          assertTrue(success);
-         assertSent(server, "POST", "/job/DevTest/disable");
+         assertSentAccept(server, "POST", "/job/DevTest/disable", MediaType.TEXT_HTML);
       } finally {
          etcdJavaApi.close();
          server.shutdown();
