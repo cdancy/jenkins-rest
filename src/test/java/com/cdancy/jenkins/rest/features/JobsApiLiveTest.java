@@ -17,6 +17,8 @@
 package com.cdancy.jenkins.rest.features;
 
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
@@ -41,6 +43,31 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
    }
 
    @Test(dependsOnMethods = "testCreateJobThatAlreadyExists")
+   public void testSetDescription() {
+      boolean success = api().description("DevTest", "RandomDescription");
+      assertTrue(success);
+   }
+
+   @Test(dependsOnMethods = "testSetDescription")
+   public void testGetDescription() {
+      String output = api().description("DevTest");
+      assertTrue(output.equals("RandomDescription"));
+   }
+
+   @Test(dependsOnMethods = "testGetDescription")
+   public void testGetConfig() {
+      String output = api().config("DevTest");
+      assertNotNull(output);
+   }
+
+   @Test(dependsOnMethods = "testGetConfig")
+   public void testUpdateConfig() {
+      String config = payloadFromResource("/freestyle-project.xml");
+      boolean success = api().config("DevTest", config);
+      assertTrue(success);
+   }
+
+   @Test(dependsOnMethods = "testUpdateConfig")
    public void testDisableJob() {
       boolean success = api().disable("DevTest");
       assertTrue(success);
@@ -74,6 +101,24 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
    public void testDeleteJobNonExistent() {
       boolean success = api().delete(randomString());
       assertFalse(success);
+   }
+
+   @Test
+   public void testGetConfigNonExistentJob() {
+      String output = api().config(randomString());
+      assertNull(output);
+   }
+
+   @Test
+   public void testSetDescriptionNonExistentJob() {
+      boolean success = api().description(randomString(), "RandomDescription");
+      assertFalse(success);
+   }
+
+   @Test
+   public void testGetDescriptionNonExistentJob() {
+      String output = api().description(randomString());
+      assertNull(output);
    }
 
    private JobsApi api() {

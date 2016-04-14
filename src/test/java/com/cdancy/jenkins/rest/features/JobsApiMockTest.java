@@ -17,6 +17,8 @@
 package com.cdancy.jenkins.rest.features;
 
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
@@ -61,6 +63,139 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
          boolean success = api.create("DevTest", configXML);
          assertFalse(success);
          assertSentWithXMLFormData(server, "POST", "/createItem?name=DevTest", configXML);
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGetDescription() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setBody("whatever").setResponseCode(200));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         String output = api.description("DevTest");
+         assertNotNull(output);
+         assertTrue(output.equals("whatever"));
+         assertSentAcceptText(server, "GET", "/job/DevTest/description");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGetDescriptionNonExistentJob() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(404));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         String output = api.description("DevTest");
+         assertNull(output);
+         assertSentAcceptText(server, "GET", "/job/DevTest/description");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testUpdateDescription() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(200));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         boolean success = api.description("DevTest", "whatever");
+         assertTrue(success);
+         assertSentWithFormData(server, "POST", "/job/DevTest/description", "description=whatever");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testUpdateDescriptionNonExistentJob() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(404));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         boolean success = api.description("DevTest", "whatever");
+         assertFalse(success);
+         assertSentWithFormData(server, "POST", "/job/DevTest/description", "description=whatever");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGetConfig() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      String configXML = payloadFromResource("/freestyle-project.xml");
+      server.enqueue(new MockResponse().setBody(configXML).setResponseCode(200));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         String output = api.config("DevTest");
+         assertNotNull(output);
+         assertTrue(configXML.equals(output));
+         assertSentAcceptText(server, "GET", "/job/DevTest/config.xml");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGetConfigNonExistentJob() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(404));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         String output = api.config("DevTest");
+         assertNull(output);
+         assertSentAcceptText(server, "GET", "/job/DevTest/config.xml");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testUpdateConfig() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      String configXML = payloadFromResource("/freestyle-project.xml");
+      server.enqueue(new MockResponse().setResponseCode(200));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         boolean success = api.config("DevTest", configXML);
+         assertTrue(success);
+         assertSentAccept(server, "POST", "/job/DevTest/config.xml", "*/*");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testUpdateConfigNonExistentJob() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      String configXML = payloadFromResource("/freestyle-project.xml");
+      server.enqueue(new MockResponse().setResponseCode(404));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         boolean success = api.config("DevTest", configXML);
+         assertFalse(success);
+         assertSentAccept(server, "POST", "/job/DevTest/config.xml", "*/*");
       } finally {
          etcdJavaApi.close();
          server.shutdown();

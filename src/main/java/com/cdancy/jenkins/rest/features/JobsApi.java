@@ -19,6 +19,8 @@ package com.cdancy.jenkins.rest.features;
 
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -47,6 +49,35 @@ public interface JobsApi {
    @Payload("{configXML}")
    @POST
    boolean create(@QueryParam("name") String jobName, @PayloadParam(value = "configXML") String configXML);
+
+   @Named("jobs:get-config")
+   @Path("/job/{name}/config.xml")
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @Consumes(MediaType.TEXT_PLAIN)
+   @GET
+   String config(@PathParam("name") String jobName);
+
+   @Named("jobs:update-config")
+   @Path("/job/{name}/config.xml")
+   @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
+   @Produces(MediaType.APPLICATION_XML)
+   @Consumes(MediaType.WILDCARD)
+   @Payload("{configXML}")
+   @POST
+   boolean config(@PathParam("name") String jobName, @PayloadParam(value = "configXML") String configXML);
+
+   @Named("jobs:get-description")
+   @Path("/job/{name}/description")
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @Consumes(MediaType.TEXT_PLAIN)
+   @GET
+   String description(@PathParam("name") String jobName);
+
+   @Named("jobs:set-description")
+   @Path("/job/{name}/description")
+   @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
+   @POST
+   boolean description(@PathParam("name") String jobName, @FormParam("description") String description);
 
    @Named("jobs:delete")
    @Path("/job/{name}/doDelete")

@@ -115,6 +115,15 @@ public class BaseJenkinsMockTest {
       return request;
    }
 
+   protected RecordedRequest assertSentAccept(MockWebServer server, String method, String path, String acceptType)
+         throws InterruptedException {
+      RecordedRequest request = server.takeRequest();
+      assertThat(request.getMethod()).isEqualTo(method);
+      assertThat(request.getPath()).isEqualTo(path);
+      assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(acceptType);
+      return request;
+   }
+
    protected RecordedRequest assertSent(MockWebServer server, String method, String path, String json)
          throws InterruptedException {
       RecordedRequest request = assertSent(server, method, path);
