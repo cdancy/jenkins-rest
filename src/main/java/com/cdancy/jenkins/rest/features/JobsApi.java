@@ -17,6 +17,9 @@
 
 package com.cdancy.jenkins.rest.features;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -29,13 +32,18 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.Fallbacks;
+import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Payload;
 import org.jclouds.rest.annotations.PayloadParam;
 import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
 
+import com.cdancy.jenkins.rest.binders.BindMapToForm;
+import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthentication;
+import com.cdancy.jenkins.rest.parsers.LocationToQueueItem;
 
 @RequestFilters(JenkinsAuthentication.class)
 @Path("/")
@@ -89,13 +97,32 @@ public interface JobsApi {
 
    @Named("jobs:enable")
    @Path("/job/{name}/enable")
+   @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
    @Consumes(MediaType.TEXT_HTML)
    @POST
    boolean enable(@PathParam("name") String jobName);
 
    @Named("jobs:disable")
    @Path("/job/{name}/disable")
+   @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
    @Consumes(MediaType.TEXT_HTML)
    @POST
    boolean disable(@PathParam("name") String jobName);
+
+   @Named("jobs:build")
+   @Path("/job/{name}/build")
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @ResponseParser(LocationToQueueItem.class)
+   @Consumes("application/unknown")
+   @POST
+   QueueItem build(@PathParam("name") String jobName);
+
+   @Named("jobs:build-with-params")
+   @Path("/job/{name}/buildWithParameters")
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @ResponseParser(LocationToQueueItem.class)
+   @Consumes("application/unknown")
+   @POST
+   QueueItem buildWithParameters(@PathParam("name") String jobName,
+         @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
 }

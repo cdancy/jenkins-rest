@@ -21,21 +21,34 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
+import com.cdancy.jenkins.rest.domain.queue.QueueItem;
+import com.google.common.collect.Lists;
 
 @Test(groups = "live", testName = "SystemApiLiveTest", singleThreaded = true)
 public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
    @Test
    public void testCreateJob() {
-      String config = payloadFromResource("/freestyle-project.xml");
+      String config = payloadFromResource("/freestyle-project-no-params.xml");
       boolean success = api().create("DevTest", config);
       assertTrue(success);
    }
 
    @Test(dependsOnMethods = "testCreateJob")
+   public void testBuildJob() {
+      QueueItem output = api().build("DevTest");
+      assertNotNull(output);
+      assertTrue(output.number() > 0);
+   }
+
+   @Test(dependsOnMethods = "testBuildJob")
    public void testCreateJobThatAlreadyExists() {
       String config = payloadFromResource("/freestyle-project.xml");
       boolean success = api().create("DevTest", config);
@@ -68,6 +81,15 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
    }
 
    @Test(dependsOnMethods = "testUpdateConfig")
+   public void testBuildJobWithParameters() {
+      Map<String, List<String>> params = new HashMap<>();
+      params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
+      QueueItem output = api().buildWithParameters("DevTest", params);
+      assertNotNull(output);
+      assertTrue(output.number() > 0);
+   }
+
+   @Test(dependsOnMethods = "testBuildJobWithParameters")
    public void testDisableJob() {
       boolean success = api().disable("DevTest");
       assertTrue(success);
@@ -118,6 +140,20 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
    @Test
    public void testGetDescriptionNonExistentJob() {
       String output = api().description(randomString());
+      assertNull(output);
+   }
+
+   @Test
+   public void testBuildNonExistentJob() {
+      QueueItem output = api().build(randomString());
+      assertNull(output);
+   }
+
+   @Test
+   public void testBuildNonExistentJobWithParams() {
+      Map<String, List<String>> params = new HashMap<>();
+      params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
+      QueueItem output = api().buildWithParameters(randomString(), params);
       assertNull(output);
    }
 

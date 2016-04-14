@@ -21,12 +21,18 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.ws.rs.core.MediaType;
 
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
+import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 import com.cdancy.jenkins.rest.internal.BaseJenkinsMockTest;
+import com.google.common.collect.Lists;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
@@ -296,6 +302,78 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
          boolean success = api.disable("DevTest");
          assertTrue(success);
          assertSentAccept(server, "POST", "/job/DevTest/disable", MediaType.TEXT_HTML);
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testBuildJob() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(
+            new MockResponse().setHeader("Location", "http://127.0.1.1:8080/queue/item/1/").setResponseCode(201));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         QueueItem output = api.build("DevTest");
+         assertNotNull(output);
+         assertTrue(output.number() == 1);
+         assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testBuildJobNonExistentJob() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(404));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         QueueItem output = api.build("DevTest");
+         assertNull(output);
+         assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testBuildJobWithParams() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(
+            new MockResponse().setHeader("Location", "http://127.0.1.1:8080/queue/item/1/").setResponseCode(201));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         Map<String, List<String>> params = new HashMap<>();
+         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
+         QueueItem output = api.buildWithParameters("DevTest", params);
+         assertNotNull(output);
+         assertTrue(output.number() == 1);
+         assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testBuildJobWithParamsNonExistentJob() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(404));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         Map<String, List<String>> params = new HashMap<>();
+         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
+         QueueItem output = api.buildWithParameters("DevTest", params);
+         assertNull(output);
+         assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
       } finally {
          etcdJavaApi.close();
          server.shutdown();
