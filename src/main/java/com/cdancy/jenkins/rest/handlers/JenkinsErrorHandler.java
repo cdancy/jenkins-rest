@@ -42,7 +42,8 @@ public class JenkinsErrorHandler implements HttpErrorHandler {
 
    public void handleError(HttpCommand command, HttpResponse response) {
 
-      String message = parseMessage(response);
+      String jenkinsError = response.getFirstHeaderOrNull("X-Error");
+      String message = jenkinsError != null ? jenkinsError : parseMessage(response);
       Exception exception = null;
       try {
 
@@ -51,8 +52,14 @@ public class JenkinsErrorHandler implements HttpErrorHandler {
 
          switch (response.getStatusCode()) {
             case 400:
-               exception = new IllegalArgumentException(message);
-               break;
+               if (command.getCurrentRequest().getMethod().equals("POST")) {
+                  if (command.getCurrentRequest().getRequestLine().contains("/createItem")) {
+                     if (message.contains("A job already exists with the name")) {
+                        exception = new ResourceAlreadyExistsException(message);
+                        break;
+                     }
+                  }
+               }
             case 404:
                exception = new ResourceNotFoundException(message);
                break;

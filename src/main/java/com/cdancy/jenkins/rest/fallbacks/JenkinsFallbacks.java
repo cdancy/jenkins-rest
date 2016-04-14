@@ -23,16 +23,21 @@ import static org.jclouds.http.HttpUtils.returnValueOnCodeOrNull;
 
 import org.jclouds.Fallback;
 
-import com.google.gson.JsonParser;
-
 public final class JenkinsFallbacks {
-
-   private static final JsonParser parser = new JsonParser();
 
    public static final class FalseOn503 implements Fallback<Boolean> {
       public Boolean createOrPropagate(Throwable t) throws Exception {
          if (checkNotNull(t, "throwable") != null && t.getMessage().contains("{\"health\": \"false\"}")
                && returnValueOnCodeOrNull(t, true, equalTo(503)) != null) {
+            return Boolean.FALSE;
+         }
+         throw propagate(t);
+      }
+   }
+
+   public static final class FalseOn400AndJobAlreadyExists implements Fallback<Boolean> {
+      public Boolean createOrPropagate(Throwable t) throws Exception {
+         if (checkNotNull(t, "throwable") != null && t.getMessage().contains("A job already exists with the name")) {
             return Boolean.FALSE;
          }
          throw propagate(t);

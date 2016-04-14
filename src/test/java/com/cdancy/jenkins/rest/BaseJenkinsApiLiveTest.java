@@ -16,6 +16,9 @@
  */
 package com.cdancy.jenkins.rest;
 
+import static org.jclouds.util.Strings2.toStringAndClose;
+
+import java.io.IOException;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -23,6 +26,8 @@ import org.jclouds.Constants;
 import org.jclouds.apis.BaseApiLiveTest;
 import org.testng.annotations.Test;
 
+import com.google.common.base.Charsets;
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
@@ -47,5 +52,13 @@ public class BaseJenkinsApiLiveTest extends BaseApiLiveTest<JenkinsApi> {
 
    protected String randomString() {
       return UUID.randomUUID().toString().replaceAll("-", "");
+   }
+
+   public String payloadFromResource(String resource) {
+      try {
+         return new String(toStringAndClose(getClass().getResourceAsStream(resource)).getBytes(Charsets.UTF_8));
+      } catch (IOException e) {
+         throw Throwables.propagate(e);
+      }
    }
 }

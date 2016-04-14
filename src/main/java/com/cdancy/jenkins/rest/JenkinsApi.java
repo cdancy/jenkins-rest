@@ -21,10 +21,14 @@ import java.io.Closeable;
 
 import org.jclouds.rest.annotations.Delegate;
 
+import com.cdancy.jenkins.rest.features.JobsApi;
 import com.cdancy.jenkins.rest.features.StatisticsApi;
 import com.cdancy.jenkins.rest.features.SystemApi;
 
 public interface JenkinsApi extends Closeable {
+
+   @Delegate
+   JobsApi jobsApi();
 
    @Delegate
    StatisticsApi statisticsApi();

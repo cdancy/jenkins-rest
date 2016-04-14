@@ -95,6 +95,17 @@ public class BaseJenkinsMockTest {
       return request;
    }
 
+   protected RecordedRequest assertSentWithXMLFormData(MockWebServer server, String method, String path, String body)
+         throws InterruptedException {
+      RecordedRequest request = server.takeRequest();
+      assertThat(request.getMethod()).isEqualTo(method);
+      assertThat(request.getPath()).isEqualTo(path);
+      assertThat(request.getUtf8Body()).isEqualTo(body);
+      assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(MediaType.APPLICATION_JSON);
+      assertThat(request.getHeader(HttpHeaders.CONTENT_TYPE)).isEqualTo(MediaType.APPLICATION_XML);
+      return request;
+   }
+
    protected RecordedRequest assertSentAcceptText(MockWebServer server, String method, String path)
          throws InterruptedException {
       RecordedRequest request = server.takeRequest();
