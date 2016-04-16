@@ -40,10 +40,12 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
 import com.cdancy.jenkins.rest.binders.BindMapToForm;
-import com.cdancy.jenkins.rest.domain.queue.QueueItem;
+import com.cdancy.jenkins.rest.domain.lastbuild.ProgressiveText;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthentication;
-import com.cdancy.jenkins.rest.parsers.LocationToQueueItem;
+import com.cdancy.jenkins.rest.parsers.BuildNumberToInteger;
+import com.cdancy.jenkins.rest.parsers.LocationToQueueId;
+import com.cdancy.jenkins.rest.parsers.OutputToProgressiveText;
 
 @RequestFilters(JenkinsAuthentication.class)
 @Path("/")
@@ -112,17 +114,40 @@ public interface JobsApi {
    @Named("jobs:build")
    @Path("/job/{name}/build")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
-   @ResponseParser(LocationToQueueItem.class)
+   @ResponseParser(LocationToQueueId.class)
    @Consumes("application/unknown")
    @POST
-   QueueItem build(@PathParam("name") String jobName);
+   Integer build(@PathParam("name") String jobName);
 
    @Named("jobs:build-with-params")
    @Path("/job/{name}/buildWithParameters")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
-   @ResponseParser(LocationToQueueItem.class)
+   @ResponseParser(LocationToQueueId.class)
    @Consumes("application/unknown")
    @POST
-   QueueItem buildWithParameters(@PathParam("name") String jobName,
+   Integer buildWithParameters(@PathParam("name") String jobName,
          @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
+
+   @Named("jobs:last-build-number")
+   @Path("/job/{name}/lastBuild/buildNumber")
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @ResponseParser(BuildNumberToInteger.class)
+   @Consumes(MediaType.TEXT_PLAIN)
+   @GET
+   Integer lastBuildNumber(@PathParam("name") String jobName);
+
+   @Named("jobs:last-build-timestamp")
+   @Path("/job/{name}/lastBuild/buildTimestamp")
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @Consumes(MediaType.TEXT_PLAIN)
+   @GET
+   String lastBuildTimestamp(@PathParam("name") String jobName);
+
+   @Named("jobs:progressive-text")
+   @Path("/job/{name}/lastBuild/logText/progressiveText")
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @ResponseParser(OutputToProgressiveText.class)
+   @Consumes(MediaType.TEXT_PLAIN)
+   @GET
+   ProgressiveText progressiveText(@PathParam("name") String jobName, @QueryParam("start") int start);
 }

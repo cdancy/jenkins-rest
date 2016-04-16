@@ -17,24 +17,46 @@
 
 package com.cdancy.jenkins.rest.parsers;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import javax.inject.Singleton;
 
 import org.jclouds.http.HttpResponse;
 
-import com.cdancy.jenkins.rest.domain.system.SystemInfo;
+import com.google.common.base.Charsets;
 import com.google.common.base.Function;
+import com.google.common.io.CharStreams;
+
+import autovalue.shaded.com.google.common.common.base.Throwables;
 
 /**
  * Created by dancc on 3/11/16.
  */
 @Singleton
-public class SystemInfoFromJenkinsHeaders implements Function<HttpResponse, SystemInfo> {
+public class BuildNumberToInteger implements Function<HttpResponse, Integer> {
 
-   public SystemInfo apply(HttpResponse response) {
-      return SystemInfo.create(response.getFirstHeaderOrNull("X-Hudson"), response.getFirstHeaderOrNull("X-Jenkins"),
-            response.getFirstHeaderOrNull("X-Jenkins-Session"), response.getFirstHeaderOrNull("X-Hudson-CLI-Port"),
-            response.getFirstHeaderOrNull("X-Jenkins-CLI-Port"), response.getFirstHeaderOrNull("X-Jenkins-CLI2-Port"),
-            response.getFirstHeaderOrNull("X-Instance-Identity"), response.getFirstHeaderOrNull("X-SSH-Endpoint"),
-            response.getFirstHeaderOrNull("Server"));
+   public Integer apply(HttpResponse response) {
+      return Integer.valueOf(getTextOutput(response));
+   }
+
+   public String getTextOutput(HttpResponse response) {
+      InputStream is = null;
+      try {
+         is = response.getPayload().openStream();
+         return CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8)).trim();
+      } catch (Exception e) {
+         Throwables.propagate(e);
+      } finally {
+         if (is != null) {
+            try {
+               is.close();
+            } catch (Exception e) {
+               Throwables.propagate(e);
+            }
+         }
+      }
+
+      return null;
    }
 }

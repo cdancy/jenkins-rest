@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
-import com.cdancy.jenkins.rest.domain.queue.QueueItem;
+import com.cdancy.jenkins.rest.domain.lastbuild.ProgressiveText;
 import com.cdancy.jenkins.rest.internal.BaseJenkinsMockTest;
 import com.google.common.collect.Lists;
 import com.squareup.okhttp.mockwebserver.MockResponse;
@@ -316,9 +316,9 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       JenkinsApi etcdJavaApi = api(server.getUrl("/"));
       JobsApi api = etcdJavaApi.jobsApi();
       try {
-         QueueItem output = api.build("DevTest");
+         Integer output = api.build("DevTest");
          assertNotNull(output);
-         assertTrue(output.number() == 1);
+         assertTrue(output == 1);
          assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
       } finally {
          etcdJavaApi.close();
@@ -333,7 +333,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       JenkinsApi etcdJavaApi = api(server.getUrl("/"));
       JobsApi api = etcdJavaApi.jobsApi();
       try {
-         QueueItem output = api.build("DevTest");
+         Integer output = api.build("DevTest");
          assertNull(output);
          assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
       } finally {
@@ -352,9 +352,9 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       try {
          Map<String, List<String>> params = new HashMap<>();
          params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-         QueueItem output = api.buildWithParameters("DevTest", params);
+         Integer output = api.buildWithParameters("DevTest", params);
          assertNotNull(output);
-         assertTrue(output.number() == 1);
+         assertTrue(output == 1);
          assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
       } finally {
          etcdJavaApi.close();
@@ -371,9 +371,112 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       try {
          Map<String, List<String>> params = new HashMap<>();
          params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-         QueueItem output = api.buildWithParameters("DevTest", params);
+         Integer output = api.buildWithParameters("DevTest", params);
          assertNull(output);
          assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGetLastBuildNumber() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      String body = payloadFromResource("/build-number.txt");
+      server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         Integer output = api.lastBuildNumber("DevTest");
+         assertNotNull(output);
+         assertTrue(output.intValue() == 123);
+         assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildNumber");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGetLastBuildNumberJobNotExist() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(404));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         Integer output = api.lastBuildNumber("DevTest");
+         assertNull(output);
+         assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildNumber");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGetLastBuildTimeStamp() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      String body = payloadFromResource("/build-timestamp.txt");
+      server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         String output = api.lastBuildTimestamp("DevTest");
+         assertNotNull(output);
+         assertTrue(output.equals(body));
+         assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildTimestamp");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGetLastBuildTimeStampJobNotExist() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(404));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         String output = api.lastBuildTimestamp("DevTest");
+         assertNull(output);
+         assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildTimestamp");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGetProgressiveText() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      String body = payloadFromResource("/progressive-text.txt");
+      server.enqueue(new MockResponse().setHeader("X-Text-Size", "123").setBody(body).setResponseCode(200));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         ProgressiveText output = api.progressiveText("DevTest", 0);
+         assertNotNull(output);
+         assertTrue(output.size() == 123);
+         assertFalse(output.hasMoreData());
+         assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/logText/progressiveText?start=0");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGetProgressiveTextJobNotExist() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(404));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         ProgressiveText output = api.progressiveText("DevTest", 0);
+         assertNull(output);
+         assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/logText/progressiveText?start=0");
       } finally {
          etcdJavaApi.close();
          server.shutdown();

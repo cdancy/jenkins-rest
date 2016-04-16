@@ -28,7 +28,7 @@ import java.util.Map;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
-import com.cdancy.jenkins.rest.domain.queue.QueueItem;
+import com.cdancy.jenkins.rest.domain.lastbuild.ProgressiveText;
 import com.google.common.collect.Lists;
 
 @Test(groups = "live", testName = "SystemApiLiveTest", singleThreaded = true)
@@ -42,13 +42,51 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
    }
 
    @Test(dependsOnMethods = "testCreateJob")
+   public void testLastBuildNumberOnJobWithNoBuilds() {
+      Integer output = api().lastBuildNumber("DevTest");
+      assertNull(output);
+   }
+
+   @Test(dependsOnMethods = "testLastBuildNumberOnJobWithNoBuilds")
+   public void testLastBuildTimestampOnJobWithNoBuilds() {
+      String output = api().lastBuildTimestamp("DevTest");
+      assertNull(output);
+   }
+
+   @Test(dependsOnMethods = "testLastBuildTimestampOnJobWithNoBuilds")
    public void testBuildJob() {
-      QueueItem output = api().build("DevTest");
+      Integer output = api().build("DevTest");
       assertNotNull(output);
-      assertTrue(output.number() > 0);
+      assertTrue(output > 0);
    }
 
    @Test(dependsOnMethods = "testBuildJob")
+   public void testLastBuildNumberOnJob() {
+      try {
+         Thread.sleep(10000);
+      } catch (InterruptedException e) {
+         e.printStackTrace();
+      }
+      Integer output = api().lastBuildNumber("DevTest");
+      assertNotNull(output);
+      assertTrue(output.intValue() == 1);
+   }
+
+   @Test(dependsOnMethods = "testLastBuildNumberOnJob")
+   public void testLastBuildTimestamp() {
+      String output = api().lastBuildTimestamp("DevTest");
+      assertNotNull(output);
+   }
+
+   @Test(dependsOnMethods = "testLastBuildTimestamp")
+   public void testLastBuildGetProgressiveText() {
+      ProgressiveText output = api().progressiveText("DevTest", 0);
+      assertNotNull(output);
+      assertTrue(output.size() > 0);
+      assertFalse(output.hasMoreData());
+   }
+
+   @Test(dependsOnMethods = "testLastBuildGetProgressiveText")
    public void testCreateJobThatAlreadyExists() {
       String config = payloadFromResource("/freestyle-project.xml");
       boolean success = api().create("DevTest", config);
@@ -84,9 +122,9 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
    public void testBuildJobWithParameters() {
       Map<String, List<String>> params = new HashMap<>();
       params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-      QueueItem output = api().buildWithParameters("DevTest", params);
+      Integer output = api().buildWithParameters("DevTest", params);
       assertNotNull(output);
-      assertTrue(output.number() > 0);
+      assertTrue(output > 0);
    }
 
    @Test(dependsOnMethods = "testBuildJobWithParameters")
@@ -145,7 +183,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
    @Test
    public void testBuildNonExistentJob() {
-      QueueItem output = api().build(randomString());
+      Integer output = api().build(randomString());
       assertNull(output);
    }
 
@@ -153,7 +191,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
    public void testBuildNonExistentJobWithParams() {
       Map<String, List<String>> params = new HashMap<>();
       params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-      QueueItem output = api().buildWithParameters(randomString(), params);
+      Integer output = api().buildWithParameters(randomString(), params);
       assertNull(output);
    }
 

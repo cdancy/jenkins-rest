@@ -17,24 +17,31 @@
 
 package com.cdancy.jenkins.rest.parsers;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.inject.Singleton;
 
 import org.jclouds.http.HttpResponse;
 
-import com.cdancy.jenkins.rest.domain.system.SystemInfo;
 import com.google.common.base.Function;
 
 /**
  * Created by dancc on 3/11/16.
  */
 @Singleton
-public class SystemInfoFromJenkinsHeaders implements Function<HttpResponse, SystemInfo> {
+public class LocationToQueueId implements Function<HttpResponse, Integer> {
 
-   public SystemInfo apply(HttpResponse response) {
-      return SystemInfo.create(response.getFirstHeaderOrNull("X-Hudson"), response.getFirstHeaderOrNull("X-Jenkins"),
-            response.getFirstHeaderOrNull("X-Jenkins-Session"), response.getFirstHeaderOrNull("X-Hudson-CLI-Port"),
-            response.getFirstHeaderOrNull("X-Jenkins-CLI-Port"), response.getFirstHeaderOrNull("X-Jenkins-CLI2-Port"),
-            response.getFirstHeaderOrNull("X-Instance-Identity"), response.getFirstHeaderOrNull("X-SSH-Endpoint"),
-            response.getFirstHeaderOrNull("Server"));
+   private static final Pattern pattern = Pattern.compile("^.*/queue/item/(\\d+)/$");
+
+   public Integer apply(HttpResponse response) {
+
+      String url = response.getFirstHeaderOrNull("Location");
+      Matcher matcher = pattern.matcher(url);
+      if (matcher.find() && matcher.groupCount() == 1) {
+         return Integer.valueOf(matcher.group(1));
+      } else {
+         return -1;
+      }
    }
 }

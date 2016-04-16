@@ -1,0 +1,450 @@
+Started by upstream project "chicken" build number 92
+originally caused by:
+ Started by upstream project "Test" build number 94
+ originally caused by:
+  Started by upstream project "chicken" build number 90
+  originally caused by:
+   Started by upstream project "Test" build number 92
+   originally caused by:
+    Started by upstream project "chicken" build number 88
+    originally caused by:
+     Started by upstream project "Test" build number 90
+     originally caused by:
+      Started by upstream project "chicken" build number 86
+      originally caused by:
+       Started by upstream project "Test" build number 88
+       originally caused by:
+        Started by upstream project "chicken" build number 84
+        originally caused by:
+         Started by upstream project "Test" build number 86
+         originally caused by:
+          Started by upstream project "chicken" build number 82
+          originally caused by:
+           Started by upstream project "Test" build number 84
+           originally caused by:
+            (deeply nested causes)
+Building in workspace /var/jenkins_home/workspace/Test@2
+Unable to auto-install JDK until the license is accepted.
+Updating http://svn.apache.org/repos/asf/ant at revision '2016-04-15T18:26:26.561 +0000'
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,196,454 into '/var/jenkins_home/workspace/Test@2/antlibs/compress/tags/1_1_RC1/common'
+At revision 1196454
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,324,557 into '/var/jenkins_home/workspace/Test@2/antlibs/compress/tags/1_2_RC1/common'
+At revision 1324557
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,195,451 into '/var/jenkins_home/workspace/Test@2/antlibs/compress/tags/1_3_RC1/common'
+At revision 1195451
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,559,921 into '/var/jenkins_home/workspace/Test@2/antlibs/compress/tags/1_4_RC1/common'
+At revision 1559921
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/vss/tags/PRE_PROMOTION/common'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.4.0-rc1/doc/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivy/sources/style' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.4.0-rc1/doc/style'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/easyant/sources/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/branches/1.2.0/doc/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/easyant/sources/history/trunk/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/easyant/core/trunk/src/documentation' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/easyant/sources/history/trunk'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/dbpatch/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/sandbox/antlibs/dbpatch' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/dbpatch'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/debian/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/sandbox/antlibs/debian/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/debian'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/sandbox/antlibs/gendoc' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/gendoc'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/http/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/sandbox/antlibs/http/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/http'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/manual4eclipse/common'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/core/trunk/manual/stylesheets' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/manual4eclipse/docs/stylesheets'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/sandbox/antlibs/manual4eclipse' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/manual4eclipse'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/minify/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/sandbox/antlibs/minify/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/minify'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/starteam/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/sandbox/antlibs/starteam/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/starteam'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/weblogic/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/sandbox/antlibs/weblogic/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/all-trunks/weblogic'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/core/tags/2.4.0-rc1/doc/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivy/sources/style' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/core/tags/2.4.0-rc1/doc/style'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,064,449 into '/var/jenkins_home/workspace/Test@2/antlibs/dotnet/tags/1_1/common'
+At revision 1064449
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/http/trunk/common'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/branches/2.2.0.final/doc/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/branches/2.2.0.final/doc/style'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/weblogic/trunk/common'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/ivy/site/xooki' at 790,212 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/tags/2.0.0.final-200907011148-RELEASE/doc/xooki'
+At revision 790212
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/tags/antunit_10beta2' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/antunit/tags/10/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/fscache/trunk/common'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/trunk/doc/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/trunk/doc/style'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/tags/antunit_10beta1' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/antunit/tags/10_BETA1/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/tags/antunit_10beta2' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/antunit/tags/10_BETA2/common'
+At revision 1739347
+Fetching 'https://dist.apache.org/repos/dist/dev/ant/ivyde/updatesite' at 13,260 into '/var/jenkins_home/workspace/Test@2/ivy/updatesite/trunk/dist/dev'
+At revision 13260
+Fetching 'https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite' at 13,260 into '/var/jenkins_home/workspace/Test@2/ivy/updatesite/trunk/dist/release'
+At revision 13260
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 987,066 into '/var/jenkins_home/workspace/Test@2/antlibs/compress/tags/1_0/common'
+At revision 987066
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,196,454 into '/var/jenkins_home/workspace/Test@2/antlibs/compress/tags/1_1/common'
+At revision 1196454
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/compress/trunk/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,324,557 into '/var/jenkins_home/workspace/Test@2/antlibs/compress/tags/1_2/common'
+At revision 1324557
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/vss/trunk/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,195,451 into '/var/jenkins_home/workspace/Test@2/antlibs/compress/tags/1_3/common'
+At revision 1195451
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,593,374 into '/var/jenkins_home/workspace/Test@2/antlibs/antunit/tags/1.3RC1/common'
+At revision 1593374
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,559,921 into '/var/jenkins_home/workspace/Test@2/antlibs/compress/tags/1_4/common'
+At revision 1559921
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,306,546 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/tags/2.2.0.beta1/doc/xooki'
+At revision 1306546
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style' at 1,306,546 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/tags/2.2.0.beta1/doc/style'
+At revision 1306546
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/dbpatch/common'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.2.0/doc/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/ivy/site/xooki' at 726,839 into '/var/jenkins_home/workspace/Test@2/ivy/core/tags/2.0.0/doc/xooki'
+At revision 726839
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.3.x/doc/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivy/sources/style' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.3.x/doc/style'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/tags/antunit_11' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/antunit/tags/1.1/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,157,317 into '/var/jenkins_home/workspace/Test@2/antlibs/antunit/tags/1.2/common'
+At revision 1157317
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,593,374 into '/var/jenkins_home/workspace/Test@2/antlibs/antunit/tags/1.3/common'
+At revision 1593374
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,326,426 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.3.0-rc1/doc/xooki'
+At revision 1326426
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivy/sources/style' at 1,326,426 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.3.0-rc1/doc/style'
+At revision 1326426
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.3.0-rc2/doc/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivy/sources/style' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.3.0-rc2/doc/style'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/all-trunks/antunit/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/antunit/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/all-trunks/antunit'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/all-trunks/compress/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/compress/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/all-trunks/compress'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/all-trunks/dotnet/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/dotnet/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/all-trunks/dotnet'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/all-trunks/props/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/props/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/all-trunks/props'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/all-trunks/svn/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/svn/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/all-trunks/svn'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/all-trunks/vss/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/vss/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/all-trunks/vss'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/easyant/core/tags/0.9-incubating/src/documentation/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/branches/2.1.0/doc/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,560,033 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.4.0-rc1_OLD/doc/xooki'
+At revision 1560033
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivy/sources/style' at 1,560,033 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.4.0-rc1_OLD/doc/style'
+At revision 1560033
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,326,426 into '/var/jenkins_home/workspace/Test@2/ivy/core/tags/2.3.0-rc1/doc/xooki'
+At revision 1326426
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivy/sources/style' at 1,326,426 into '/var/jenkins_home/workspace/Test@2/ivy/core/tags/2.3.0-rc1/doc/style'
+At revision 1326426
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivy/sources/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,405,992 into '/var/jenkins_home/workspace/Test@2/ivy/core/tags/2.3.0-rc2/doc/xooki'
+At revision 1405992
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivy/sources/style' at 1,405,992 into '/var/jenkins_home/workspace/Test@2/ivy/core/tags/2.3.0-rc2/doc/style'
+At revision 1405992
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/core/trunk/manual/stylesheets' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/manual4eclipse/docs/stylesheets'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/ivy/site/xooki' at 984,323 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/tags/2.1.0/doc/xooki'
+At revision 984323
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/trunk/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/trunk/style'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/ivy/ivyde/trunk/doc' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/trunk'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/latest-milestone/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/latest-milestone/style'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/ivy/ivyde/branches/2.2.0.final/doc' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/latest-milestone'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/2.2.0.final/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/2.2.0.final/style'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/ivy/ivyde/branches/2.2.0.final/doc' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/2.2.0.final'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/2.2.0.beta1/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/2.2.0.beta1/style'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/ivy/ivyde/branches/2.2.0.beta1/doc' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/2.2.0.beta1'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/2.1.0/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/ivy/ivyde/branches/2.1.0/doc' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/2.1.0'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/2.0.0.final/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/ivy/ivyde/branches/2.0.0-final/doc' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/2.0.0.final'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/1.2.0/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/ivy/ivyde/branches/1.2.0/doc' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/site/ivyde/sources/history/1.2.0'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/tags/antunit_10beta2' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/dotnet/tags/10/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/git/trunk/common'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,560,033 into '/var/jenkins_home/workspace/Test@2/ivy/core/tags/2.4.0-rc1_OLD/doc/xooki'
+At revision 1560033
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivy/sources/style' at 1,560,033 into '/var/jenkins_home/workspace/Test@2/ivy/core/tags/2.4.0-rc1_OLD/doc/style'
+At revision 1560033
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/tags/2.2.0.final/doc/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/tags/2.2.0.final/doc/style'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/tags/antunit_11' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/antunit/tags/11_BETA1/common'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/branches/2.2.0.beta1/doc/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/branches/2.2.0.beta1/doc/style'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/easyant/core/trunk/src/documentation/xooki'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/usertests/common'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/ivyde/branches/2.0.0-final/doc/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/ivy/site/xooki' at 817,865 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.1.0/doc/xooki'
+At revision 817865
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,432,746 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.3.0/doc/xooki'
+At revision 1432746
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivy/sources/style' at 1,432,746 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.3.0/doc/style'
+At revision 1432746
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/core/trunk/doc/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivy/sources/style' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/core/trunk/doc/style'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/minify/trunk/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/dotnet/trunk/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/antunit/trunk/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/svn/trunk/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/starteam/trunk/common'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/ivy/site/xooki' at 817,865 into '/var/jenkins_home/workspace/Test@2/ivy/core/tags/2.1.0/doc/xooki'
+At revision 817865
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.4.x/doc/xooki'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivy/sources/style' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/ivy/core/branches/2.4.x/doc/style'
+At revision 1739347
+Fetching 'https://svn.apache.org/repos/asf/ant/site/xooki' at 1,432,746 into '/var/jenkins_home/workspace/Test@2/ivy/core/tags/2.3.0/doc/xooki'
+At revision 1432746
+Fetching 'https://svn.apache.org/repos/asf/ant/site/ivy/sources/style' at 1,432,746 into '/var/jenkins_home/workspace/Test@2/ivy/core/tags/2.3.0/doc/style'
+At revision 1432746
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/tags/dotnet_10beta1' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/antlibs/dotnet/tags/10_B1/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/manual4eclipse/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/antlibs/debian/trunk/common'
+At revision 1739347
+Fetching 'http://svn.apache.org/repos/asf/ant/antlibs/common/trunk' at 1,739,347 into '/var/jenkins_home/workspace/Test@2/sandbox/javafront/common'
+At revision 1739347
+At revision 1739346
+no change for http://svn.apache.org/repos/asf/ant since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivy/sources/style since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/easyant/core/trunk/src/documentation since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/sandbox/antlibs/dbpatch since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/sandbox/antlibs/debian/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/sandbox/antlibs/gendoc since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/sandbox/antlibs/http/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for https://svn.apache.org/repos/asf/ant/core/trunk/manual/stylesheets since the previous build
+no change for http://svn.apache.org/repos/asf/ant/sandbox/antlibs/manual4eclipse since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/sandbox/antlibs/minify/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/sandbox/antlibs/starteam/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/sandbox/antlibs/weblogic/trunk since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivy/sources/style since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for https://svn.apache.org/repos/asf/ant/ivy/site/xooki since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/tags/antunit_10beta2 since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/tags/antunit_10beta1 since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/tags/antunit_10beta2 since the previous build
+no change for https://dist.apache.org/repos/dist/dev/ant/ivyde/updatesite since the previous build
+no change for https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/ivy/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivy/sources/style since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/tags/antunit_11 since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivy/sources/style since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivy/sources/style since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/antunit/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/compress/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/dotnet/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/props/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/svn/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/vss/trunk since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivy/sources/style since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivy/sources/style since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivy/sources/style since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/core/trunk/manual/stylesheets since the previous build
+no change for https://svn.apache.org/repos/asf/ant/ivy/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style since the previous build
+no change for https://svn.apache.org/repos/asf/ant/ivy/ivyde/trunk/doc since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style since the previous build
+no change for https://svn.apache.org/repos/asf/ant/ivy/ivyde/branches/2.2.0.final/doc since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style since the previous build
+no change for https://svn.apache.org/repos/asf/ant/ivy/ivyde/branches/2.2.0.final/doc since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style since the previous build
+no change for https://svn.apache.org/repos/asf/ant/ivy/ivyde/branches/2.2.0.beta1/doc since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/ivy/ivyde/branches/2.1.0/doc since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/ivy/ivyde/branches/2.0.0-final/doc since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no revision recorded for https://svn.apache.org/repos/asf/ant/ivy/ivyde/branches/1.2.0/doc in the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/tags/antunit_10beta2 since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivy/sources/style since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/tags/antunit_11 since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivyde/sources/style since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/ivy/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivy/sources/style since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivy/sources/style since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for https://svn.apache.org/repos/asf/ant/ivy/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivy/sources/style since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/xooki since the previous build
+no change for https://svn.apache.org/repos/asf/ant/site/ivy/sources/style since the previous build
+no revision recorded for http://svn.apache.org/repos/asf/ant/antlibs/common/tags/dotnet_10beta1 in the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+no change for http://svn.apache.org/repos/asf/ant/antlibs/common/trunk since the previous build
+Unable to auto-install JDK until the license is accepted.
+[Test@2] $ /bin/sh -xe /tmp/hudson6849580861461471266.sh
++ touch helloWorld.txt
+Archiving artifacts
+Unable to auto-install JDK until the license is accepted.
+Finished: SUCCESS
