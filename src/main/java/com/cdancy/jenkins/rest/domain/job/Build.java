@@ -15,24 +15,24 @@
  * limitations under the License.
  */
 
-package com.cdancy.jenkins.rest.domain.queue;
+package com.cdancy.jenkins.rest.domain.job;
 
 import org.jclouds.json.SerializedNames;
 
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class Task {
+public abstract class Build {
 
-   public abstract String name();
+   public abstract int number();
 
    public abstract String url();
 
-   Task() {
+   Build() {
    }
 
-   @SerializedNames({ "name", "url" })
-   public static Task create(String name, String url) {
-      return new AutoValue_Task(name, url);
+   @SerializedNames({ "number", "url" })
+   public static Build create(int number, String url) {
+      return new AutoValue_Build(number, url);
    }
 }

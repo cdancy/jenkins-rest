@@ -1,0 +1,54 @@
+{
+  "actions" : [
+    {
+      "parameters" : [
+        {
+          "name" : "bear",
+          "value" : true
+        },
+        {
+          "name" : "fish",
+          "value" : "salmon"
+        }
+      ]
+    },
+    {
+      "causes" : [
+        {
+          "shortDescription" : "Started by user anonymous",
+          "userId" : null,
+          "userName" : "anonymous"
+        }
+      ]
+    }
+  ],
+  "artifacts" : [
+    
+  ],
+  "building" : true,
+  "description" : null,
+  "displayName" : "#9",
+  "duration" : 0,
+  "estimatedDuration" : 60036,
+  "executor" : {
+    
+  },
+  "fullDisplayName" : "fish #9",
+  "id" : "9",
+  "keepLog" : false,
+  "number" : 9,
+  "queueId" : 72,
+  "result" : null,
+  "timestamp" : 1460942082837,
+  "url" : "http://localhost:32769/job/fish/9/",
+  "builtOn" : "",
+  "changeSet" : {
+    "items" : [
+      
+    ],
+    "kind" : null
+  },
+  "culprits" : [
+    
+  ]
+}

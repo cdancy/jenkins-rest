@@ -1,0 +1,144 @@
+{
+  "actions" : [
+    {
+      "parameterDefinitions" : [
+        {
+          "defaultParameterValue" : {
+            "value" : true
+          },
+          "description" : "some bear",
+          "name" : "bear",
+          "type" : "BooleanParameterDefinition"
+        },
+        {
+          "defaultParameterValue" : {
+            "value" : "salmon"
+          },
+          "description" : "some fish",
+          "name" : "fish",
+          "type" : "StringParameterDefinition"
+        }
+      ]
+    }
+  ],
+  "description" : "",
+  "displayName" : "fish",
+  "displayNameOrNull" : null,
+  "name" : "fish",
+  "url" : "http://localhost:32769/job/fish/",
+  "buildable" : true,
+  "builds" : [
+    {
+      "number" : 7,
+      "url" : "http://localhost:32769/job/fish/7/"
+    },
+    {
+      "number" : 6,
+      "url" : "http://localhost:32769/job/fish/6/"
+    },
+    {
+      "number" : 5,
+      "url" : "http://localhost:32769/job/fish/5/"
+    },
+    {
+      "number" : 4,
+      "url" : "http://localhost:32769/job/fish/4/"
+    },
+    {
+      "number" : 3,
+      "url" : "http://localhost:32769/job/fish/3/"
+    },
+    {
+      "number" : 2,
+      "url" : "http://localhost:32769/job/fish/2/"
+    },
+    {
+      "number" : 1,
+      "url" : "http://localhost:32769/job/fish/1/"
+    }
+  ],
+  "color" : "blue_anime",
+  "firstBuild" : {
+    "number" : 1,
+    "url" : "http://localhost:32769/job/fish/1/"
+  },
+  "healthReport" : [
+    {
+      "description" : "Build stability: No recent builds failed.",
+      "iconClassName" : "icon-health-80plus",
+      "iconUrl" : "health-80plus.png",
+      "score" : 100
+    }
+  ],
+  "inQueue" : true,
+  "keepDependencies" : false,
+  "lastBuild" : {
+    "number" : 7,
+    "url" : "http://localhost:32769/job/fish/7/"
+  },
+  "lastCompletedBuild" : {
+    "number" : 6,
+    "url" : "http://localhost:32769/job/fish/6/"
+  },
+  "lastFailedBuild" : null,
+  "lastStableBuild" : {
+    "number" : 6,
+    "url" : "http://localhost:32769/job/fish/6/"
+  },
+  "lastSuccessfulBuild" : {
+    "number" : 6,
+    "url" : "http://localhost:32769/job/fish/6/"
+  },
+  "lastUnstableBuild" : null,
+  "lastUnsuccessfulBuild" : null,
+  "nextBuildNumber" : 8,
+  "property" : [
+    {
+      "parameterDefinitions" : [
+        {
+          "defaultParameterValue" : {
+            "name" : "bear",
+            "value" : true
+          },
+          "description" : "some bear",
+          "name" : "bear",
+          "type" : "BooleanParameterDefinition"
+        },
+        {
+          "defaultParameterValue" : {
+            "name" : "fish",
+            "value" : "salmon"
+          },
+          "description" : "some fish",
+          "name" : "fish",
+          "type" : "StringParameterDefinition"
+        }
+      ]
+    }
+  ],
+  "queueItem" : {
+    "blocked" : true,
+    "buildable" : false,
+    "id" : 71,
+    "inQueueSince" : 1460940851267,
+    "params" : "\nbear=true\nfish=salmon",
+    "stuck" : false,
+    "task" : {
+      "name" : "fish",
+      "url" : "http://localhost:32769/job/fish/"
+    },
+    "url" : "queue/item/71/",
+    "why" : "Build #7 is already in progress (ETA:52 sec)",
+    "buildableStartMilliseconds" : 1460940851268
+  },
+  "concurrentBuild" : false,
+  "downstreamProjects" : [
+    
+  ],
+  "scm" : {
+    
+  },
+  "upstreamProjects" : [
+    
+  ]
+}

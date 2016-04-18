@@ -36,10 +36,12 @@ import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Payload;
 import org.jclouds.rest.annotations.PayloadParam;
+import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
 import com.cdancy.jenkins.rest.binders.BindMapToForm;
+import com.cdancy.jenkins.rest.domain.job.JobInfo;
 import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthentication;
@@ -50,6 +52,14 @@ import com.cdancy.jenkins.rest.parsers.OutputToProgressiveText;
 @RequestFilters(JenkinsAuthentication.class)
 @Path("/")
 public interface JobsApi {
+
+   @Named("jobs:info")
+   @Path("/job/{name}/api/json")
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @Consumes(MediaType.APPLICATION_JSON)
+   @QueryParams(keys = { "pretty" }, values = { "true" })
+   @GET
+   JobInfo info(@PathParam("name") String jobName);
 
    @Named("jobs:create")
    @Path("/createItem")

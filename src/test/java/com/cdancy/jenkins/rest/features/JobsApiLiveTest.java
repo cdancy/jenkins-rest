@@ -28,6 +28,7 @@ import java.util.Map;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
+import com.cdancy.jenkins.rest.domain.job.JobInfo;
 import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.google.common.collect.Lists;
 
@@ -42,6 +43,16 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
    }
 
    @Test(dependsOnMethods = "testCreateJob")
+   public void testGetJobInfo() {
+      JobInfo output = api().info("DevTest");
+      assertNotNull(output);
+      assertTrue(output.name().equals("DevTest"));
+      assertNull(output.lastBuild());
+      assertNull(output.firstBuild());
+      assertTrue(output.builds().size() == 0);
+   }
+
+   @Test(dependsOnMethods = "testGetJobInfo")
    public void testLastBuildNumberOnJobWithNoBuilds() {
       Integer output = api().lastBuildNumber("DevTest");
       assertNull(output);
@@ -155,6 +166,12 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
    public void testDeleteJob() {
       boolean success = api().delete("DevTest");
       assertTrue(success);
+   }
+
+   @Test
+   public void testGetJobInfoNonExistentJob() {
+      JobInfo output = api().info(randomString());
+      assertNull(output);
    }
 
    @Test
