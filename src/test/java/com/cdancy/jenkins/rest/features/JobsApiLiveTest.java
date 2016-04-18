@@ -28,7 +28,7 @@ import java.util.Map;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
-import com.cdancy.jenkins.rest.domain.lastbuild.ProgressiveText;
+import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.google.common.collect.Lists;
 
 @Test(groups = "live", testName = "SystemApiLiveTest", singleThreaded = true)

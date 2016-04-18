@@ -24,7 +24,7 @@ import javax.inject.Singleton;
 
 import org.jclouds.http.HttpResponse;
 
-import com.cdancy.jenkins.rest.domain.lastbuild.ProgressiveText;
+import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.google.common.base.Charsets;
 import com.google.common.base.Function;
 import com.google.common.io.CharStreams;

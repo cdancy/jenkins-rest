@@ -15,26 +15,31 @@
  * limitations under the License.
  */
 
-package com.cdancy.jenkins.rest.domain.lastbuild;
+package com.cdancy.jenkins.rest.features;
 
-import org.jclouds.json.SerializedNames;
+import java.util.List;
 
-import com.google.auto.value.AutoValue;
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 
-@AutoValue
-public abstract class ProgressiveText {
+import org.jclouds.rest.annotations.QueryParams;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.SelectJson;
 
-   public abstract String text();
+import com.cdancy.jenkins.rest.domain.queue.QueueItem;
+import com.cdancy.jenkins.rest.filters.JenkinsAuthentication;
 
-   public abstract int size();
+@RequestFilters(JenkinsAuthentication.class)
+@Consumes(MediaType.APPLICATION_JSON)
+@Path("/queue/api/json")
+public interface QueueApi {
 
-   public abstract boolean hasMoreData();
-
-   ProgressiveText() {
-   }
-
-   @SerializedNames({ "text", "size", "hasMoreData" })
-   public static ProgressiveText create(String text, int size, boolean hasMoreData) {
-      return new AutoValue_ProgressiveText(text, size, hasMoreData);
-   }
+   @Named("queue:queue")
+   @SelectJson("items")
+   @QueryParams(keys = { "pretty" }, values = { "true" })
+   @GET
+   List<QueueItem> queue();
 }

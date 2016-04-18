@@ -17,22 +17,54 @@
 
 package com.cdancy.jenkins.rest.domain.queue;
 
+import java.util.Map;
+
 import org.jclouds.json.SerializedNames;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.Maps;
 
 @AutoValue
 public abstract class QueueItem {
 
-   public abstract int number();
+   public abstract boolean blocked();
+
+   public abstract boolean buildable();
+
+   public abstract int id();
+
+   public abstract long inQueueSince();
+
+   public abstract Map<String, String> params();
+
+   public abstract boolean stuck();
+
+   public abstract Task task();
 
    public abstract String url();
+
+   public abstract String why();
+
+   public abstract long buildableStartMilliseconds();
 
    QueueItem() {
    }
 
-   @SerializedNames({ "number", "url" })
-   public static QueueItem create(int number, String url) {
-      return new AutoValue_QueueItem(number, url);
+   @SerializedNames({ "blocked", "buildable", "id", "inQueueSince", "params", "stuck", "task", "url", "why",
+         "buildableStartMilliseconds" })
+   public static QueueItem create(boolean blocked, boolean buildable, int id, long inQueueSince, String params,
+         boolean stuck, Task task, String url, String why, long buildableStartMilliseconds) {
+      Map<String, String> parameters = Maps.newHashMap();
+      if (params != null) {
+         params = params.trim();
+         if (params.length() > 0) {
+            for (String keyValue : params.replaceFirst("\n", "").split("\n")) {
+               String[] pair = keyValue.split("=");
+               parameters.put(pair[0], pair[1]);
+            }
+         }
+      }
+      return new AutoValue_QueueItem(blocked, buildable, id, inQueueSince, parameters, stuck, task, url, why,
+            buildableStartMilliseconds);
    }
 }

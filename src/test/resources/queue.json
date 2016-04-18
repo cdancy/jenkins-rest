@@ -1,79 +1,79 @@
-{
-  "discoverableItems" : [
-    
-  ],
-  "items" : [
-    {
-      "actions" : [
-        {
-          "parameters" : [
-            {
-              "name" : "feet",
-              "value" : false
+{  
+   "discoverableItems":[  
+
+   ],
+   "items":[  
+      {  
+         "actions":[  
+            {  
+               "parameters":[  
+                  {  
+                     "name":"feet",
+                     "value":false
+                  }
+               ]
+            },
+            {  
+               "causes":[  
+                  {  
+                     "shortDescription":"Started by user anonymous",
+                     "userId":null,
+                     "userName":"anonymous"
+                  }
+               ]
             }
-          ]
-        },
-        {
-          "causes" : [
-            {
-              "shortDescription" : "Started by user anonymous",
-              "userId" : null,
-              "userName" : "anonymous"
-            }
-          ]
-        }
-      ],
-      "blocked" : false,
-      "buildable" : true,
-      "id" : 7,
-      "inQueueSince" : 1460738557584,
-      "params" : "\nfeet=false",
-      "stuck" : false,
-      "task" : {
-        "name" : "chicken",
-        "url" : "http://localhost:32769/job/chicken/",
-        "color" : "blue"
+         ],
+         "blocked":false,
+         "buildable":true,
+         "id":7,
+         "inQueueSince":1460738557584,
+         "params":"\nfeet=false",
+         "stuck":false,
+         "task":{  
+            "name":"chicken",
+            "url":"http://localhost:32769/job/chicken/",
+            "color":"blue"
+         },
+         "url":"queue/item/7/",
+         "why":"Waiting for next available executor",
+         "buildableStartMilliseconds":1460738557585,
+         "pending":false
       },
-      "url" : "queue/item/7/",
-      "why" : "Waiting for next available executor",
-      "buildableStartMilliseconds" : 1460738557585,
-      "pending" : false
-    },
-    {
-      "actions" : [
-        {
-          "parameters" : [
-            {
-              "name" : "fish",
-              "value" : "bear"
+      {  
+         "actions":[  
+            {  
+               "parameters":[  
+                  {  
+                     "name":"fish",
+                     "value":"bear"
+                  }
+               ]
+            },
+            {  
+               "causes":[  
+                  {  
+                     "shortDescription":"Started by user anonymous",
+                     "userId":null,
+                     "userName":"anonymous"
+                  }
+               ]
             }
-          ]
-        },
-        {
-          "causes" : [
-            {
-              "shortDescription" : "Started by user anonymous",
-              "userId" : null,
-              "userName" : "anonymous"
-            }
-          ]
-        }
-      ],
-      "blocked" : false,
-      "buildable" : true,
-      "id" : 6,
-      "inQueueSince" : 1460738551155,
-      "params" : "\nfish=bear",
-      "stuck" : false,
-      "task" : {
-        "name" : "Freestyle",
-        "url" : "http://localhost:32769/job/Freestyle/",
-        "color" : "blue"
-      },
-      "url" : "queue/item/6/",
-      "why" : "Waiting for next available executor",
-      "buildableStartMilliseconds" : 1460738551156,
-      "pending" : false
-    }
-  ]
+         ],
+         "blocked":false,
+         "buildable":true,
+         "id":6,
+         "inQueueSince":1460738551155,
+         "params":"\nfish=bear",
+         "stuck":false,
+         "task":{  
+            "name":"Freestyle",
+            "url":"http://localhost:32769/job/Freestyle/",
+            "color":"blue"
+         },
+         "url":"queue/item/6/",
+         "why":"Waiting for next available executor",
+         "buildableStartMilliseconds":1460738551156,
+         "pending":false
+      }
+   ]
 }

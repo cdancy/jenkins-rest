@@ -40,7 +40,7 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
 import com.cdancy.jenkins.rest.binders.BindMapToForm;
-import com.cdancy.jenkins.rest.domain.lastbuild.ProgressiveText;
+import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthentication;
 import com.cdancy.jenkins.rest.parsers.BuildNumberToInteger;
