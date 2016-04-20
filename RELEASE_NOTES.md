@@ -1,4 +1,4 @@
-### Version 0.0.2 (TBA)
+### Version 0.0.2 (April 19, 2016)
 
 * ADDED: JobsApi.
 * ADDED: QueueApi.
