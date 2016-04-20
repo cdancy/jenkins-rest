@@ -22,17 +22,19 @@ import org.jclouds.json.SerializedNames;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class Build {
+public abstract class Artifact {
 
-   public abstract int number();
+   public abstract String displayPath();
 
-   public abstract String url();
+   public abstract String fileName();
 
-   Build() {
+   public abstract String relativePath();
+
+   Artifact() {
    }
 
-   @SerializedNames({ "number", "url" })
-   public static Build create(int number, String url) {
-      return new AutoValue_Build(number, url);
+   @SerializedNames({ "displayPath", "fileName", "relativePath" })
+   public static Artifact create(String displayPath, String fileName, String relativePath) {
+      return new AutoValue_Artifact(displayPath, fileName, relativePath);
    }
 }

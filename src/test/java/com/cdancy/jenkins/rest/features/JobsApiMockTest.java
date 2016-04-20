@@ -30,6 +30,7 @@ import javax.ws.rs.core.MediaType;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
+import com.cdancy.jenkins.rest.domain.job.BuildInfo;
 import com.cdancy.jenkins.rest.domain.job.JobInfo;
 import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.cdancy.jenkins.rest.internal.BaseJenkinsMockTest;
@@ -51,11 +52,11 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       JenkinsApi etcdJavaApi = api(server.getUrl("/"));
       JobsApi api = etcdJavaApi.jobsApi();
       try {
-         JobInfo output = api.info("fish");
+         JobInfo output = api.jobInfo("fish");
          assertNotNull(output);
          assertNotNull(output.name().equals("fish"));
          assertTrue(output.builds().size() == 7);
-         assertSent(server, "GET", "/job/fish/api/json?pretty=true");
+         assertSent(server, "GET", "/job/fish/api/json");
       } finally {
          etcdJavaApi.close();
          server.shutdown();
@@ -69,9 +70,44 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       JenkinsApi etcdJavaApi = api(server.getUrl("/"));
       JobsApi api = etcdJavaApi.jobsApi();
       try {
-         JobInfo output = api.info("fish");
+         JobInfo output = api.jobInfo("fish");
          assertNull(output);
-         assertSent(server, "GET", "/job/fish/api/json?pretty=true");
+         assertSent(server, "GET", "/job/fish/api/json");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGetBuildInfo() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      String body = payloadFromResource("/build-info.json");
+      server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         BuildInfo output = api.buildInfo("fish", 10);
+         assertNotNull(output);
+         assertNotNull(output.fullDisplayName().equals("fish #10"));
+         assertTrue(output.artifacts().size() == 1);
+         assertSent(server, "GET", "/job/fish/10/api/json");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
+   public void testGetBuildInfoNotFound() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(new MockResponse().setResponseCode(404));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         BuildInfo output = api.buildInfo("fish", 10);
+         assertNull(output);
+         assertSent(server, "GET", "/job/fish/10/api/json");
       } finally {
          etcdJavaApi.close();
          server.shutdown();

@@ -36,11 +36,11 @@ import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Payload;
 import org.jclouds.rest.annotations.PayloadParam;
-import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
 import com.cdancy.jenkins.rest.binders.BindMapToForm;
+import com.cdancy.jenkins.rest.domain.job.BuildInfo;
 import com.cdancy.jenkins.rest.domain.job.JobInfo;
 import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
@@ -53,13 +53,19 @@ import com.cdancy.jenkins.rest.parsers.OutputToProgressiveText;
 @Path("/")
 public interface JobsApi {
 
-   @Named("jobs:info")
+   @Named("jobs:job-info")
    @Path("/job/{name}/api/json")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
    @Consumes(MediaType.APPLICATION_JSON)
-   @QueryParams(keys = { "pretty" }, values = { "true" })
    @GET
-   JobInfo info(@PathParam("name") String jobName);
+   JobInfo jobInfo(@PathParam("name") String jobName);
+
+   @Named("jobs:build-info")
+   @Path("/job/{name}/{number}/api/json")
+   @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+   @Consumes(MediaType.APPLICATION_JSON)
+   @GET
+   BuildInfo buildInfo(@PathParam("name") String jobName, @PathParam("number") int buildNumber);
 
    @Named("jobs:create")
    @Path("/createItem")

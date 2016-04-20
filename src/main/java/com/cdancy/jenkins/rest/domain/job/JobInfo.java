@@ -44,37 +44,37 @@ public abstract class JobInfo {
 
    public abstract boolean buildable();
 
-   public abstract List<Build> builds();
+   public abstract List<BuildInfo> builds();
 
    public abstract String color();
 
    @Nullable
-   public abstract Build firstBuild();
+   public abstract BuildInfo firstBuild();
 
    public abstract boolean inQueue();
 
    public abstract boolean keepDependencies();
 
    @Nullable
-   public abstract Build lastBuild();
+   public abstract BuildInfo lastBuild();
 
    @Nullable
-   public abstract Build lastCompleteBuild();
+   public abstract BuildInfo lastCompleteBuild();
 
    @Nullable
-   public abstract Build lastFailedBuild();
+   public abstract BuildInfo lastFailedBuild();
 
    @Nullable
-   public abstract Build lastStableBuild();
+   public abstract BuildInfo lastStableBuild();
 
    @Nullable
-   public abstract Build lastSuccessfulBuild();
+   public abstract BuildInfo lastSuccessfulBuild();
 
    @Nullable
-   public abstract Build lastUnstableBuild();
+   public abstract BuildInfo lastUnstableBuild();
 
    @Nullable
-   public abstract Build lastUnsuccessfulBuild();
+   public abstract BuildInfo lastUnsuccessfulBuild();
 
    public abstract int nextBuildNumber();
 
@@ -91,12 +91,12 @@ public abstract class JobInfo {
          "lastStableBuild", "lastSuccessfulBuild", "lastUnstableBuild", "lastUnsuccessfulBuild", "nextBuildNumber",
          "queueItem", "concurrentBuild" })
    public static JobInfo create(String description, String displayName, String displayNameOrNull, String name,
-         String url, boolean buildable, List<Build> builds, String color, Build firstBuild, boolean inQueue,
-         boolean keepDependencies, Build lastBuild, Build lastCompleteBuild, Build lastFailedBuild,
-         Build lastStableBuild, Build lastSuccessfulBuild, Build lastUnstableBuild, Build lastUnsuccessfulBuild,
+         String url, boolean buildable, List<BuildInfo> builds, String color, BuildInfo firstBuild, boolean inQueue,
+         boolean keepDependencies, BuildInfo lastBuild, BuildInfo lastCompleteBuild, BuildInfo lastFailedBuild,
+         BuildInfo lastStableBuild, BuildInfo lastSuccessfulBuild, BuildInfo lastUnstableBuild, BuildInfo lastUnsuccessfulBuild,
          int nextBuildNumber, QueueItem queueItem, boolean concurrentBuild) {
       return new AutoValue_JobInfo(description, displayName, displayNameOrNull, name, url, buildable,
-            builds != null ? ImmutableList.copyOf(builds) : ImmutableList.<Build> of(), color, firstBuild, inQueue,
+            builds != null ? ImmutableList.copyOf(builds) : ImmutableList.<BuildInfo> of(), color, firstBuild, inQueue,
             keepDependencies, lastBuild, lastCompleteBuild, lastFailedBuild, lastStableBuild, lastSuccessfulBuild,
             lastUnstableBuild, lastUnsuccessfulBuild, nextBuildNumber, queueItem, concurrentBuild);
    }

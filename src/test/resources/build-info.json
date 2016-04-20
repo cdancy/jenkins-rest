@@ -23,24 +23,26 @@
     }
   ],
   "artifacts" : [
-    
+    {
+      "displayPath" : "fish.txt",
+      "fileName" : "fish.txt",
+      "relativePath" : "fish.txt"
+    }
   ],
-  "building" : true,
+  "building" : false,
   "description" : null,
-  "displayName" : "#9",
-  "duration" : 0,
-  "estimatedDuration" : 60036,
-  "executor" : {
-    
-  },
-  "fullDisplayName" : "fish #9",
-  "id" : "9",
+  "displayName" : "#10",
+  "duration" : 60750,
+  "estimatedDuration" : 60258,
+  "executor" : null,
+  "fullDisplayName" : "fish #10",
+  "id" : "10",
   "keepLog" : false,
-  "number" : 9,
-  "queueId" : 72,
-  "result" : null,
-  "timestamp" : 1460942082837,
-  "url" : "http://localhost:32769/job/fish/9/",
+  "number" : 10,
+  "queueId" : 73,
+  "result" : "SUCCESS",
+  "timestamp" : 1461091892486,
+  "url" : "http://localhost:32769/job/fish/10/",
   "builtOn" : "",
   "changeSet" : {
     "items" : [
@@ -49,6 +51,9 @@
     "kind" : null
   },
   "culprits" : [
-    
+    {
+        "absoluteUrl": "http://localhost:8080/user/username",
+        "fullName": "username"
+    }
   ]
 }
