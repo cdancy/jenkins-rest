@@ -25,7 +25,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
-import org.jclouds.rest.annotations.QueryParams;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.SelectJson;
 
@@ -39,7 +38,6 @@ public interface QueueApi {
 
    @Named("queue:queue")
    @SelectJson("items")
-   @QueryParams(keys = { "pretty" }, values = { "true" })
    @GET
    List<QueueItem> queue();
 }

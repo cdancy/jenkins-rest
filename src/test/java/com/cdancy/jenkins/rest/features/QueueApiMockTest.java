@@ -44,7 +44,7 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
       try {
          List<QueueItem> output = api.queue();
          assertTrue(output.size() == 2);
-         assertSent(server, "GET", "/queue/api/json?pretty=true");
+         assertSent(server, "GET", "/queue/api/json");
       } finally {
          etcdJavaApi.close();
          server.shutdown();
