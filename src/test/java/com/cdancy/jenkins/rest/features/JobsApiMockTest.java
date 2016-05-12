@@ -398,6 +398,24 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
       }
    }
 
+   public void testBuildJobWithNoLocationReturned() throws Exception {
+      MockWebServer server = mockEtcdJavaWebServer();
+
+      server.enqueue(
+              new MockResponse().setResponseCode(201));
+      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
+      JobsApi api = etcdJavaApi.jobsApi();
+      try {
+         Integer output = api.build("DevTest");
+         assertNotNull(output);
+         assertTrue(output == 0);
+         assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
+      } finally {
+         etcdJavaApi.close();
+         server.shutdown();
+      }
+   }
+
    public void testBuildJobNonExistentJob() throws Exception {
       MockWebServer server = mockEtcdJavaWebServer();
 

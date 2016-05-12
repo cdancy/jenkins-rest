@@ -22,7 +22,7 @@ Can be found in jcenter:
 	<dependency>
 	  <groupId>com.cdancy</groupId>
 	  <artifactId>jenkins-rest</artifactId>
-	  <version>0.0.2</version>
+	  <version>0.0.3</version>
 	</dependency>
 	
 ## Documentation

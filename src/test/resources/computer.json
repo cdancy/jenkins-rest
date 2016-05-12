@@ -1,0 +1,466 @@
+{
+  "busyExecutors" : 1,
+  "computer" : [
+    {
+      "actions" : [
+        
+      ],
+      "displayName" : "master",
+      "executors" : [
+        {
+          
+        },
+        {
+          
+        }
+      ],
+      "icon" : "computer.png",
+      "iconClassName" : "icon-computer",
+      "idle" : false,
+      "jnlpAgent" : false,
+      "launchSupported" : true,
+      "loadStatistics" : {
+        
+      },
+      "manualLaunchAllowed" : true,
+      "monitorData" : {
+        "hudson.node_monitors.SwapSpaceMonitor" : {
+          "availablePhysicalMemory" : 296132608,
+          "availableSwapSpace" : 384086016,
+          "totalPhysicalMemory" : 4129214464,
+          "totalSwapSpace" : 501702656
+        },
+        "hudson.node_monitors.ArchitectureMonitor" : "Linux (amd64)",
+        "hudson.node_monitors.ResponseTimeMonitor" : {
+          "average" : 0
+        },
+        "hudson.node_monitors.TemporarySpaceMonitor" : {
+          "path" : "/tmp",
+          "size" : 602546176
+        },
+        "hudson.node_monitors.DiskSpaceMonitor" : {
+          "path" : "/srv/jenkins",
+          "size" : 13811769344
+        },
+        "hudson.node_monitors.ClockMonitor" : {
+          "diff" : 0
+        }
+      },
+      "numExecutors" : 2,
+      "offline" : false,
+      "offlineCause" : null,
+      "offlineCauseReason" : "",
+      "oneOffExecutors" : [
+        
+      ],
+      "temporarilyOffline" : false
+    },
+    {
+      "actions" : [
+        
+      ],
+      "displayName" : "alpine-i686",
+      "executors" : [
+        {
+          
+        }
+      ],
+      "icon" : "computer-x.png",
+      "iconClassName" : "icon-computer-x",
+      "idle" : true,
+      "jnlpAgent" : false,
+      "launchSupported" : true,
+      "loadStatistics" : {
+        
+      },
+      "manualLaunchAllowed" : true,
+      "monitorData" : {
+        "hudson.node_monitors.SwapSpaceMonitor" : null,
+        "hudson.node_monitors.ArchitectureMonitor" : null,
+        "hudson.node_monitors.ResponseTimeMonitor" : {
+          "average" : 5000
+        },
+        "hudson.node_monitors.TemporarySpaceMonitor" : null,
+        "hudson.node_monitors.DiskSpaceMonitor" : null,
+        "hudson.node_monitors.ClockMonitor" : null
+      },
+      "numExecutors" : 1,
+      "offline" : true,
+      "offlineCause" : {
+        
+      },
+      "offlineCauseReason" : "This node is offline because Jenkins failed to launch the slave agent on it.",
+      "oneOffExecutors" : [
+        
+      ],
+      "temporarilyOffline" : false
+    },
+    {
+      "actions" : [
+        
+      ],
+      "displayName" : "arm-greg",
+      "executors" : [
+        {
+          
+        },
+        {
+          
+        }
+      ],
+      "icon" : "computer-x.png",
+      "iconClassName" : "icon-computer-x",
+      "idle" : true,
+      "jnlpAgent" : false,
+      "launchSupported" : true,
+      "loadStatistics" : {
+        
+      },
+      "manualLaunchAllowed" : true,
+      "monitorData" : {
+        "hudson.node_monitors.SwapSpaceMonitor" : null,
+        "hudson.node_monitors.ArchitectureMonitor" : null,
+        "hudson.node_monitors.ResponseTimeMonitor" : {
+          "average" : 5000
+        },
+        "hudson.node_monitors.TemporarySpaceMonitor" : null,
+        "hudson.node_monitors.DiskSpaceMonitor" : null,
+        "hudson.node_monitors.ClockMonitor" : null
+      },
+      "numExecutors" : 2,
+      "offline" : true,
+      "offlineCause" : {
+        
+      },
+      "offlineCauseReason" : "This node is offline because Jenkins failed to launch the slave agent on it.",
+      "oneOffExecutors" : [
+        
+      ],
+      "temporarilyOffline" : false
+    },
+    {
+      "actions" : [
+        
+      ],
+      "displayName" : "i686-epian533-greg",
+      "executors" : [
+        {
+          
+        }
+      ],
+      "icon" : "computer-x.png",
+      "iconClassName" : "icon-computer-x",
+      "idle" : true,
+      "jnlpAgent" : false,
+      "launchSupported" : true,
+      "loadStatistics" : {
+        
+      },
+      "manualLaunchAllowed" : true,
+      "monitorData" : {
+        "hudson.node_monitors.SwapSpaceMonitor" : null,
+        "hudson.node_monitors.ArchitectureMonitor" : null,
+        "hudson.node_monitors.ResponseTimeMonitor" : {
+          "average" : 5000
+        },
+        "hudson.node_monitors.TemporarySpaceMonitor" : null,
+        "hudson.node_monitors.DiskSpaceMonitor" : null,
+        "hudson.node_monitors.ClockMonitor" : null
+      },
+      "numExecutors" : 1,
+      "offline" : true,
+      "offlineCause" : {
+        
+      },
+      "offlineCauseReason" : "This node is offline because Jenkins failed to launch the slave agent on it.",
+      "oneOffExecutors" : [
+        
+      ],
+      "temporarilyOffline" : false
+    },
+    {
+      "actions" : [
+        
+      ],
+      "displayName" : "macos-giles",
+      "executors" : [
+        {
+          
+        },
+        {
+          
+        }
+      ],
+      "icon" : "computer-x.png",
+      "iconClassName" : "icon-computer-x",
+      "idle" : true,
+      "jnlpAgent" : false,
+      "launchSupported" : true,
+      "loadStatistics" : {
+        
+      },
+      "manualLaunchAllowed" : true,
+      "monitorData" : {
+        "hudson.node_monitors.SwapSpaceMonitor" : null,
+        "hudson.node_monitors.ArchitectureMonitor" : null,
+        "hudson.node_monitors.ResponseTimeMonitor" : {
+          "average" : 5000
+        },
+        "hudson.node_monitors.TemporarySpaceMonitor" : null,
+        "hudson.node_monitors.DiskSpaceMonitor" : null,
+        "hudson.node_monitors.ClockMonitor" : null
+      },
+      "numExecutors" : 2,
+      "offline" : true,
+      "offlineCause" : {
+        
+      },
+      "offlineCauseReason" : "This node is offline because Jenkins failed to launch the slave agent on it.",
+      "oneOffExecutors" : [
+        
+      ],
+      "temporarilyOffline" : false
+    },
+    {
+      "actions" : [
+        
+      ],
+      "displayName" : "osx-ppc-greg",
+      "executors" : [
+        {
+          
+        },
+        {
+          
+        }
+      ],
+      "icon" : "computer-x.png",
+      "iconClassName" : "icon-computer-x",
+      "idle" : true,
+      "jnlpAgent" : false,
+      "launchSupported" : true,
+      "loadStatistics" : {
+        
+      },
+      "manualLaunchAllowed" : true,
+      "monitorData" : {
+        "hudson.node_monitors.SwapSpaceMonitor" : null,
+        "hudson.node_monitors.ArchitectureMonitor" : null,
+        "hudson.node_monitors.ResponseTimeMonitor" : {
+          "average" : 5000
+        },
+        "hudson.node_monitors.TemporarySpaceMonitor" : null,
+        "hudson.node_monitors.DiskSpaceMonitor" : null,
+        "hudson.node_monitors.ClockMonitor" : null
+      },
+      "numExecutors" : 2,
+      "offline" : true,
+      "offlineCause" : {
+        
+      },
+      "offlineCauseReason" : "This node is offline because Jenkins failed to launch the slave agent on it.",
+      "oneOffExecutors" : [
+        
+      ],
+      "temporarilyOffline" : false
+    },
+    {
+      "actions" : [
+        
+      ],
+      "displayName" : "solaris-greg",
+      "executors" : [
+        {
+          
+        },
+        {
+          
+        }
+      ],
+      "icon" : "computer-x.png",
+      "iconClassName" : "icon-computer-x",
+      "idle" : true,
+      "jnlpAgent" : false,
+      "launchSupported" : true,
+      "loadStatistics" : {
+        
+      },
+      "manualLaunchAllowed" : true,
+      "monitorData" : {
+        "hudson.node_monitors.SwapSpaceMonitor" : null,
+        "hudson.node_monitors.ArchitectureMonitor" : null,
+        "hudson.node_monitors.ResponseTimeMonitor" : {
+          "average" : 5000
+        },
+        "hudson.node_monitors.TemporarySpaceMonitor" : null,
+        "hudson.node_monitors.DiskSpaceMonitor" : null,
+        "hudson.node_monitors.ClockMonitor" : null
+      },
+      "numExecutors" : 2,
+      "offline" : true,
+      "offlineCause" : {
+        
+      },
+      "offlineCauseReason" : "This node is offline because Jenkins failed to launch the slave agent on it.",
+      "oneOffExecutors" : [
+        
+      ],
+      "temporarilyOffline" : false
+    },
+    {
+      "actions" : [
+        
+      ],
+      "displayName" : "thomas-armv7",
+      "executors" : [
+        {
+          
+        }
+      ],
+      "icon" : "computer.png",
+      "iconClassName" : "icon-computer",
+      "idle" : true,
+      "jnlpAgent" : false,
+      "launchSupported" : true,
+      "loadStatistics" : {
+        
+      },
+      "manualLaunchAllowed" : true,
+      "monitorData" : {
+        "hudson.node_monitors.SwapSpaceMonitor" : {
+          "availablePhysicalMemory" : 16617472,
+          "availableSwapSpace" : 0,
+          "totalPhysicalMemory" : 967942144,
+          "totalSwapSpace" : 0
+        },
+        "hudson.node_monitors.ArchitectureMonitor" : "Linux (arm)",
+        "hudson.node_monitors.ResponseTimeMonitor" : {
+          "average" : 241
+        },
+        "hudson.node_monitors.TemporarySpaceMonitor" : {
+          "path" : "/tmp",
+          "size" : 483831808
+        },
+        "hudson.node_monitors.DiskSpaceMonitor" : {
+          "path" : "/home/jenkins/mf4-slave",
+          "size" : 11712028672
+        },
+        "hudson.node_monitors.ClockMonitor" : {
+          "diff" : -51
+        }
+      },
+      "numExecutors" : 1,
+      "offline" : false,
+      "offlineCause" : null,
+      "offlineCauseReason" : "",
+      "oneOffExecutors" : [
+        
+      ],
+      "temporarilyOffline" : false
+    },
+    {
+      "actions" : [
+        
+      ],
+      "displayName" : "thomas-armv8",
+      "executors" : [
+        {
+          
+        }
+      ],
+      "icon" : "computer.png",
+      "iconClassName" : "icon-computer",
+      "idle" : true,
+      "jnlpAgent" : false,
+      "launchSupported" : true,
+      "loadStatistics" : {
+        
+      },
+      "manualLaunchAllowed" : true,
+      "monitorData" : {
+        "hudson.node_monitors.SwapSpaceMonitor" : {
+          "availablePhysicalMemory" : 48705536,
+          "availableSwapSpace" : 0,
+          "totalPhysicalMemory" : 922046464,
+          "totalSwapSpace" : 0
+        },
+        "hudson.node_monitors.ArchitectureMonitor" : "Linux (aarch64)",
+        "hudson.node_monitors.ResponseTimeMonitor" : {
+          "average" : 283
+        },
+        "hudson.node_monitors.TemporarySpaceMonitor" : {
+          "path" : "/tmp",
+          "size" : 460984320
+        },
+        "hudson.node_monitors.DiskSpaceMonitor" : {
+          "path" : "/home/jenkins/mf4-slave",
+          "size" : 25846784000
+        },
+        "hudson.node_monitors.ClockMonitor" : {
+          "diff" : 4
+        }
+      },
+      "numExecutors" : 1,
+      "offline" : false,
+      "offlineCause" : null,
+      "offlineCauseReason" : "",
+      "oneOffExecutors" : [
+        
+      ],
+      "temporarilyOffline" : false
+    },
+    {
+      "actions" : [
+        
+      ],
+      "displayName" : "thomas-mips",
+      "executors" : [
+        {
+          
+        }
+      ],
+      "icon" : "computer.png",
+      "iconClassName" : "icon-computer",
+      "idle" : true,
+      "jnlpAgent" : false,
+      "launchSupported" : true,
+      "loadStatistics" : {
+        
+      },
+      "manualLaunchAllowed" : true,
+      "monitorData" : {
+        "hudson.node_monitors.SwapSpaceMonitor" : {
+          "availablePhysicalMemory" : 11415552,
+          "availableSwapSpace" : 0,
+          "totalPhysicalMemory" : 128274432,
+          "totalSwapSpace" : 0
+        },
+        "hudson.node_monitors.ArchitectureMonitor" : "Linux (mips)",
+        "hudson.node_monitors.ResponseTimeMonitor" : {
+          "average" : 3006
+        },
+        "hudson.node_monitors.TemporarySpaceMonitor" : {
+          "path" : "/tmp",
+          "size" : 5367590912
+        },
+        "hudson.node_monitors.DiskSpaceMonitor" : {
+          "path" : "/home/jenkins/mf4-slave",
+          "size" : 5367590912
+        },
+        "hudson.node_monitors.ClockMonitor" : {
+          "diff" : -314
+        }
+      },
+      "numExecutors" : 1,
+      "offline" : false,
+      "offlineCause" : null,
+      "offlineCauseReason" : "",
+      "oneOffExecutors" : [
+        
+      ],
+      "temporarilyOffline" : false
+    }
+  ],
+  "displayName" : "nodes",
+  "totalExecutors" : 5
+}

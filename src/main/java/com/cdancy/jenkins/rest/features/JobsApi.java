@@ -127,6 +127,12 @@ public interface JobsApi {
    @POST
    boolean disable(@PathParam("name") String jobName);
 
+   /**
+    * Queue's a build for a given job
+    *
+    * @param jobName
+    * @return queue id to reference build
+     */
    @Named("jobs:build")
    @Path("/job/{name}/build")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
@@ -135,6 +141,13 @@ public interface JobsApi {
    @POST
    Integer build(@PathParam("name") String jobName);
 
+   /**
+    * Queue's a build with parameters for a given job
+    *
+    * @param jobName
+    * @param properties
+    * @return queue id to reference build
+     */
    @Named("jobs:build-with-params")
    @Path("/job/{name}/buildWithParameters")
    @Fallback(Fallbacks.NullOnNotFoundOr404.class)

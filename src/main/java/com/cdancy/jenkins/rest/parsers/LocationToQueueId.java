@@ -37,11 +37,13 @@ public class LocationToQueueId implements Function<HttpResponse, Integer> {
    public Integer apply(HttpResponse response) {
 
       String url = response.getFirstHeaderOrNull("Location");
-      Matcher matcher = pattern.matcher(url);
-      if (matcher.find() && matcher.groupCount() == 1) {
-         return Integer.valueOf(matcher.group(1));
-      } else {
-         return -1;
+      if (url != null) {
+         Matcher matcher = pattern.matcher(url);
+         if (matcher.find() && matcher.groupCount() == 1) {
+            return Integer.valueOf(matcher.group(1));
+         }
       }
+
+      return 0;
    }
 }
