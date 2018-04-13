@@ -27,16 +27,16 @@ apply from: "$rootDir/gradle/publishing.gradle"
 apply from: "$rootDir/gradle/release.gradle"
 
 dependencies {
-    compile ('org.apache.jclouds:jclouds-core:1.9.2') 
-    compile ('org.apache.jclouds.driver:jclouds-okhttp:1.9.2') 
+    compile ('org.apache.jclouds:jclouds-core:2.1.0') 
+    compile ('org.apache.jclouds.driver:jclouds-okhttp:2.1.0') 
     compile ('com.google.auto.service:auto-service:1.0-rc2') 
     compile ('com.google.auto.value:auto-value:1.1')
     
-    testCompile ('org.apache.jclouds:jclouds-core:1.9.2:tests')
+    testCompile ('org.apache.jclouds:jclouds-core:2.1.0:tests')
     testCompile ('org.testng:testng:6.8.21') 
     testCompile ('org.assertj:assertj-core:1.7.0') 
     testCompile ('com.squareup.okhttp:mockwebserver:2.2.0') 
-    testCompile ('org.apache.jclouds.driver:jclouds-slf4j:1.9.2') 
+    testCompile ('org.apache.jclouds.driver:jclouds-slf4j:2.1.0') 
     testCompile ('ch.qos.logback:logback-core:1.1.2') 
     testCompile ('ch.qos.logback:logback-classic:1.1.2')
 }
