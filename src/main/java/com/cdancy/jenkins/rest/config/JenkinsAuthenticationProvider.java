@@ -17,23 +17,26 @@
 
 package com.cdancy.jenkins.rest.config;
 
-import org.jclouds.http.HttpErrorHandler;
-import org.jclouds.http.annotation.ClientError;
-import org.jclouds.http.annotation.Redirection;
-import org.jclouds.http.annotation.ServerError;
-import org.jclouds.rest.ConfiguresHttpApi;
-import org.jclouds.rest.config.HttpApiModule;
+import com.cdancy.jenkins.rest.JenkinsAuthentication;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 
-import com.cdancy.jenkins.rest.JenkinsApi;
-import com.cdancy.jenkins.rest.handlers.JenkinsErrorHandler;
+/**
+ * Provider for JenkinsAuthentication objects. The JenkinsAuthentication
+ * should be created ahead of time with this module simply handing it out
+ * to downstream objects for injection.
+ */
+public class JenkinsAuthenticationProvider implements Provider<JenkinsAuthentication> {
 
-@ConfiguresHttpApi
-public class JenkinsHttpApiModule extends HttpApiModule<JenkinsApi> {
+    private final JenkinsAuthentication creds;
+
+    @Inject
+    public JenkinsAuthenticationProvider(final JenkinsAuthentication creds) {
+        this.creds = creds;
+    }
 
     @Override
-    protected void bindErrorHandlers() {
-        bind(HttpErrorHandler.class).annotatedWith(Redirection.class).to(JenkinsErrorHandler.class);
-        bind(HttpErrorHandler.class).annotatedWith(ClientError.class).to(JenkinsErrorHandler.class);
-        bind(HttpErrorHandler.class).annotatedWith(ServerError.class).to(JenkinsErrorHandler.class);
+    public JenkinsAuthentication get() {
+        return creds;
     }
 }
