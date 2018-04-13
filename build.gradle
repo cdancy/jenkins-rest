@@ -1,16 +1,11 @@
-repositories {
-    jcenter()
-    mavenCentral()
-}
-
 buildscript {
     repositories {
         jcenter()
-        mavenCentral()
     }
     dependencies {
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1"
-        classpath "com.bmuschko:gradle-docker-plugin:2.6.8"
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
+        classpath 'com.bmuschko:gradle-docker-plugin:3.2.6'
     }
 }
 
@@ -18,7 +13,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.artifactory'
-apply plugin: "com.bmuschko.docker-remote-api"
+apply plugin: 'com.bmuschko.docker-remote-api'
 
 apply from: "$rootDir/gradle/additional-artifacts.gradle"
 apply from: "$rootDir/gradle/dependencies.gradle"
@@ -26,19 +21,24 @@ apply from: "$rootDir/gradle/documentation.gradle"
 apply from: "$rootDir/gradle/publishing.gradle"
 apply from: "$rootDir/gradle/release.gradle"
 
+repositories {
+    jcenter()
+}
+
 dependencies {
-    compile ('org.apache.jclouds:jclouds-core:2.1.0') 
-    compile ('org.apache.jclouds.driver:jclouds-okhttp:2.1.0') 
-    compile ('com.google.auto.service:auto-service:1.0-rc2') 
-    compile ('com.google.auto.value:auto-value:1.1')
+    ext.jcloudsVersion = '2.1.0'
+
+    compile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}") 
+    compile ('com.google.auto.service:auto-service:1.0-rc3') 
+    compileOnly ('com.google.auto.value:auto-value:1.5.3')
     
-    testCompile ('org.apache.jclouds:jclouds-core:2.1.0:tests')
-    testCompile ('org.testng:testng:6.8.21') 
-    testCompile ('org.assertj:assertj-core:1.7.0') 
-    testCompile ('com.squareup.okhttp:mockwebserver:2.2.0') 
-    testCompile ('org.apache.jclouds.driver:jclouds-slf4j:2.1.0') 
-    testCompile ('ch.qos.logback:logback-core:1.1.2') 
-    testCompile ('ch.qos.logback:logback-classic:1.1.2')
+    testCompile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}:tests")
+    testCompile ("org.apache.jclouds.driver:jclouds-slf4j:${jcloudsVersion}") 
+    testCompile ('org.testng:testng:6.11') 
+    testCompile ('org.assertj:assertj-core:3.8.0') 
+    testCompile ('com.squareup.okhttp:mockwebserver:2.7.5') 
+    testCompile ('ch.qos.logback:logback-core:1.2.3') 
+    testCompile ('ch.qos.logback:logback-classic:1.2.3')
 }
 
 ext.compatibilityVersion = '1.8'
@@ -62,11 +62,12 @@ tasks.withType(JavaCompile) {
 
 task mockTest(type: Test) {
     useTestNG() 
-	include "**/*MockTest.class"
-	testLogging {
-		showStandardStreams = true
-		events 'started', 'passed', 'failed'
-	}
+    include '**/**MockTest.class'
+    maxParallelForks = 2
+    testLogging {
+        showStandardStreams = true
+        events 'started', 'passed', 'failed'
+    }
 }
 
 task integTest(type: Test, dependsOn: ['mockTest']) {
@@ -83,34 +84,34 @@ task integTest(type: Test, dependsOn: ['mockTest']) {
 }
 
 if (bootstrapDocker) {
-	def integTestTask = project.tasks.getByName('integTest')
-	integTestTask.dependsOn('startNode')
-	integTestTask.finalizedBy('teardownNode')
+    def integTestTask = project.tasks.getByName('integTest')
+    integTestTask.dependsOn('startNode')
+    integTestTask.finalizedBy('teardownNode')
 }
 
 artifactory {
-	contextUrl = artifactoryURL
-	publish {
-		repository {
-			repoKey = version.endsWith('-SNAPSHOT') ? snapshotRepository : releaseRepository
-			username = artifactoryUser
-			password = artifactoryPassword
-			mavenCompatible = true
-		}
-		defaults {
-			publications ('artifactoryJava')
-		}
-	}
+    contextUrl = artifactoryURL
+    publish {
+        repository {
+            repoKey = version.endsWith('-SNAPSHOT') ? snapshotRepository : releaseRepository
+            username = artifactoryUser
+            password = artifactoryPassword
+            mavenCompatible = true
+        }
+        defaults {
+            publications ('artifactoryJava')
+        }
+    }
 }
 
 publishing {
-	publications {
-		artifactoryJava(MavenPublication) {
-			from components.java
-			artifact sourcesJar
-			artifact javadocJar
-		}
-	}
+    publications {
+        artifactoryJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
 }
 
 docker {

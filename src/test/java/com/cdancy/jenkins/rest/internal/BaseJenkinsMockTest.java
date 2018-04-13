@@ -64,7 +64,7 @@ public class BaseJenkinsMockTest {
 
    public static MockWebServer mockEtcdJavaWebServer() throws IOException {
       MockWebServer server = new MockWebServer();
-      server.play();
+      server.start();
       return server;
    }
 

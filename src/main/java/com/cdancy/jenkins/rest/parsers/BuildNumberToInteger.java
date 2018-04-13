@@ -26,9 +26,8 @@ import org.jclouds.http.HttpResponse;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Function;
+import com.google.common.base.Throwables;
 import com.google.common.io.CharStreams;
-
-import autovalue.shaded.com.google.common.common.base.Throwables;
 
 /**
  * Created by dancc on 3/11/16.
