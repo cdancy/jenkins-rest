@@ -1,3 +1,22 @@
+shadowJar {
+    classifier = 'all'
+    mergeServiceFiles()
+
+    def foundGroup = rootProject.findProperty('group')
+    def foundName = rootProject.name.replaceAll('-', '.')
+    def newBasePackage = "${foundGroup}.${foundName}"
+
+    relocate 'org.aopalliance', "${newBasePackage}.shaded.org.aopalliance"
+    relocate 'org.objectweb', "${newBasePackage}.shaded.org.objectweb"
+    relocate 'com.google', "${newBasePackage}.shaded.com.google"
+    relocate 'net.sf', "${newBasePackage}.shaded.net.sf"
+    relocate 'javax.inject', "${newBasePackage}.shaded.javax.inject"
+    relocate 'org.jclouds', "${newBasePackage}.shaded.org.jclouds"
+    relocate 'javax.inject', "${newBasePackage}.shaded.javax.inject"
+    relocate 'javax.annotation', "${newBasePackage}.shaded.javax.annotation"
+    relocate 'javax.ws.rs', "${newBasePackage}.shaded.javax.ws.rs"
+}
+
 task sourcesJar(type: Jar) {
     classifier 'sources'
     from sourceSets.main.allSource
@@ -8,7 +27,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
-artifacts {
-    archives sourcesJar
-    archives javadocJar
+task testsJar(type: Jar) {
+    classifier = 'tests'
+    from sourceSets.test.output
 }

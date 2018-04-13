@@ -16,7 +16,9 @@ publishing {
         mavenJava(MavenPublication) {
             from components.java
             artifact sourcesJar
+            artifact testsJar
             artifact javadocJar
+            artifact shadowJar
 
             pom.withXml {
                 def root = asNode()
@@ -45,10 +47,25 @@ publishing {
     }
 }
 
+artifactory {
+    contextUrl = artifactoryURL
+    publish {
+        repository {
+            repoKey = version.endsWith('-SNAPSHOT') ? snapshotRepository : releaseRepository
+            username = artifactoryUser
+            password = artifactoryPassword
+            mavenCompatible = true
+        }
+        defaults {
+            publications ('mavenJava')
+        }
+    }
+}
+
 bintray {
 
-    user = project.bintrayUsername
-    key = project.bintrayKey
+    user = resolveProperty('bintrayUsername')
+    key = resolveProperty('bintrayKey')
     publications = ['mavenJava']
     publish = true
 
@@ -66,20 +83,20 @@ bintray {
         githubReleaseNotesFile = 'RELEASE_NOTES.md'
 
         version {
-        	released  = new Date()
+            released  = new Date()
             vcsTag = "v${project.version}"
             attributes = ['jenkins-rest': ["${project.group}:${project.name}:${project.version}"]]
 
             gpg {
                 sign = true
-                passphrase = resolveProperty('GPG_PASSPHRASE', 'gpgPassphrase')
+                passphrase = resolveProperty('gpgPassphrase')
             }
         }
     }
 }
 
-String resolveProperty(String envVarKey, String projectPropKey) {
-    String propValue = System.getenv()[envVarKey]
+String resolveProperty(String propKey) {
+    String propValue = System.getenv()[propKey]
     if(propValue) { return propValue }
-    hasProperty(projectPropKey) ? getProperty(projectPropKey) : null
+    hasProperty(propKey) ? getProperty(propKey) : null
 }

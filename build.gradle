@@ -89,31 +89,6 @@ if (bootstrapDocker) {
     integTestTask.finalizedBy('teardownNode')
 }
 
-artifactory {
-    contextUrl = artifactoryURL
-    publish {
-        repository {
-            repoKey = version.endsWith('-SNAPSHOT') ? snapshotRepository : releaseRepository
-            username = artifactoryUser
-            password = artifactoryPassword
-            mavenCompatible = true
-        }
-        defaults {
-            publications ('artifactoryJava')
-        }
-    }
-}
-
-publishing {
-    publications {
-        artifactoryJava(MavenPublication) {
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
-        }
-    }
-}
-
 docker {
     url = testDockerEndpoint
 }
