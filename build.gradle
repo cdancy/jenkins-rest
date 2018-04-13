@@ -41,7 +41,7 @@ dependencies {
     testCompile ('ch.qos.logback:logback-classic:1.1.2')
 }
 
-ext.compatibilityVersion = '1.7'
+ext.compatibilityVersion = '1.8'
 sourceCompatibility = compatibilityVersion
 targetCompatibility = compatibilityVersion
 
