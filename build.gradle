@@ -95,7 +95,7 @@ artifactory {
 			repoKey = version.endsWith('-SNAPSHOT') ? snapshotRepository : releaseRepository
 			username = artifactoryUser
 			password = artifactoryPassword
-			maven = true
+			mavenCompatible = true
 		}
 		defaults {
 			publications ('artifactoryJava')
