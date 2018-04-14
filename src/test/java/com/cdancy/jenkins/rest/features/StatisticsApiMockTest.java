@@ -22,7 +22,7 @@ import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.domain.statistics.OverallLoad;
-import com.cdancy.jenkins.rest.internal.BaseJenkinsMockTest;
+import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
@@ -33,19 +33,19 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 @Test(groups = "unit", testName = "StatisticsApiMockTest")
 public class StatisticsApiMockTest extends BaseJenkinsMockTest {
 
-   public void testOverallLoad() throws Exception {
-      MockWebServer server = mockEtcdJavaWebServer();
+    public void testOverallLoad() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setBody(payloadFromResource("/overall-load.json")).setResponseCode(200));
-      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
-      StatisticsApi api = etcdJavaApi.statisticsApi();
-      try {
-         OverallLoad load = api.overallLoad();
-         assertNotNull(load);
-         assertSent(server, "GET", "/overallLoad/api/json");
-      } finally {
-         etcdJavaApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setBody(payloadFromResource("/overall-load.json")).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        StatisticsApi api = jenkinsApi.statisticsApi();
+        try {
+            OverallLoad load = api.overallLoad();
+            assertNotNull(load);
+            assertSent(server, "GET", "/overallLoad/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 }

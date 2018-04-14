@@ -31,52 +31,52 @@ import com.google.inject.Module;
 @AutoService(ApiMetadata.class)
 public class JenkinsApiMetadata extends BaseHttpApiMetadata<JenkinsApi> {
 
-   public static final String API_VERSION = "1.0";
-   public static final String BUILD_VERSION = "1.642.4";
+    public static final String API_VERSION = "1.0";
+    public static final String BUILD_VERSION = "2.0";
 
-   @Override
-   public Builder toBuilder() {
-      return new Builder().fromApiMetadata(this);
-   }
+    @Override
+    public Builder toBuilder() {
+        return new Builder().fromApiMetadata(this);
+    }
 
-   public JenkinsApiMetadata() {
-      this(new Builder());
-   }
+    public JenkinsApiMetadata() {
+        this(new Builder());
+    }
 
-   protected JenkinsApiMetadata(Builder builder) {
-      super(builder);
-   }
+    protected JenkinsApiMetadata(Builder builder) {
+        super(builder);
+    }
 
-   public static Properties defaultProperties() {
-      Properties properties = BaseHttpApiMetadata.defaultProperties();
-      return properties;
-   }
+    public static Properties defaultProperties() {
+        Properties properties = BaseHttpApiMetadata.defaultProperties();
+        return properties;
+    }
 
-   public static class Builder extends BaseHttpApiMetadata.Builder<JenkinsApi, Builder> {
+    public static class Builder extends BaseHttpApiMetadata.Builder<JenkinsApi, Builder> {
 
-      protected Builder() {
-         super(JenkinsApi.class);
-         id("jenkins").name("Jenkins API").identityName("Optional Username").credentialName("Optional Password")
-               .defaultIdentity("").defaultCredential("")
-               .documentation(URI.create("http://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API"))
-               .version(API_VERSION).buildVersion(BUILD_VERSION).defaultEndpoint("http://127.0.0.1:8080")
-               .defaultProperties(JenkinsApiMetadata.defaultProperties())
-               .defaultModules(ImmutableSet.<Class<? extends Module>> of(JenkinsHttpApiModule.class));
-      }
+        protected Builder() {
+           super(JenkinsApi.class);
+           id("jenkins").name("Jenkins API").identityName("Optional Username").credentialName("Optional Password")
+                .defaultIdentity("").defaultCredential("")
+                .documentation(URI.create("http://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API"))
+                .version(API_VERSION).buildVersion(BUILD_VERSION).defaultEndpoint("http://127.0.0.1:8080")
+                .defaultProperties(JenkinsApiMetadata.defaultProperties())
+                .defaultModules(ImmutableSet.<Class<? extends Module>> of(JenkinsHttpApiModule.class));
+        }
 
-      @Override
-      public JenkinsApiMetadata build() {
-         return new JenkinsApiMetadata(this);
-      }
+        @Override
+        public JenkinsApiMetadata build() {
+            return new JenkinsApiMetadata(this);
+        }
 
-      @Override
-      protected Builder self() {
-         return this;
-      }
+        @Override
+        protected Builder self() {
+            return this;
+        }
 
-      @Override
-      public Builder fromApiMetadata(ApiMetadata in) {
-         return this;
-      }
-   }
+        @Override
+        public Builder fromApiMetadata(ApiMetadata in) {
+            return this;
+        }
+    }
 }

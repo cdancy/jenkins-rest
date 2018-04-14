@@ -26,9 +26,9 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.rest.annotations.RequestFilters;
 
 import com.cdancy.jenkins.rest.domain.statistics.OverallLoad;
-import com.cdancy.jenkins.rest.filters.JenkinsAuthentication;
+import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
 
-@RequestFilters(JenkinsAuthentication.class)
+@RequestFilters(JenkinsAuthenticationFilter.class)
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("/")
 public interface StatisticsApi {

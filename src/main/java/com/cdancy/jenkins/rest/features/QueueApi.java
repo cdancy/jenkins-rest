@@ -29,9 +29,9 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.SelectJson;
 
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
-import com.cdancy.jenkins.rest.filters.JenkinsAuthentication;
+import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
 
-@RequestFilters(JenkinsAuthentication.class)
+@RequestFilters(JenkinsAuthenticationFilter.class)
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("/queue/api/json")
 public interface QueueApi {

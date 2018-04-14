@@ -24,7 +24,7 @@ import org.testng.annotations.Test;
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.JenkinsApiMetadata;
 import com.cdancy.jenkins.rest.domain.system.SystemInfo;
-import com.cdancy.jenkins.rest.internal.BaseJenkinsMockTest;
+import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
@@ -35,7 +35,7 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 public class SystemApiMockTest extends BaseJenkinsMockTest {
 
    public void testOverallLoad() throws Exception {
-      MockWebServer server = mockEtcdJavaWebServer();
+      MockWebServer server = mockWebServer();
 
       server.enqueue(
             new MockResponse().setHeader("X-Hudson", "1.395").setHeader("X-Jenkins", JenkinsApiMetadata.BUILD_VERSION)
@@ -43,15 +43,15 @@ public class SystemApiMockTest extends BaseJenkinsMockTest {
                   .setHeader("X-Jenkins-CLI-Port", "50000").setHeader("X-Jenkins-CLI2-Port", "50000")
                   .setHeader("X-Instance-Identity", "fdsa").setHeader("X-SSH-Endpoint", "127.0.1.1:46126")
                   .setHeader("Server", "Jetty(winstone-2.9)").setResponseCode(200));
-      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
-      SystemApi api = etcdJavaApi.systemApi();
+      JenkinsApi jenkinsApi = api(server.getUrl("/"));
+      SystemApi api = jenkinsApi.systemApi();
       try {
          SystemInfo version = api.systemInfo();
          assertNotNull(version);
          assertTrue(version.jenkinsVersion().equalsIgnoreCase(JenkinsApiMetadata.BUILD_VERSION));
          assertSent(server, "HEAD", "/");
       } finally {
-         etcdJavaApi.close();
+         jenkinsApi.close();
          server.shutdown();
       }
    }

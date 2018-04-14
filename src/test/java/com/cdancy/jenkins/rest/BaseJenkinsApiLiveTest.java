@@ -16,6 +16,7 @@
  */
 package com.cdancy.jenkins.rest;
 
+import com.cdancy.jenkins.rest.config.JenkinsAuthenticationModule;
 import static org.jclouds.util.Strings2.toStringAndClose;
 
 import java.io.IOException;
@@ -34,31 +35,36 @@ import com.google.inject.Module;
 @Test(groups = "live")
 public class BaseJenkinsApiLiveTest extends BaseApiLiveTest<JenkinsApi> {
 
-   public BaseJenkinsApiLiveTest() {
-      provider = "jenkins";
-   }
+    protected final String defaultBitbucketGroup = "stash-users";
+    protected final JenkinsAuthentication jenkinsAuthentication;
 
-   @Override
-   protected Iterable<Module> setupModules() {
-      return ImmutableSet.<Module> of(getLoggingModule());
-   }
+    public BaseJenkinsApiLiveTest() {
+        provider = "jenkins";
+        this.jenkinsAuthentication = TestUtilities.inferTestAuthentication();
+    }
 
-   @Override
-   protected Properties setupProperties() {
-      Properties overrides = super.setupProperties();
-      overrides.setProperty(Constants.PROPERTY_MAX_RETRIES, "0");
-      return overrides;
-   }
+    @Override
+    protected Properties setupProperties() {
+        Properties overrides = super.setupProperties();
+        overrides.setProperty(Constants.PROPERTY_MAX_RETRIES, "0");
+        return overrides;
+    }
 
-   protected String randomString() {
-      return UUID.randomUUID().toString().replaceAll("-", "");
-   }
+    protected String randomString() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
 
-   public String payloadFromResource(String resource) {
-      try {
-         return new String(toStringAndClose(getClass().getResourceAsStream(resource)).getBytes(Charsets.UTF_8));
-      } catch (IOException e) {
-         throw Throwables.propagate(e);
-      }
-   }
+    public String payloadFromResource(String resource) {
+        try {
+            return new String(toStringAndClose(getClass().getResourceAsStream(resource)).getBytes(Charsets.UTF_8));
+        } catch (IOException e) {
+            throw Throwables.propagate(e);
+        }
+    }
+
+    @Override
+    protected Iterable<Module> setupModules() {
+        final JenkinsAuthenticationModule credsModule = new JenkinsAuthenticationModule(this.jenkinsAuthentication);
+        return ImmutableSet.<Module> of(getLoggingModule(), credsModule);
+    }
 }

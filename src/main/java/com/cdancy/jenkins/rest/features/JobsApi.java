@@ -44,12 +44,12 @@ import com.cdancy.jenkins.rest.domain.job.BuildInfo;
 import com.cdancy.jenkins.rest.domain.job.JobInfo;
 import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
-import com.cdancy.jenkins.rest.filters.JenkinsAuthentication;
+import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
 import com.cdancy.jenkins.rest.parsers.BuildNumberToInteger;
 import com.cdancy.jenkins.rest.parsers.LocationToQueueId;
 import com.cdancy.jenkins.rest.parsers.OutputToProgressiveText;
 
-@RequestFilters(JenkinsAuthentication.class)
+@RequestFilters(JenkinsAuthenticationFilter.class)
 @Path("/")
 public interface JobsApi {
 

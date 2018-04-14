@@ -5,7 +5,6 @@ buildscript {
     dependencies {
         classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1'
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
-        classpath 'com.bmuschko:gradle-docker-plugin:3.2.6'
     }
 }
 
@@ -13,7 +12,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.artifactory'
-apply plugin: 'com.bmuschko.docker-remote-api'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 apply from: "$rootDir/gradle/additional-artifacts.gradle"
 apply from: "$rootDir/gradle/dependencies.gradle"
@@ -62,7 +61,7 @@ tasks.withType(JavaCompile) {
 
 task mockTest(type: Test) {
     useTestNG() 
-    include '**/**MockTest.class'
+    include '**/**MockTest*'
     maxParallelForks = 2
     testLogging {
         showStandardStreams = true
@@ -71,95 +70,36 @@ task mockTest(type: Test) {
 }
 
 task integTest(type: Test, dependsOn: ['mockTest']) {
+    doFirst {
+        def integProjectDir = project.file("${buildDir}/integ-projects")
+        if (!integProjectDir.exists()) {
+            if (!integProjectDir.mkdirs()) {
+                throw new RuntimeException("Failed to create integ-project directory @ ${integProjectDir.path}")
+            }
+        }
+    }
     useTestNG() 
-    include "**/**LiveTest.class"
+    include "**/**LiveTest*"
+    maxParallelForks = 1
     testLogging {
         showStandardStreams = true
         events 'started', 'passed', 'failed'
-    } 
-    doFirst {
-    	String runtimeURL = bootstrapDocker ? "http://${getLocalHost()}:8080" : "${testJenkinsEndpoint}"
-    	systemProperties = ["test.jenkins.endpoint" : runtimeURL]
     }
-}
-
-if (bootstrapDocker) {
-    def integTestTask = project.tasks.getByName('integTest')
-    integTestTask.dependsOn('startNode')
-    integTestTask.finalizedBy('teardownNode')
-}
-
-docker {
-    url = testDockerEndpoint
-}
-
-ext.jenkinsContainerName = "jenkins-integ-test"
-
-task inspectNode(type: com.bmuschko.gradle.docker.tasks.container.DockerInspectContainer) {
-    targetContainerId { jenkinsContainerName }
-}
-
-task pullImage(type: com.bmuschko.gradle.docker.tasks.image.DockerPullImage) {
-    repository = testJenkinsImage
-    tag = testJenkinsTag
-}
-
-task stopNode(type: com.bmuschko.gradle.docker.tasks.container.DockerStopContainer) {
-    onlyIf { checkNode() }
-    dependsOn pullImage
-    targetContainerId { jenkinsContainerName }
-    timeout = 30
-}
-
-task removeNode(type: com.bmuschko.gradle.docker.tasks.container.DockerRemoveContainer) {
-    onlyIf { checkNode() }
-    dependsOn stopNode
-    targetContainerId { jenkinsContainerName }
-    removeVolumes = true
-    force = true
-}
-
-task createNode(type: com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer) {
-    dependsOn removeNode
-    targetImageId { pullImage.repository + ":" + pullImage.tag }
-    containerName = jenkinsContainerName
-    portBindings = ['8080:8080']
-}
-
-task startNode(type: com.bmuschko.gradle.docker.tasks.container.DockerStartContainer) {
-    dependsOn createNode
-    targetContainerId { createNode.getContainerId() }
-    doLast {
-    	logger.quiet "Sleeping for 20 seconds to allow container to init..."
-    	sleep(20000)
+    def authentication = [:]
+    def possibleAuth = project.findProperty('testJenkinsRestCredentials')
+    if (possibleAuth) {
+        authentication['test.jenkins.rest.credentials'] = possibleAuth
+    } else {
+        possibleAuth = project.findProperty('testJenkinsRestToken')
+        if (possibleAuth) {
+            authentication['test.jenkins.rest.token'] = possibleAuth
+        } else {
+            logger.quiet 'No authentication parameters found. Assuming anonymous...'
+        }
     }
-}
 
-task postTestStopNode(type: com.bmuschko.gradle.docker.tasks.container.DockerStopContainer) {
-    targetContainerId { jenkinsContainerName }
-    timeout = 30
+    // property 'test.bitbucket.endpoint' needs to be
+    // hard-coded in for jclouds test framework
+    systemProperties = ["test.jenkins.endpoint" : "${testJenkinsRestEndpoint}",
+                        "test.jenkins.basedir" : "${buildDir}/integ-projects"] << authentication
 }
-
-task teardownNode(type: com.bmuschko.gradle.docker.tasks.container.DockerRemoveContainer) {
-    dependsOn postTestStopNode
-    targetContainerId { jenkinsContainerName }
-    removeVolumes = true
-    force = true
-}
-
-public boolean checkNode() {
-	boolean containerFound = false
-	try {
-		Task inspect = project.tasks.getByName("inspectNode")
-		inspect.execute()
-		containerFound = true
-	} catch (Exception e) {
-		// println e.message
-	}
-	containerFound
-}
-
-public String getLocalHost() {
-    InetAddress.getLocalHost().getHostAddress()
-}
-

@@ -24,7 +24,7 @@ import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
-import com.cdancy.jenkins.rest.internal.BaseJenkinsMockTest;
+import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
@@ -35,18 +35,18 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 public class QueueApiMockTest extends BaseJenkinsMockTest {
 
    public void testGetQueue() throws Exception {
-      MockWebServer server = mockEtcdJavaWebServer();
+      MockWebServer server = mockWebServer();
 
       String body = payloadFromResource("/queue.json");
       server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-      JenkinsApi etcdJavaApi = api(server.getUrl("/"));
-      QueueApi api = etcdJavaApi.queueApi();
+      JenkinsApi jenkinsApi = api(server.getUrl("/"));
+      QueueApi api = jenkinsApi.queueApi();
       try {
          List<QueueItem> output = api.queue();
          assertTrue(output.size() == 2);
          assertSent(server, "GET", "/queue/api/json");
       } finally {
-         etcdJavaApi.close();
+         jenkinsApi.close();
          server.shutdown();
       }
    }

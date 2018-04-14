@@ -27,10 +27,10 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
 import com.cdancy.jenkins.rest.domain.system.SystemInfo;
-import com.cdancy.jenkins.rest.filters.JenkinsAuthentication;
+import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
 import com.cdancy.jenkins.rest.parsers.SystemInfoFromJenkinsHeaders;
 
-@RequestFilters(JenkinsAuthentication.class)
+@RequestFilters(JenkinsAuthenticationFilter.class)
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("/")
 public interface SystemApi {

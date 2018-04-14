@@ -20,37 +20,41 @@ package com.cdancy.jenkins.rest.domain.system;
 import org.jclouds.json.SerializedNames;
 
 import com.google.auto.value.AutoValue;
+import org.jclouds.javax.annotation.Nullable;
 
 @AutoValue
 public abstract class SystemInfo {
 
-   public abstract String hudsonVersion();
+    public abstract String hudsonVersion();
 
-   public abstract String jenkinsVersion();
+    public abstract String jenkinsVersion();
 
-   public abstract String jenkinsSession();
+    public abstract String jenkinsSession();
 
-   public abstract String hudsonCLIPort();
+    public abstract String hudsonCLIPort();
 
-   public abstract String jenkinsCLIPort();
+    public abstract String jenkinsCLIPort();
 
-   public abstract String jenkinsCLI2Port();
+    public abstract String jenkinsCLI2Port();
 
-   public abstract String instanceIdentity();
+    public abstract String instanceIdentity();
 
-   public abstract String sshEndpoint();
+    @Nullable
+    public abstract String sshEndpoint();
 
-   public abstract String server();
+    public abstract String server();
 
-   SystemInfo() {
-   }
+    SystemInfo() {
+    }
 
-   @SerializedNames({ "hudsonVersion", "jenkinsVersion", "jenkinsSession", "hudsonCLIPort", "jenkinsCLIPort",
-         "jenkinsCLI2Port", "instanceIdentity", "sshEndpoint", "server" })
-   public static SystemInfo create(String hudsonVersion, String jenkinsVersion, String jenkinsSession,
-         String hudsonCLIPort, String jenkinsCLIPort, String jenkinsCLI2Port, String instanceIdentity,
-         String sshEndpoint, String server) {
-      return new AutoValue_SystemInfo(hudsonVersion, jenkinsVersion, jenkinsSession, hudsonCLIPort, jenkinsCLIPort,
-            jenkinsCLI2Port, instanceIdentity, sshEndpoint, server);
-   }
+    @SerializedNames({ "hudsonVersion", "jenkinsVersion", "jenkinsSession",
+        "hudsonCLIPort", "jenkinsCLIPort", "jenkinsCLI2Port",
+        "instanceIdentity", "sshEndpoint", "server" })
+    public static SystemInfo create(String hudsonVersion, String jenkinsVersion, String jenkinsSession,
+            String hudsonCLIPort, String jenkinsCLIPort, String jenkinsCLI2Port, String instanceIdentity,
+            String sshEndpoint, String server) {
+        return new AutoValue_SystemInfo(hudsonVersion, jenkinsVersion, jenkinsSession, 
+                hudsonCLIPort, jenkinsCLIPort, jenkinsCLI2Port,
+                instanceIdentity, sshEndpoint, server);
+    }
 }
