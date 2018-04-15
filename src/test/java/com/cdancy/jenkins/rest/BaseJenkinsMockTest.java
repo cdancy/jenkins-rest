@@ -17,8 +17,6 @@
 
 package com.cdancy.jenkins.rest;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.jclouds.util.Strings2.toStringAndClose;
 
 import java.io.IOException;
@@ -41,6 +39,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonParser;
+import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -52,7 +51,6 @@ import static org.testng.Assert.assertEquals;
  */
 public class BaseJenkinsMockTest {
 
-    protected final String restBasePath = "/rest/api/";
     protected final String provider;
     private final JsonParser parser = new JsonParser();
 
@@ -67,10 +65,7 @@ public class BaseJenkinsMockTest {
      * @return instance of JenkinsApi.
      */
     public JenkinsApi api(final URL url) {
-        final JenkinsAuthentication creds = JenkinsAuthentication
-                .builder()
-                .credentials("hello:world")
-                .build();
+        final JenkinsAuthentication creds = JenkinsAuthentication.builder().build();
         final JenkinsAuthenticationModule credsModule = new JenkinsAuthenticationModule(creds);
         return ContextBuilder.newBuilder(provider)
                 .endpoint(url.toString())
@@ -86,7 +81,7 @@ public class BaseJenkinsMockTest {
     }
 
     /**
-     * Create a MockWebServer.
+     * Create a MockWebServer with an initial bread-crumb response.
      *
      * @return instance of MockWebServer
      * @throws IOException
@@ -145,7 +140,7 @@ public class BaseJenkinsMockTest {
             final String expectedPath, 
             final Map<String, ?> queryParams) throws InterruptedException {
 
-        final RecordedRequest request = server.takeRequest();
+        RecordedRequest request = server.takeRequest();
         assertThat(request.getMethod()).isEqualTo(method);
         assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(APPLICATION_JSON);
 
@@ -164,7 +159,7 @@ public class BaseJenkinsMockTest {
             final String path, 
             final String body) throws InterruptedException {
 
-        final RecordedRequest request = server.takeRequest();
+        RecordedRequest request = server.takeRequest();
         assertThat(request.getMethod()).isEqualTo(method);
         assertThat(request.getPath()).isEqualTo(path);
         assertThat(request.getUtf8Body()).isEqualTo(body);
@@ -186,8 +181,9 @@ public class BaseJenkinsMockTest {
         return request;
     }
 
-   protected RecordedRequest assertSentWithXMLFormDataAccept(MockWebServer server, String method, String path,
+    protected RecordedRequest assertSentWithXMLFormDataAccept(MockWebServer server, String method, String path,
         String body, String acceptType) throws InterruptedException {
+
         RecordedRequest request = server.takeRequest();
         assertThat(request.getMethod()).isEqualTo(method);
         assertThat(request.getPath()).isEqualTo(path);
@@ -195,28 +191,28 @@ public class BaseJenkinsMockTest {
         assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(acceptType);
         assertThat(request.getHeader(HttpHeaders.CONTENT_TYPE)).isEqualTo(MediaType.APPLICATION_XML);
         return request;
-   }
+    }
 
-   protected RecordedRequest assertSentAcceptText(MockWebServer server, String method, String path) throws InterruptedException {
+    protected RecordedRequest assertSentAcceptText(MockWebServer server, String method, String path) throws InterruptedException {
         RecordedRequest request = server.takeRequest();
         assertThat(request.getMethod()).isEqualTo(method);
         assertThat(request.getPath()).isEqualTo(path);
         assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(MediaType.TEXT_PLAIN);
         return request;
-   }
+    }
 
-   protected RecordedRequest assertSentAccept(MockWebServer server, String method, String path, String acceptType) throws InterruptedException {
+    protected RecordedRequest assertSentAccept(MockWebServer server, String method, String path, String acceptType) throws InterruptedException {
         RecordedRequest request = server.takeRequest();
         assertThat(request.getMethod()).isEqualTo(method);
         assertThat(request.getPath()).isEqualTo(path);
         assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(acceptType);
         return request;
-   }
+    }
 
-   protected RecordedRequest assertSent(MockWebServer server, String method, String path, String json) throws InterruptedException {
-        RecordedRequest request = assertSent(server, method, path);
+    protected RecordedRequest assertSent(MockWebServer server, String method, String path, String json) throws InterruptedException {
+        RecordedRequest request = server.takeRequest();
         assertEquals(request.getHeader("Content-Type"), APPLICATION_JSON);
         assertEquals(parser.parse(request.getUtf8Body()), parser.parse(json));
         return request;
-   }
+    }
 }

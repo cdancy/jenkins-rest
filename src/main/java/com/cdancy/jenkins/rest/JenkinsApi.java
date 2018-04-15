@@ -17,6 +17,7 @@
 
 package com.cdancy.jenkins.rest;
 
+import com.cdancy.jenkins.rest.features.CrumbIssuerApi;
 import java.io.Closeable;
 
 import org.jclouds.rest.annotations.Delegate;
@@ -28,15 +29,18 @@ import com.cdancy.jenkins.rest.features.SystemApi;
 
 public interface JenkinsApi extends Closeable {
 
-   @Delegate
-   JobsApi jobsApi();
+    @Delegate
+    CrumbIssuerApi crumbIssuerApi();
 
-   @Delegate
-   QueueApi queueApi();
+    @Delegate
+    JobsApi jobsApi();
 
-   @Delegate
-   StatisticsApi statisticsApi();
+    @Delegate
+    QueueApi queueApi();
 
-   @Delegate
-   SystemApi systemApi();
+    @Delegate
+    StatisticsApi statisticsApi();
+
+    @Delegate
+    SystemApi systemApi();
 }

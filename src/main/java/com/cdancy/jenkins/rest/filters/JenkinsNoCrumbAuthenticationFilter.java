@@ -17,30 +17,25 @@
 
 package com.cdancy.jenkins.rest.filters;
 
+import com.cdancy.jenkins.rest.JenkinsApi;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.JenkinsAuthentication;
 import com.cdancy.jenkins.rest.auth.AuthenticationType;
 
 import org.jclouds.http.HttpException;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpRequestFilter;
-
 import com.google.common.net.HttpHeaders;
 
 @Singleton
-public class JenkinsAuthenticationFilter implements HttpRequestFilter {
+public class JenkinsNoCrumbAuthenticationFilter implements HttpRequestFilter {
     private final JenkinsAuthentication creds;
-    private final JenkinsApi jenkinsApi;
-    private static volatile String crumbValue = null; // can be shared across requests
-    private static final String CRUMB_HEADER = "Jenkins-Crumb";
 
     @Inject
-    JenkinsAuthenticationFilter(final JenkinsAuthentication creds, final JenkinsApi jenkinsApi) {
+    JenkinsNoCrumbAuthenticationFilter(final JenkinsAuthentication creds) {
         this.creds = creds;
-        this.jenkinsApi = jenkinsApi;
     }
 
     @Override
@@ -49,23 +44,7 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
             return request;
         } else {
             final String authHeader = creds.authType() + " " + creds.authValue();
-            return request.toBuilder()
-                    .addHeader(HttpHeaders.AUTHORIZATION, authHeader)
-                    .addHeader(CRUMB_HEADER, getCrumbValue())
-                    .build();
+            return request.toBuilder().addHeader(HttpHeaders.AUTHORIZATION, authHeader).build();
         }
-    }
-
-    private String getCrumbValue() {
-        String crumbValueInit = JenkinsAuthenticationFilter.crumbValue;
-        if (crumbValueInit == null) {
-            synchronized(this) {
-                crumbValueInit = JenkinsAuthenticationFilter.crumbValue;
-                if (crumbValueInit == null) {
-                    JenkinsAuthenticationFilter.crumbValue = crumbValueInit = jenkinsApi.crumbIssuerApi().crumb().split(":")[1];
-                }
-            }
-        }
-        return crumbValueInit;
     }
 }

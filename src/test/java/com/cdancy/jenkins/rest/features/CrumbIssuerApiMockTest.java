@@ -16,34 +16,37 @@
  */
 package com.cdancy.jenkins.rest.features;
 
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
-
-import java.util.List;
 
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
-import com.cdancy.jenkins.rest.domain.queue.QueueItem;
+import com.cdancy.jenkins.rest.JenkinsApiMetadata;
+import com.cdancy.jenkins.rest.domain.system.SystemInfo;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
+import javax.ws.rs.core.MediaType;
 
 /**
- * Mock tests for the {@link com.cdancy.jenkins.rest.features.QueueApi} class.
+ * Mock tests for the {@link com.cdancy.jenkins.rest.features.CrumbIssuerApi} class.
  */
-@Test(groups = "unit", testName = "QueueApiMockTest")
-public class QueueApiMockTest extends BaseJenkinsMockTest {
+@Test(groups = "unit", testName = "CrumbIssuerApiMockTest")
+public class CrumbIssuerApiMockTest extends BaseJenkinsMockTest {
 
-    public void testGetQueue() throws Exception {
+    public void testGetSystemInfo() throws Exception {
         MockWebServer server = mockWebServer();
-        String body = payloadFromResource("/queue.json");
-        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+
+        final String body = "";
+        server.enqueue(new MockResponse().setBody("Jenkins-Crumb:04a1109fc2db171362c966ebe9fc87f0").setResponseCode(200));
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
-        QueueApi api = jenkinsApi.queueApi();
+        CrumbIssuerApi api = jenkinsApi.crumbIssuerApi();
         try {
-            List<QueueItem> output = api.queue();
-            assertTrue(output.size() == 2);
-            assertSent(server, "GET", "/queue/api/json");
+            final String instance = api.crumb();
+            assertNotNull(instance);
+            assertTrue(instance.contains(":"));
+            assertSentAccept(server, "GET", "/crumbIssuer/api/xml?xpath=concat%28//crumbRequestField,%22%3A%22,//crumb%29", MediaType.TEXT_PLAIN);
         } finally {
             jenkinsApi.close();
             server.shutdown();

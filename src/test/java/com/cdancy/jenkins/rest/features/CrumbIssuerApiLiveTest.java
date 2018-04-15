@@ -17,24 +17,21 @@
 package com.cdancy.jenkins.rest.features;
 
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
-import com.cdancy.jenkins.rest.domain.system.SystemInfo;
 
-@Test(groups = "live", testName = "SystemApiLiveTest", singleThreaded = true)
-public class SystemApiLiveTest extends BaseJenkinsApiLiveTest {
+@Test(groups = "live", testName = "CrumbIssuerApiLiveTest", singleThreaded = true)
+public class CrumbIssuerApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test
-    public void testGetSystemInfo() {
-        final SystemInfo version = api().systemInfo();
-        assertNotNull(version);
-        assertTrue(version.jenkinsVersion() != null);
+    public void testGetCrumb() {
+        final String crumb = api().crumb();
+        assertNotNull(crumb);
     }
 
-    private SystemApi api() {
-        return api.systemApi();
+    private CrumbIssuerApi api() {
+        return api.crumbIssuerApi();
     }
 }

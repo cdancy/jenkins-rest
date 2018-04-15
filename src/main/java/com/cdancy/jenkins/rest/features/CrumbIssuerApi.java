@@ -14,27 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.cdancy.jenkins.rest.features;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 
-import org.testng.annotations.Test;
+import org.jclouds.rest.annotations.RequestFilters;
+import com.cdancy.jenkins.rest.filters.JenkinsNoCrumbAuthenticationFilter;
+import org.jclouds.rest.annotations.QueryParams;
 
-import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
-import com.cdancy.jenkins.rest.domain.system.SystemInfo;
+@RequestFilters(JenkinsNoCrumbAuthenticationFilter.class)
+@Path("/crumbIssuer/api/xml")
+public interface CrumbIssuerApi {
 
-@Test(groups = "live", testName = "SystemApiLiveTest", singleThreaded = true)
-public class SystemApiLiveTest extends BaseJenkinsApiLiveTest {
-
-    @Test
-    public void testGetSystemInfo() {
-        final SystemInfo version = api().systemInfo();
-        assertNotNull(version);
-        assertTrue(version.jenkinsVersion() != null);
-    }
-
-    private SystemApi api() {
-        return api.systemApi();
-    }
+    @Named("crumb-issuer:crumb")
+    @QueryParams(keys = { "xpath" }, values = { "concat(//crumbRequestField,\":\",//crumb)" })
+    @Consumes(MediaType.TEXT_PLAIN)
+    @GET
+    String crumb();
 }
