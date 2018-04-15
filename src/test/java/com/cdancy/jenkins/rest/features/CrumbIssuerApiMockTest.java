@@ -22,11 +22,11 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
-import com.cdancy.jenkins.rest.JenkinsApiMetadata;
-import com.cdancy.jenkins.rest.domain.system.SystemInfo;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
+
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
+
 import javax.ws.rs.core.MediaType;
 
 /**

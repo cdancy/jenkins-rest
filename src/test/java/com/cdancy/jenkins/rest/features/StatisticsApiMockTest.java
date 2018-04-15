@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.domain.statistics.OverallLoad;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
+
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 

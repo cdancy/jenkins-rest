@@ -24,8 +24,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.rest.annotations.RequestFilters;
-import com.cdancy.jenkins.rest.filters.JenkinsNoCrumbAuthenticationFilter;
 import org.jclouds.rest.annotations.QueryParams;
+
+import com.cdancy.jenkins.rest.filters.JenkinsNoCrumbAuthenticationFilter;
 
 @RequestFilters(JenkinsNoCrumbAuthenticationFilter.class)
 @Path("/crumbIssuer/api/xml")
