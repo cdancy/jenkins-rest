@@ -6,25 +6,27 @@ java-based client to interact with Jenkins REST API.
 ## Setup
 
 Client's can be built like so:
+```
+JenkinsClient client = JenkinsClient.builder()
+.endPoint("http://127.0.0.1:8080") // Optional. Defaults to http://127.0.0.1:8080
+.credentials("admin:password") // Optional.
+.build();
 
-      JenkinsClient client = new JenkinsClient.Builder()
-      .endPoint("http://127.0.0.1:8080") // Optional. Defaults to http://127.0.0.1:8080
-      .credentials("admin:password") // Optional.
-      .build();
-
-      SystemInfo systemInfo = client.api().systemApi().systemInfo();
-      assertTrue(systemInfo.jenkinsVersion().equals("1.642.4"));
+SystemInfo systemInfo = client.api().systemApi().systemInfo();
+assertTrue(systemInfo.jenkinsVersion().equals("1.642.4"));
+```
       
 ## Latest release
 
-Can be found in jcenter:
+Can be found in jcenter like so:
+```
+<dependency>
+  <groupId>com.cdancy</groupId>
+  <artifactId>jenkins-rest</artifactId>
+  <version>X.Y.Z</version>
+</dependency>
+```
 
-	<dependency>
-	  <groupId>com.cdancy</groupId>
-	  <artifactId>jenkins-rest</artifactId>
-	  <version>0.0.3</version>
-	</dependency>
-	
 ## Documentation
 
 javadocs can be found via [github pages here](http://cdancy.github.io/jenkins-rest/docs/javadoc/)
@@ -71,13 +73,9 @@ Running mock tests can be done like so:
 
 	./gradlew clean build mockTest
 	
-Running integration tests can be done like so (requires docker):
+Running integration tests can be done like so (requires existing jenkins instance):
 
-	./gradlew clean build integTest
-	
-Running integration tests without invoking docker can be done like so:
-
-	./gradlew clean build integTest -PbootstrapDocker=false -PtestJenkinsEndpoint=http://127.0.0.1:8080 
+	./gradlew clean build integTest 
 	
 # Additional Resources
 
