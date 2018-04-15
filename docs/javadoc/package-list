@@ -1,4 +1,5 @@
 com.cdancy.jenkins.rest
+com.cdancy.jenkins.rest.auth
 com.cdancy.jenkins.rest.binders
 com.cdancy.jenkins.rest.config
 com.cdancy.jenkins.rest.domain.job
