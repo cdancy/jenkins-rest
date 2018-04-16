@@ -16,6 +16,9 @@
  */
 package com.cdancy.jenkins.rest.handlers;
 
+import com.cdancy.jenkins.rest.exception.ForbiddenException;
+import com.cdancy.jenkins.rest.exception.MethodNotAllowedException;
+import com.cdancy.jenkins.rest.exception.UnsupportedMediaTypeException;
 import static org.jclouds.util.Closeables2.closeQuietly;
 
 import java.io.IOException;
@@ -32,6 +35,8 @@ import org.jclouds.rest.ResourceNotFoundException;
 import org.jclouds.util.Strings2;
 
 import com.google.common.base.Throwables;
+import org.jclouds.rest.AuthorizationException;
+import static org.jclouds.util.Closeables2.closeQuietly;
 
 /**
  * Handle errors and propagate exception
@@ -40,52 +45,65 @@ public class JenkinsErrorHandler implements HttpErrorHandler {
    @Resource
    protected Logger logger = Logger.NULL;
 
-   public void handleError(HttpCommand command, HttpResponse response) {
+    @Override
+    public void handleError(final HttpCommand command, final HttpResponse response) {
 
-      String jenkinsError = response.getFirstHeaderOrNull("X-Error");
-      String message = jenkinsError != null ? jenkinsError : parseMessage(response);
-      Exception exception = null;
-      try {
+        Exception exception = null;
+        try {
+            final String message = parseMessage(command, response);
+            switch (response.getStatusCode()) {
+                case 400:
+                    if (command.getCurrentRequest().getMethod().equals("POST")) {
+                        if (command.getCurrentRequest().getRequestLine().contains("/createItem")) {
+                            if (message.contains("A job already exists with the name")) {
+                                exception = new ResourceAlreadyExistsException(message);
+                                break;
+                            }
+                        }
+                    }
+                    exception = new IllegalArgumentException(message);
+                    break;
+                case 401:
+                    exception = new AuthorizationException(message);
+                    break;
+                case 403:
+                    exception = new ForbiddenException(message);
+                    break;
+                case 404:
+                    exception = new ResourceNotFoundException(message);
+                    break;
+                case 405:
+                    exception = new MethodNotAllowedException(message);
+                    break;
+                case 409:
+                    exception = new ResourceAlreadyExistsException(message);
+                    break;
+                case 415:
+                    exception = new UnsupportedMediaTypeException(message);
+                    break;
+                default:
+                    exception = new HttpResponseException(command, response);
+            }
+        } catch (Exception e) {
+            exception = new HttpResponseException(command, response, e);
+        } finally {
+            closeQuietly(response.getPayload());
+            command.setException(exception);
+        }
+    }
 
-         message = message != null ? message
-               : String.format("%s -> %s", command.getCurrentRequest().getRequestLine(), response.getStatusLine());
-
-         switch (response.getStatusCode()) {
-            case 400:
-               if (command.getCurrentRequest().getMethod().equals("POST")) {
-                  if (command.getCurrentRequest().getRequestLine().contains("/createItem")) {
-                     if (message.contains("A job already exists with the name")) {
-                        exception = new ResourceAlreadyExistsException(message);
-                        break;
-                     }
-                  }
-               }
-            case 404:
-               exception = new ResourceNotFoundException(message);
-               break;
-            case 409:
-               exception = new ResourceAlreadyExistsException(message);
-               break;
-         }
-      } catch (Exception e) {
-         exception = new HttpResponseException(command, response, e);
-      } finally {
-         if (exception == null) {
-            exception = message != null ? new HttpResponseException(command, response, message)
-                  : new HttpResponseException(command, response);
-         }
-         closeQuietly(response.getPayload());
-         command.setException(exception);
-      }
-   }
-
-   private String parseMessage(HttpResponse response) {
-      if (response.getPayload() == null)
-         return null;
-      try {
-         return Strings2.toStringAndClose(response.getPayload().openStream());
-      } catch (IOException e) {
-         throw Throwables.propagate(e);
-      }
-   }
+    private String parseMessage(final HttpCommand command, final HttpResponse response) {
+        if (response.getPayload() != null) {
+            try {
+                return Strings2.toStringAndClose(response.getPayload().openStream());
+            } catch (IOException e) {
+                throw Throwables.propagate(e);
+            }
+        } else {
+            return new StringBuffer(command.getCurrentRequest().getRequestLine())
+                    .append(" -> ")
+                    .append(response.getStatusLine())
+                    .toString();
+        }
+    }
 }
