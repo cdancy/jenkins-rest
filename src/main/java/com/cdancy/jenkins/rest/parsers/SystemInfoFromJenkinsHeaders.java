@@ -17,6 +17,7 @@
 
 package com.cdancy.jenkins.rest.parsers;
 
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import javax.inject.Singleton;
 
 import org.jclouds.http.HttpResponse;
@@ -33,10 +34,15 @@ public class SystemInfoFromJenkinsHeaders implements Function<HttpResponse, Syst
 
     @Override
     public SystemInfo apply(HttpResponse response) {
-        return SystemInfo.create(response.getFirstHeaderOrNull("X-Hudson"), response.getFirstHeaderOrNull("X-Jenkins"),
-            response.getFirstHeaderOrNull("X-Jenkins-Session"), response.getFirstHeaderOrNull("X-Hudson-CLI-Port"),
-            response.getFirstHeaderOrNull("X-Jenkins-CLI-Port"), response.getFirstHeaderOrNull("X-Jenkins-CLI2-Port"),
-            response.getFirstHeaderOrNull("X-Instance-Identity"), response.getFirstHeaderOrNull("X-SSH-Endpoint"),
-            response.getFirstHeaderOrNull("Server"));
+        final int statusCode = response.getStatusCode();
+        if (statusCode >= 200 && statusCode < 400) {
+            return SystemInfo.create(response.getFirstHeaderOrNull("X-Hudson"), response.getFirstHeaderOrNull("X-Jenkins"),
+                response.getFirstHeaderOrNull("X-Jenkins-Session"), response.getFirstHeaderOrNull("X-Hudson-CLI-Port"),
+                response.getFirstHeaderOrNull("X-Jenkins-CLI-Port"), response.getFirstHeaderOrNull("X-Jenkins-CLI2-Port"),
+                response.getFirstHeaderOrNull("X-Instance-Identity"), response.getFirstHeaderOrNull("X-SSH-Endpoint"),
+                response.getFirstHeaderOrNull("Server"), null);
+        } else {
+            throw new RuntimeException(response.getStatusLine());
+        }
     }
 }

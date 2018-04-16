@@ -18,6 +18,7 @@ package com.cdancy.jenkins.rest.features;
 
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.assertFalse;
 
 import org.testng.annotations.Test;
 
@@ -50,6 +51,24 @@ public class SystemApiMockTest extends BaseJenkinsMockTest {
             final SystemInfo version = api.systemInfo();
             assertNotNull(version);
             assertTrue(version.jenkinsVersion().equalsIgnoreCase(JenkinsApiMetadata.BUILD_VERSION));
+            assertSent(server, "HEAD", "/");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetSystemInfoOnError() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(
+            new MockResponse().setBody("Not Authorized").setResponseCode(401));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        SystemApi api = jenkinsApi.systemApi();
+        try {
+            final SystemInfo version = api.systemInfo();
+            assertNotNull(version);
+            assertFalse(version.errors().isEmpty());
             assertSent(server, "HEAD", "/");
         } finally {
             jenkinsApi.close();
