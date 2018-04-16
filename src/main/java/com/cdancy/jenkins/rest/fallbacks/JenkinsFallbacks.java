@@ -25,6 +25,7 @@ import static org.jclouds.http.HttpUtils.returnValueOnCodeOrNull;
 import com.cdancy.jenkins.rest.JenkinsUtils;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.common.Error;
+import com.cdancy.jenkins.rest.domain.system.SystemInfo;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -56,6 +57,16 @@ public final class JenkinsFallbacks {
         }
     }
 
+    public static final class SystemInfoOnError implements Fallback<Object> {
+        @Override
+        public Object createOrPropagate(final Throwable throwable) throws Exception {
+            if (checkNotNull(throwable, "throwable") != null) {
+                return createSystemInfoFromErrors(getErrors(throwable));
+            }
+            throw propagate(throwable);
+        }
+    }
+
     public static final class RequestStatusOnError implements Fallback<Object> {
         @Override
         public Object createOrPropagate(final Throwable throwable) throws Exception {
@@ -71,6 +82,13 @@ public final class JenkinsFallbacks {
             }
             throw propagate(throwable);
         }
+    }
+
+    public static SystemInfo createSystemInfoFromErrors(final List<Error> errors) {
+        final String illegalValue = "-1";
+        return SystemInfo.create(illegalValue, illegalValue, illegalValue,
+                illegalValue, illegalValue, illegalValue,
+                illegalValue, illegalValue, illegalValue, errors);
     }
 
     public static RequestStatus createRequestStatusFromErrors(final List<Error> errors) {

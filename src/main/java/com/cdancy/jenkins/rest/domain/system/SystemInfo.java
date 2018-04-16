@@ -17,13 +17,19 @@
 
 package com.cdancy.jenkins.rest.domain.system;
 
-import org.jclouds.json.SerializedNames;
+import com.cdancy.jenkins.rest.JenkinsUtils;
+import com.cdancy.jenkins.rest.domain.common.ErrorsHolder;
+import com.cdancy.jenkins.rest.domain.common.Error;
 
-import com.google.auto.value.AutoValue;
+import org.jclouds.json.SerializedNames;
 import org.jclouds.javax.annotation.Nullable;
 
+import com.google.auto.value.AutoValue;
+
+import java.util.List;
+
 @AutoValue
-public abstract class SystemInfo {
+public abstract class SystemInfo implements ErrorsHolder {
 
     public abstract String hudsonVersion();
 
@@ -49,11 +55,12 @@ public abstract class SystemInfo {
 
     @SerializedNames({ "hudsonVersion", "jenkinsVersion", "jenkinsSession",
         "hudsonCLIPort", "jenkinsCLIPort", "jenkinsCLI2Port",
-        "instanceIdentity", "sshEndpoint", "server" })
+        "instanceIdentity", "sshEndpoint", "server", "errors" })
     public static SystemInfo create(String hudsonVersion, String jenkinsVersion, String jenkinsSession,
             String hudsonCLIPort, String jenkinsCLIPort, String jenkinsCLI2Port, String instanceIdentity,
-            String sshEndpoint, String server) {
-        return new AutoValue_SystemInfo(hudsonVersion, jenkinsVersion, jenkinsSession, 
+            String sshEndpoint, String server, final List<Error> errors) {
+        return new AutoValue_SystemInfo(JenkinsUtils.nullToEmpty(errors),
+                hudsonVersion, jenkinsVersion, jenkinsSession, 
                 hudsonCLIPort, jenkinsCLIPort, jenkinsCLI2Port,
                 instanceIdentity, sshEndpoint, server);
     }
