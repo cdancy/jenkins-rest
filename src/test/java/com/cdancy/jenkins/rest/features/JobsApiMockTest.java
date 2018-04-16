@@ -34,6 +34,7 @@ import com.cdancy.jenkins.rest.domain.job.BuildInfo;
 import com.cdancy.jenkins.rest.domain.job.JobInfo;
 import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 
 import com.google.common.collect.Lists;
 
@@ -46,532 +47,540 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 @Test(groups = "unit", testName = "JobsApiMockTest")
 public class JobsApiMockTest extends BaseJenkinsMockTest {
 
-   public void testGetJobInfo() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testGetJobInfo() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      String body = payloadFromResource("/job-info.json");
-      server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         JobInfo output = api.jobInfo("fish");
-         assertNotNull(output);
-         assertNotNull(output.name().equals("fish"));
-         assertTrue(output.builds().size() == 7);
-         assertSent(server, "GET", "/job/fish/api/json");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        String body = payloadFromResource("/job-info.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            JobInfo output = api.jobInfo("fish");
+            assertNotNull(output);
+            assertNotNull(output.name().equals("fish"));
+            assertTrue(output.builds().size() == 7);
+            assertSent(server, "GET", "/job/fish/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testGetJobInfoNotFound() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testGetJobInfoNotFound() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(404));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         JobInfo output = api.jobInfo("fish");
-         assertNull(output);
-         assertSent(server, "GET", "/job/fish/api/json");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            JobInfo output = api.jobInfo("fish");
+            assertNull(output);
+            assertSent(server, "GET", "/job/fish/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testGetBuildInfo() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testGetBuildInfo() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      String body = payloadFromResource("/build-info.json");
-      server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         BuildInfo output = api.buildInfo("fish", 10);
-         assertNotNull(output);
-         assertNotNull(output.fullDisplayName().equals("fish #10"));
-         assertTrue(output.artifacts().size() == 1);
-         assertSent(server, "GET", "/job/fish/10/api/json");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        String body = payloadFromResource("/build-info.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            BuildInfo output = api.buildInfo("fish", 10);
+            assertNotNull(output);
+            assertNotNull(output.fullDisplayName().equals("fish #10"));
+            assertTrue(output.artifacts().size() == 1);
+            assertSent(server, "GET", "/job/fish/10/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testGetBuildInfoNotFound() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testGetBuildInfoNotFound() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(404));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         BuildInfo output = api.buildInfo("fish", 10);
-         assertNull(output);
-         assertSent(server, "GET", "/job/fish/10/api/json");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            BuildInfo output = api.buildInfo("fish", 10);
+            assertNull(output);
+            assertSent(server, "GET", "/job/fish/10/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testCreateJob() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testCreateJob() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      String configXML = payloadFromResource("/freestyle-project.xml");
-      server.enqueue(new MockResponse().setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         boolean success = api.create("DevTest", configXML);
-         assertTrue(success);
-         assertSentWithXMLFormDataAccept(server, "POST", "/createItem?name=DevTest", configXML, MediaType.WILDCARD);
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        String configXML = payloadFromResource("/freestyle-project.xml");
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus success = api.create("DevTest", configXML);
+            assertNotNull(success);
+            assertTrue(success.value());
+            assertTrue(success.errors().isEmpty());
+            assertSentWithXMLFormDataAccept(server, "POST", "/createItem?name=DevTest", configXML, MediaType.WILDCARD);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testCreateJobAlreadyExists() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testCreateJobAlreadyExists() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      String configXML = payloadFromResource("/freestyle-project.xml");
-      server.enqueue(new MockResponse().setHeader("X-Error", "A job already exists with the name ?DevTest?")
-            .setResponseCode(400));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         boolean success = api.create("DevTest", configXML);
-         assertFalse(success);
-         assertSentWithXMLFormDataAccept(server, "POST", "/createItem?name=DevTest", configXML, MediaType.WILDCARD);
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        String configXML = payloadFromResource("/freestyle-project.xml");
+        server.enqueue(new MockResponse().setHeader("X-Error", "A job already exists with the name ?DevTest?")
+              .setResponseCode(400));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus success = api.create("DevTest", configXML);
+            assertNotNull(success);
+            assertFalse(success.value());
+            assertFalse(success.errors().isEmpty());
+            assertSentWithXMLFormDataAccept(server, "POST", "/createItem?name=DevTest", configXML, MediaType.WILDCARD);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testGetDescription() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testGetDescription() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setBody("whatever").setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         String output = api.description("DevTest");
-         assertNotNull(output);
-         assertTrue(output.equals("whatever"));
-         assertSentAcceptText(server, "GET", "/job/DevTest/description");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setBody("whatever").setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            String output = api.description("DevTest");
+            assertNotNull(output);
+            assertTrue(output.equals("whatever"));
+            assertSentAcceptText(server, "GET", "/job/DevTest/description");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testGetDescriptionNonExistentJob() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testGetDescriptionNonExistentJob() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(404));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         String output = api.description("DevTest");
-         assertNull(output);
-         assertSentAcceptText(server, "GET", "/job/DevTest/description");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            String output = api.description("DevTest");
+            assertNull(output);
+            assertSentAcceptText(server, "GET", "/job/DevTest/description");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testUpdateDescription() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testUpdateDescription() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         boolean success = api.description("DevTest", "whatever");
-         assertTrue(success);
-         assertSentWithFormData(server, "POST", "/job/DevTest/description", "description=whatever",
-               MediaType.TEXT_HTML);
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            boolean success = api.description("DevTest", "whatever");
+            assertTrue(success);
+            assertSentWithFormData(server, "POST", "/job/DevTest/description", "description=whatever",
+                  MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testUpdateDescriptionNonExistentJob() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testUpdateDescriptionNonExistentJob() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(404));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         boolean success = api.description("DevTest", "whatever");
-         assertFalse(success);
-         assertSentWithFormData(server, "POST", "/job/DevTest/description", "description=whatever",
-               MediaType.TEXT_HTML);
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            boolean success = api.description("DevTest", "whatever");
+            assertFalse(success);
+            assertSentWithFormData(server, "POST", "/job/DevTest/description", "description=whatever",
+                  MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testGetConfig() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testGetConfig() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      String configXML = payloadFromResource("/freestyle-project.xml");
-      server.enqueue(new MockResponse().setBody(configXML).setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         String output = api.config("DevTest");
-         assertNotNull(output);
-         assertTrue(configXML.equals(output));
-         assertSentAcceptText(server, "GET", "/job/DevTest/config.xml");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        String configXML = payloadFromResource("/freestyle-project.xml");
+        server.enqueue(new MockResponse().setBody(configXML).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            String output = api.config("DevTest");
+            assertNotNull(output);
+            assertTrue(configXML.equals(output));
+            assertSentAcceptText(server, "GET", "/job/DevTest/config.xml");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testGetConfigNonExistentJob() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testGetConfigNonExistentJob() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(404));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         String output = api.config("DevTest");
-         assertNull(output);
-         assertSentAcceptText(server, "GET", "/job/DevTest/config.xml");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            String output = api.config("DevTest");
+            assertNull(output);
+            assertSentAcceptText(server, "GET", "/job/DevTest/config.xml");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testUpdateConfig() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testUpdateConfig() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      String configXML = payloadFromResource("/freestyle-project.xml");
-      server.enqueue(new MockResponse().setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         boolean success = api.config("DevTest", configXML);
-         assertTrue(success);
-         assertSentAccept(server, "POST", "/job/DevTest/config.xml", MediaType.TEXT_HTML);
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        String configXML = payloadFromResource("/freestyle-project.xml");
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            boolean success = api.config("DevTest", configXML);
+            assertTrue(success);
+            assertSentAccept(server, "POST", "/job/DevTest/config.xml", MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testUpdateConfigNonExistentJob() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testUpdateConfigNonExistentJob() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      String configXML = payloadFromResource("/freestyle-project.xml");
-      server.enqueue(new MockResponse().setResponseCode(404));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         boolean success = api.config("DevTest", configXML);
-         assertFalse(success);
-         assertSentAccept(server, "POST", "/job/DevTest/config.xml", MediaType.TEXT_HTML);
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        String configXML = payloadFromResource("/freestyle-project.xml");
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            boolean success = api.config("DevTest", configXML);
+            assertFalse(success);
+            assertSentAccept(server, "POST", "/job/DevTest/config.xml", MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testDeleteJob() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testDeleteJob() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         boolean success = api.delete("DevTest");
-         assertTrue(success);
-         assertSentAccept(server, "POST", "/job/DevTest/doDelete", MediaType.TEXT_HTML);
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus success = api.delete("DevTest");
+            assertNotNull(success);
+            assertTrue(success.value() == true);
+            assertTrue(success.errors().isEmpty());
+            assertSentAccept(server, "POST", "/job/DevTest/doDelete", MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testDeleteJobNonExistent() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testDeleteJobNonExistent() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(400));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         boolean success = api.delete("DevTest");
-         assertFalse(success);
-         assertSentAccept(server, "POST", "/job/DevTest/doDelete", MediaType.TEXT_HTML);
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(400));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus success = api.delete("DevTest");
+            assertNotNull(success);
+            assertFalse(success.value());
+            assertFalse(success.errors().isEmpty());
+            assertSentAccept(server, "POST", "/job/DevTest/doDelete", MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testEnableJob() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testEnableJob() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         boolean success = api.enable("DevTest");
-         assertTrue(success);
-         assertSentAccept(server, "POST", "/job/DevTest/enable", MediaType.TEXT_HTML);
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            boolean success = api.enable("DevTest");
+            assertTrue(success);
+            assertSentAccept(server, "POST", "/job/DevTest/enable", MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testEnableJobAlreadyEnabled() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testEnableJobAlreadyEnabled() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         boolean success = api.enable("DevTest");
-         assertTrue(success);
-         assertSentAccept(server, "POST", "/job/DevTest/enable", MediaType.TEXT_HTML);
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            boolean success = api.enable("DevTest");
+            assertTrue(success);
+            assertSentAccept(server, "POST", "/job/DevTest/enable", MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testDisableJob() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testDisableJob() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         boolean success = api.disable("DevTest");
-         assertTrue(success);
-         assertSentAccept(server, "POST", "/job/DevTest/disable", MediaType.TEXT_HTML);
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            boolean success = api.disable("DevTest");
+            assertTrue(success);
+            assertSentAccept(server, "POST", "/job/DevTest/disable", MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testDisableJobAlreadyEnabled() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testDisableJobAlreadyEnabled() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         boolean success = api.disable("DevTest");
-         assertTrue(success);
-         assertSentAccept(server, "POST", "/job/DevTest/disable", MediaType.TEXT_HTML);
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            boolean success = api.disable("DevTest");
+            assertTrue(success);
+            assertSentAccept(server, "POST", "/job/DevTest/disable", MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testBuildJob() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testBuildJob() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(
-            new MockResponse().setHeader("Location", "http://127.0.1.1:8080/queue/item/1/").setResponseCode(201));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         Integer output = api.build("DevTest");
-         assertNotNull(output);
-         assertTrue(output == 1);
-         assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(
+              new MockResponse().setHeader("Location", "http://127.0.1.1:8080/queue/item/1/").setResponseCode(201));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            Integer output = api.build("DevTest");
+            assertNotNull(output);
+            assertTrue(output == 1);
+            assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testBuildJobWithNoLocationReturned() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testBuildJobWithNoLocationReturned() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(
-              new MockResponse().setResponseCode(201));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         Integer output = api.build("DevTest");
-         assertNotNull(output);
-         assertTrue(output == 0);
-         assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(
+                new MockResponse().setResponseCode(201));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            Integer output = api.build("DevTest");
+            assertNotNull(output);
+            assertTrue(output == 0);
+            assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testBuildJobNonExistentJob() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testBuildJobNonExistentJob() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(404));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         Integer output = api.build("DevTest");
-         assertNull(output);
-         assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            Integer output = api.build("DevTest");
+            assertNull(output);
+            assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testBuildJobWithParams() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testBuildJobWithParams() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(
-            new MockResponse().setHeader("Location", "http://127.0.1.1:8080/queue/item/1/").setResponseCode(201));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         Map<String, List<String>> params = new HashMap<>();
-         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-         Integer output = api.buildWithParameters("DevTest", params);
-         assertNotNull(output);
-         assertTrue(output == 1);
-         assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(
+              new MockResponse().setHeader("Location", "http://127.0.1.1:8080/queue/item/1/").setResponseCode(201));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            Map<String, List<String>> params = new HashMap<>();
+            params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
+            Integer output = api.buildWithParameters("DevTest", params);
+            assertNotNull(output);
+            assertTrue(output == 1);
+            assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testBuildJobWithParamsNonExistentJob() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testBuildJobWithParamsNonExistentJob() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(404));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         Map<String, List<String>> params = new HashMap<>();
-         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-         Integer output = api.buildWithParameters("DevTest", params);
-         assertNull(output);
-         assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            Map<String, List<String>> params = new HashMap<>();
+            params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
+            Integer output = api.buildWithParameters("DevTest", params);
+            assertNull(output);
+            assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testGetLastBuildNumber() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testGetLastBuildNumber() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      String body = payloadFromResource("/build-number.txt");
-      server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         Integer output = api.lastBuildNumber("DevTest");
-         assertNotNull(output);
-         assertTrue(output.intValue() == 123);
-         assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildNumber");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        String body = payloadFromResource("/build-number.txt");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            Integer output = api.lastBuildNumber("DevTest");
+            assertNotNull(output);
+            assertTrue(output == 123);
+            assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildNumber");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testGetLastBuildNumberJobNotExist() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testGetLastBuildNumberJobNotExist() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(404));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         Integer output = api.lastBuildNumber("DevTest");
-         assertNull(output);
-         assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildNumber");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            Integer output = api.lastBuildNumber("DevTest");
+            assertNull(output);
+            assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildNumber");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testGetLastBuildTimeStamp() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testGetLastBuildTimeStamp() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      String body = payloadFromResource("/build-timestamp.txt");
-      server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         String output = api.lastBuildTimestamp("DevTest");
-         assertNotNull(output);
-         assertTrue(output.equals(body));
-         assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildTimestamp");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        String body = payloadFromResource("/build-timestamp.txt");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            String output = api.lastBuildTimestamp("DevTest");
+            assertNotNull(output);
+            assertTrue(output.equals(body));
+            assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildTimestamp");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testGetLastBuildTimeStampJobNotExist() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testGetLastBuildTimeStampJobNotExist() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(404));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         String output = api.lastBuildTimestamp("DevTest");
-         assertNull(output);
-         assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildTimestamp");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            String output = api.lastBuildTimestamp("DevTest");
+            assertNull(output);
+            assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildTimestamp");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testGetProgressiveText() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testGetProgressiveText() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      String body = payloadFromResource("/progressive-text.txt");
-      server.enqueue(new MockResponse().setHeader("X-Text-Size", "123").setBody(body).setResponseCode(200));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         ProgressiveText output = api.progressiveText("DevTest", 0);
-         assertNotNull(output);
-         assertTrue(output.size() == 123);
-         assertFalse(output.hasMoreData());
-         assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/logText/progressiveText?start=0");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        String body = payloadFromResource("/progressive-text.txt");
+        server.enqueue(new MockResponse().setHeader("X-Text-Size", "123").setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            ProgressiveText output = api.progressiveText("DevTest", 0);
+            assertNotNull(output);
+            assertTrue(output.size() == 123);
+            assertFalse(output.hasMoreData());
+            assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/logText/progressiveText?start=0");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
-   public void testGetProgressiveTextJobNotExist() throws Exception {
-      MockWebServer server = mockWebServer();
+    public void testGetProgressiveTextJobNotExist() throws Exception {
+        MockWebServer server = mockWebServer();
 
-      server.enqueue(new MockResponse().setResponseCode(404));
-      JenkinsApi jenkinsApi = api(server.getUrl("/"));
-      JobsApi api = jenkinsApi.jobsApi();
-      try {
-         ProgressiveText output = api.progressiveText("DevTest", 0);
-         assertNull(output);
-         assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/logText/progressiveText?start=0");
-      } finally {
-         jenkinsApi.close();
-         server.shutdown();
-      }
-   }
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            ProgressiveText output = api.progressiveText("DevTest", 0);
+            assertNull(output);
+            assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/logText/progressiveText?start=0");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 }
