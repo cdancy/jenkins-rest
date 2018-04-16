@@ -67,7 +67,8 @@ public interface JobsApi {
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.APPLICATION_JSON)
     @GET
-    BuildInfo buildInfo(@PathParam("name") String jobName, @PathParam("number") int buildNumber);
+    BuildInfo buildInfo(@PathParam("name") String jobName,
+            @PathParam("number") int buildNumber);
 
     @Named("jobs:create")
     @Path("/createItem")
@@ -77,7 +78,8 @@ public interface JobsApi {
     @Consumes(MediaType.WILDCARD)
     @Payload("{configXML}")
     @POST
-    RequestStatus create(@QueryParam("name") String jobName, @PayloadParam(value = "configXML") String configXML);
+    RequestStatus create(@QueryParam("name") String jobName,
+            @PayloadParam(value = "configXML") String configXML);
 
     @Named("jobs:get-config")
     @Path("/job/{name}/config.xml")
@@ -93,7 +95,8 @@ public interface JobsApi {
     @Consumes(MediaType.TEXT_HTML)
     @Payload("{configXML}")
     @POST
-    boolean config(@PathParam("name") String jobName, @PayloadParam(value = "configXML") String configXML);
+    boolean config(@PathParam("name") String jobName,
+            @PayloadParam(value = "configXML") String configXML);
 
     @Named("jobs:get-description")
     @Path("/job/{name}/description")
@@ -107,7 +110,8 @@ public interface JobsApi {
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_HTML)
     @POST
-    boolean description(@PathParam("name") String jobName, @FormParam("description") String description);
+    boolean description(@PathParam("name") String jobName,
+            @FormParam("description") String description);
 
     @Named("jobs:delete")
     @Path("/job/{name}/doDelete")
@@ -131,12 +135,6 @@ public interface JobsApi {
     @POST
     boolean disable(@PathParam("name") String jobName);
 
-    /**
-     * Queue's a build for a given job
-     *
-     * @param jobName
-     * @return queue id to reference build
-      */
     @Named("jobs:build")
     @Path("/job/{name}/build")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
@@ -145,13 +143,6 @@ public interface JobsApi {
     @POST
     Integer build(@PathParam("name") String jobName);
 
-    /**
-     * Queue's a build with parameters for a given job
-     *
-     * @param jobName
-     * @param properties
-     * @return queue id to reference build
-      */
     @Named("jobs:build-with-params")
     @Path("/job/{name}/buildWithParameters")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
@@ -159,7 +150,7 @@ public interface JobsApi {
     @Consumes("application/unknown")
     @POST
     Integer buildWithParameters(@PathParam("name") String jobName,
-          @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
+            @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
 
     @Named("jobs:last-build-number")
     @Path("/job/{name}/lastBuild/buildNumber")
@@ -182,5 +173,6 @@ public interface JobsApi {
     @ResponseParser(OutputToProgressiveText.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
-    ProgressiveText progressiveText(@PathParam("name") String jobName, @QueryParam("start") int start);
+    ProgressiveText progressiveText(@PathParam("name") String jobName,
+            @QueryParam("start") int start);
 }

@@ -22,8 +22,8 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier 'javadoc'
+task docsJar(type: Jar, dependsOn: javadoc) {
+    classifier 'docs'
     from javadoc.destinationDir
 }
 

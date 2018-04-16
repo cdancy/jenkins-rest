@@ -14,9 +14,7 @@ githubPages {
     repoUri = 'https://github.com/cdancy/jenkins-rest.git'
 
     pages {
-        from(javadoc.outputs.files) {
-            into 'docs/javadoc'
-        }
+        from docsJar
     }
     credentials {
     	username = project.githubUsername
