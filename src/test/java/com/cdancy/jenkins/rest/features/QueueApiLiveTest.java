@@ -26,43 +26,45 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 
 @Test(groups = "live", testName = "QueueApiLiveTest", singleThreaded = true)
 public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
 
-   @BeforeClass
-   public void init() {
-      String config = payloadFromResource("/freestyle-project-sleep-task.xml");
-      boolean success = api.jobsApi().create("QueueTest", config);
-      assertTrue(success);
-   }
+    @BeforeClass
+    public void init() {
+        String config = payloadFromResource("/freestyle-project-sleep-task.xml");
+        RequestStatus success = api.jobsApi().create("QueueTest", config);
+        assertTrue(success.value());
+    }
 
-   @Test
-   public void testGetQueue() {
-      Integer job1 = api.jobsApi().build("QueueTest");
-      assertNotNull(job1);
-      Integer job2 = api.jobsApi().build("QueueTest");
-      assertNotNull(job2);
-      List<QueueItem> queueItems = api().queue();
-      assertTrue(queueItems.size() > 0);
-      boolean foundLastKickedJob = false;
-      for (QueueItem item : queueItems) {
-         if (item.id() == job2.intValue()) {
-            foundLastKickedJob = true;
-            break;
-         }
-      }
-      assertTrue(foundLastKickedJob);
-   }
+    @Test
+    public void testGetQueue() {
+        Integer job1 = api.jobsApi().build("QueueTest");
+        assertNotNull(job1);
+        Integer job2 = api.jobsApi().build("QueueTest");
+        assertNotNull(job2);
+        List<QueueItem> queueItems = api().queue();
+        assertTrue(queueItems.size() > 0);
+        boolean foundLastKickedJob = false;
+        for (QueueItem item : queueItems) {
+            if (item.id() == job2) {
+                foundLastKickedJob = true;
+                break;
+            }
+        }
+        assertTrue(foundLastKickedJob);
+    }
 
-   @AfterClass
-   public void finalize() {
-      boolean success = api.jobsApi().delete("QueueTest");
-      assertTrue(success);
-   }
+    @AfterClass
+    public void finish() {
+        final RequestStatus success = api.jobsApi().delete("QueueTest");
+        assertNotNull(success);
+        assertTrue(success.value());
+    }
 
-   private QueueApi api() {
-      return api.queueApi();
-   }
+    private QueueApi api() {
+        return api.queueApi();
+    }
 }

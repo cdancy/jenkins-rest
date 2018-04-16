@@ -16,10 +16,11 @@
  */
 package com.cdancy.jenkins.rest.handlers;
 
+import static org.jclouds.util.Closeables2.closeQuietly;
+
 import com.cdancy.jenkins.rest.exception.ForbiddenException;
 import com.cdancy.jenkins.rest.exception.MethodNotAllowedException;
 import com.cdancy.jenkins.rest.exception.UnsupportedMediaTypeException;
-import static org.jclouds.util.Closeables2.closeQuietly;
 
 import java.io.IOException;
 
@@ -32,11 +33,10 @@ import org.jclouds.http.HttpResponseException;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.ResourceAlreadyExistsException;
 import org.jclouds.rest.ResourceNotFoundException;
+import org.jclouds.rest.AuthorizationException;
 import org.jclouds.util.Strings2;
 
 import com.google.common.base.Throwables;
-import org.jclouds.rest.AuthorizationException;
-import static org.jclouds.util.Closeables2.closeQuietly;
 
 /**
  * Handle errors and propagate exception
@@ -100,9 +100,12 @@ public class JenkinsErrorHandler implements HttpErrorHandler {
                 throw Throwables.propagate(e);
             }
         } else {
+            final String errorMessage = response.getFirstHeaderOrNull("X-Error");
             return new StringBuffer(command.getCurrentRequest().getRequestLine())
                     .append(" -> ")
                     .append(response.getStatusLine())
+                    .append(" -> ")
+                    .append(errorMessage != null ? errorMessage : "")
                     .toString();
         }
     }
