@@ -37,15 +37,6 @@ public abstract class SystemInfo implements ErrorsHolder {
 
     public abstract String jenkinsSession();
 
-    @Nullable
-    public abstract String hudsonCLIPort();
-
-    @Nullable
-    public abstract String jenkinsCLIPort();
-
-    @Nullable
-    public abstract String jenkinsCLI2Port();
-
     public abstract String instanceIdentity();
 
     @Nullable
@@ -57,14 +48,12 @@ public abstract class SystemInfo implements ErrorsHolder {
     }
 
     @SerializedNames({ "hudsonVersion", "jenkinsVersion", "jenkinsSession",
-        "hudsonCLIPort", "jenkinsCLIPort", "jenkinsCLI2Port",
         "instanceIdentity", "sshEndpoint", "server", "errors" })
     public static SystemInfo create(String hudsonVersion, String jenkinsVersion, String jenkinsSession,
-            String hudsonCLIPort, String jenkinsCLIPort, String jenkinsCLI2Port, String instanceIdentity,
+            String instanceIdentity,
             String sshEndpoint, String server, final List<Error> errors) {
         return new AutoValue_SystemInfo(JenkinsUtils.nullToEmpty(errors),
                 hudsonVersion, jenkinsVersion, jenkinsSession, 
-                hudsonCLIPort, jenkinsCLIPort, jenkinsCLI2Port,
                 instanceIdentity, sshEndpoint, server);
     }
 }
