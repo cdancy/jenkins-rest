@@ -1,3 +1,7 @@
+### Version 0.0.5 (April 18, 2018)
+
+* REFACTOR: Do not throw exception when deprecated headers are missing.
+
 ### Version 0.0.4 (April 15, 2018)
 
 * REFACTOR: various changes project wide to bring up-to-date with modern Jenkins.
