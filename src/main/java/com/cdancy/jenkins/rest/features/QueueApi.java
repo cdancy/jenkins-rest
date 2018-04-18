@@ -23,6 +23,7 @@ import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.rest.annotations.RequestFilters;
@@ -33,11 +34,17 @@ import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
 
 @RequestFilters(JenkinsAuthenticationFilter.class)
 @Consumes(MediaType.APPLICATION_JSON)
-@Path("/queue/api/json")
 public interface QueueApi {
 
    @Named("queue:queue")
    @SelectJson("items")
+   @Path("/queue/api/json")
    @GET
    List<QueueItem> queue();
+
+   @Named("queue:item")
+   @Path("/queue/item/{queueId}/api/json")
+   @GET
+   QueueItem queueItem(@PathParam("queueId") Integer queueId);
+
 }
