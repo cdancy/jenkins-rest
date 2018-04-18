@@ -87,7 +87,6 @@ public final class JenkinsFallbacks {
     public static SystemInfo createSystemInfoFromErrors(final List<Error> errors) {
         final String illegalValue = "-1";
         return SystemInfo.create(illegalValue, illegalValue, illegalValue,
-                illegalValue, illegalValue, illegalValue,
                 illegalValue, illegalValue, illegalValue, errors);
     }
 
