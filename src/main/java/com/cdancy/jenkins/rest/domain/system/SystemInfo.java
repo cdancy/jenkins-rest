@@ -37,10 +37,13 @@ public abstract class SystemInfo implements ErrorsHolder {
 
     public abstract String jenkinsSession();
 
+    @Nullable
     public abstract String hudsonCLIPort();
 
+    @Nullable
     public abstract String jenkinsCLIPort();
 
+    @Nullable
     public abstract String jenkinsCLI2Port();
 
     public abstract String instanceIdentity();
