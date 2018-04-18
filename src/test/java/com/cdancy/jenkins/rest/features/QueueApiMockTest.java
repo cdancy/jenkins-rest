@@ -16,6 +16,10 @@
  */
 package com.cdancy.jenkins.rest.features;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.List;
@@ -45,6 +49,63 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
             List<QueueItem> output = api.queue();
             assertTrue(output.size() == 2);
             assertSent(server, "GET", "/queue/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetPendingQueueItem() throws Exception {
+        MockWebServer server = mockWebServer();
+        String body = payloadFromResource("/queueItemPending.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        int queueItemId = 143;
+        QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
+        try {
+            assertFalse(queueItem.cancelled());
+	    assertEquals("Build #9 is already in progress (ETA:15 sec)", queueItem.why());
+            assertNull(queueItem.executable());
+            assertSent(server, "GET", "/queue/item/" + queueItemId + "/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetCancelledQueueItem() throws Exception {
+        MockWebServer server = mockWebServer();
+        String body = payloadFromResource("/queueItemCancelled.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        int queueItemId = 143;
+        QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
+        try {
+            assertTrue(queueItem.cancelled());
+            assertNull(queueItem.why());
+            assertNull(queueItem.executable());
+            assertSent(server, "GET", "/queue/item/" + queueItemId + "/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetRunningQueueItem() throws Exception {
+        MockWebServer server = mockWebServer();
+        String body = payloadFromResource("/queueItemRunning.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        int queueItemId = 143;
+	int buildNumber = 14;
+        QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
+        try {
+            assertFalse(queueItem.cancelled());
+            assertNull(queueItem.why());
+            assertNotNull(queueItem.executable());
+            assertEquals((int)buildNumber, (int)queueItem.executable().number());
+            assertEquals("http://localhost:8082/job/test/" + buildNumber + "/", queueItem.executable().url());
+            assertSent(server, "GET", "/queue/item/" + queueItemId + "/api/json");
         } finally {
             jenkinsApi.close();
             server.shutdown();
