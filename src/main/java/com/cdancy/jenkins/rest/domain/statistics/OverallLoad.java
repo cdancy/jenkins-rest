@@ -27,43 +27,46 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class OverallLoad {
 
-   @Nullable
-   public abstract Map<String, String> availableExecutors();
+    @Nullable
+    public abstract Map<String, String> availableExecutors();
 
-   @Nullable
-   public abstract Map<String, String> busyExecutors();
+    @Nullable
+    public abstract Map<String, String> busyExecutors();
 
-   @Nullable
-   public abstract Map<String, String> connectingExecutors();
+    @Nullable
+    public abstract Map<String, String> connectingExecutors();
 
-   @Nullable
-   public abstract Map<String, String> definedExecutors();
+    @Nullable
+    public abstract Map<String, String> definedExecutors();
 
-   @Nullable
-   public abstract Map<String, String> idleExecutors();
+    @Nullable
+    public abstract Map<String, String> idleExecutors();
 
-   @Nullable
-   public abstract Map<String, String> onlineExecutors();
+    @Nullable
+    public abstract Map<String, String> onlineExecutors();
 
-   @Nullable
-   public abstract Map<String, String> queueLength();
+    @Nullable
+    public abstract Map<String, String> queueLength();
 
-   @Nullable
-   public abstract Map<String, String> totalExecutors();
+    @Nullable
+    public abstract Map<String, String> totalExecutors();
 
-   @Nullable
-   public abstract Map<String, String> totalQueueLength();
+    @Nullable
+    public abstract Map<String, String> totalQueueLength();
 
-   OverallLoad() {
-   }
+    OverallLoad() {
+    }
 
-   @SerializedNames({ "availableExecutors", "busyExecutors", "connectingExecutors", "definedExecutors", "idleExecutors",
-         "onlineExecutors", "queueLength", "totalExecutors", "totalQueueLength" })
-   private static OverallLoad create(Map<String, String> availableExecutors, Map<String, String> busyExecutors,
-         Map<String, String> connectingExecutors, Map<String, String> definedExecutors,
-         Map<String, String> idleExecutors, Map<String, String> onlineExecutors, Map<String, String> queueLength,
-         Map<String, String> totalExecutors, Map<String, String> totalQueueLength) {
-      return new AutoValue_OverallLoad(availableExecutors, busyExecutors, connectingExecutors, definedExecutors,
-            idleExecutors, onlineExecutors, queueLength, totalExecutors, totalQueueLength);
-   }
+    @SerializedNames({ "availableExecutors", "busyExecutors", "connectingExecutors", "definedExecutors", "idleExecutors",
+          "onlineExecutors", "queueLength", "totalExecutors", "totalQueueLength" })
+    public static OverallLoad create(Map<String, String> availableExecutors, Map<String, String> busyExecutors,
+          Map<String, String> connectingExecutors, Map<String, String> definedExecutors,
+          Map<String, String> idleExecutors, Map<String, String> onlineExecutors, Map<String, String> queueLength,
+          Map<String, String> totalExecutors, Map<String, String> totalQueueLength) {
+        return new AutoValue_OverallLoad(availableExecutors, busyExecutors,
+                connectingExecutors, definedExecutors,
+                idleExecutors, onlineExecutors,
+                queueLength, totalExecutors,
+                totalQueueLength);
+    }
 }
