@@ -37,8 +37,7 @@ public class SystemInfoFromJenkinsHeaders implements Function<HttpResponse, Syst
         final int statusCode = response.getStatusCode();
         if (statusCode >= 200 && statusCode < 400) {
             return SystemInfo.create(response.getFirstHeaderOrNull("X-Hudson"), response.getFirstHeaderOrNull("X-Jenkins"),
-                response.getFirstHeaderOrNull("X-Jenkins-Session"), response.getFirstHeaderOrNull("X-Hudson-CLI-Port"),
-                response.getFirstHeaderOrNull("X-Jenkins-CLI-Port"), response.getFirstHeaderOrNull("X-Jenkins-CLI2-Port"),
+                response.getFirstHeaderOrNull("X-Jenkins-Session"),
                 response.getFirstHeaderOrNull("X-Instance-Identity"), response.getFirstHeaderOrNull("X-SSH-Endpoint"),
                 response.getFirstHeaderOrNull("Server"), null);
         } else {
