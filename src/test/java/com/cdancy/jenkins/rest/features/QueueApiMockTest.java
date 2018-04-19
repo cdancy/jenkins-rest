@@ -64,7 +64,7 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
         try {
             assertFalse(queueItem.cancelled());
-	    assertEquals("Build #9 is already in progress (ETA:15 sec)", queueItem.why());
+	    assertEquals(queueItem.why(), "Build #9 is already in progress (ETA:15 sec)");
             assertNull(queueItem.executable());
             assertSent(server, "GET", "/queue/item/" + queueItemId + "/api/json");
         } finally {
@@ -103,12 +103,14 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
             assertFalse(queueItem.cancelled());
             assertNull(queueItem.why());
             assertNotNull(queueItem.executable());
-            assertEquals((int)buildNumber, (int)queueItem.executable().number());
-            assertEquals("http://localhost:8082/job/test/" + buildNumber + "/", queueItem.executable().url());
+            assertEquals((int) queueItem.executable().number(), (int) buildNumber);
+            assertEquals(queueItem.executable().url(), "http://localhost:8082/job/test/" + buildNumber + "/");
             assertSent(server, "GET", "/queue/item/" + queueItemId + "/api/json");
         } finally {
             jenkinsApi.close();
             server.shutdown();
         }
     }
+
+    // TODO: test the queueItem cancel api
 }
