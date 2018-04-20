@@ -64,7 +64,7 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
         try {
             assertFalse(queueItem.cancelled());
-	    assertEquals(queueItem.why(), "Build #9 is already in progress (ETA:15 sec)");
+            assertEquals(queueItem.why(), "Build #9 is already in progress (ETA:15 sec)");
             assertNull(queueItem.executable());
             assertSent(server, "GET", "/queue/item/" + queueItemId + "/api/json");
         } finally {
@@ -97,7 +97,7 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         int queueItemId = 143;
-	int buildNumber = 14;
+        int buildNumber = 14;
         QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
         try {
             assertFalse(queueItem.cancelled());
