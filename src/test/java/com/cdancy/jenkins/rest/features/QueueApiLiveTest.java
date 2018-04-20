@@ -70,7 +70,6 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         QueueItem queueItem = api().queueItem(job2);
         assertFalse(queueItem.cancelled());
         assertNotNull(queueItem.why());
-        assertTrue(queueItem.why() instanceof String);
         assertNull(queueItem.executable());
     }
 
@@ -95,8 +94,6 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         //  * the url for the build should be set to a string
         assertNull(queueItem.why());
         assertNotNull(queueItem.executable());
-        assertTrue(queueItem.executable().number() instanceof Integer);
-        assertTrue(queueItem.executable().url() instanceof String);
     }
 
     @Test
@@ -106,8 +103,10 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         Integer job2 = api.jobsApi().build("QueueTest");
         assertNotNull(job2);
 
-        boolean success = api().cancel(job2);
-        assertTrue(success);
+        RequestStatus success = api().cancel(job2);
+        assertNotNull(success);
+        assertTrue(success.value());
+        assertTrue(success.errors().isEmpty());
 
         QueueItem queueItem = api().queueItem(job2);
         assertTrue(queueItem.cancelled());
@@ -115,12 +114,20 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         assertNull(queueItem.executable());
     }
 
+    @Test
+    public void testCancelNonExistentQueueItem() throws InterruptedException {
+        RequestStatus success = api().cancel(123456789);
+        assertNotNull(success);
+        assertTrue(success.value());
+        assertTrue(success.errors().isEmpty());
+    }
+
     /**
      * Return a queue item that is being built.
-     * If the queue item is cancelled before the build is launched, null is returned.
+     * If the queue item is canceled before the build is launched, null is returned.
      * To prevent the test from hanging, this method times out after 10 attempts and the queue item is returned the way it is.
      * @param queueId  The queue id returned when asking Jenkins to run a build.
-     * @return Null if the queue item has been cancelled before it has had a chance to run,
+     * @return Null if the queue item has been canceled before it has had a chance to run,
      *         otherwise the QueueItem element is returned, but this does not guarantee that the build runs.
      *         The caller has to check the value of queueItem.executable, and if it is null, the queue item is still pending.
      *

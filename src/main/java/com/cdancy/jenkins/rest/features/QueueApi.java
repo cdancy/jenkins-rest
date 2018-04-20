@@ -17,6 +17,7 @@
 
 package com.cdancy.jenkins.rest.features;
 
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import java.util.List;
 
 import javax.inject.Named;
@@ -28,21 +29,24 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
-import org.jclouds.Fallbacks;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.SelectJson;
 
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
+import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
+import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
+import org.jclouds.rest.annotations.ResponseParser;
 
 @RequestFilters(JenkinsAuthenticationFilter.class)
 @Consumes(MediaType.APPLICATION_JSON)
+@Path("/queue")
 public interface QueueApi {
 
     @Named("queue:queue")
+    @Path("/api/json")
     @SelectJson("items")
-    @Path("/queue/api/json")
     @GET
     List<QueueItem> queue();
 
@@ -54,7 +58,7 @@ public interface QueueApi {
      * @return The queue item corresponding to the queue id.
      */
     @Named("queue:item")
-    @Path("/queue/item/{queueId}/api/json")
+    @Path("/item/{queueId}/api/json")
     @GET
     QueueItem queueItem(@PathParam("queueId") Integer queueId);
 
@@ -65,9 +69,9 @@ public interface QueueApi {
      * @return Always returns true due to JENKINS-21311.
      */
     @Named("queue:cancel")
-    @Path("/queue/cancelItem")
-    @Fallback(Fallbacks.TrueOnNotFoundOr404.class)
+    @Path("/cancelItem")
+    @Fallback(JenkinsFallbacks.JENKINS_21311.class)
+    @ResponseParser(RequestStatusParser.class)
     @POST
-    boolean cancel(@FormParam("id") Integer id);
-
+    RequestStatus cancel(@FormParam("id") Integer id);
 }
