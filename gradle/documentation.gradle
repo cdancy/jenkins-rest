@@ -17,8 +17,8 @@ githubPages {
         from docsJar
     }
     credentials {
-    	username = project.githubUsername
-    	password = project.githubPassword
+    	username = rootProject.findProperty('githubUsername')
+    	password = rootProject.findProperty('githubPassword')
     }
 }
 
