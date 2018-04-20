@@ -56,32 +56,11 @@ public interface QueueApi {
     @GET
     QueueItem queueItem(@PathParam("queueId") Integer queueId);
 
-    // TODO: Remove this comment once this method is understood and the test passes
-    // curl -v -u martin:martin -H "Jenkins-Crumb:53842b63c40e494a74d261a4773339ef" -X POST "http://localhost:8082/queue/cancelItem?id=210"
-    // Trying 127.0.0.1...
-    // * Connected to localhost (127.0.0.1) port 8082 (#0)
-    // * Server auth using Basic with user 'martin'
-    // > POST /queue/cancelItem?id=210 HTTP/1.1
-    // > Host: localhost:8082
-    // > Authorization: Basic bWFydGluOm1hcnRpbg==
-    // > User-Agent: curl/7.47.0
-    // > Accept: */*
-    // > Jenkins-Crumb:53842b63c40e494a74d261a4773339ef
-    // >
-    // < HTTP/1.1 302 Found
-    // < Date: Wed, 18 Apr 2018 22:01:00 GMT
-    // < X-Content-Type-Options: nosniff
-    // < Location: http://localhost:8082/queue/
-    // < Content-Length: 0
-    // < Server: Jetty(9.4.z-SNAPSHOT)
-    // <
-    // * Connection #0 to host localhost left intact
     @Named("queue:cancel")
     @Path("/queue/cancelItem")
-    //@Fallback(Fallbacks.NullOnNotFoundOr404.class)
-    //@Fallback(JenkinsFallbacks.RequestStatusOnError.class)
+    @Fallback(Fallbacks.TrueOnNotFoundOr404.class)
     @ResponseParser(RequestStatusParser.class)
     @POST
-    RequestStatus cancel(@FormParam("id") Integer queueId);
+    boolean cancel(@FormParam("id") Integer queueId);
 
 }

@@ -106,8 +106,8 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         Integer job2 = api.jobsApi().build("QueueTest");
         assertNotNull(job2);
 
-        RequestStatus success = api().cancel(job2);
-        assertTrue(success.value());
+        boolean success = api().cancel(job2);
+        assertTrue(success);
 
         QueueItem queueItem = api().queueItem(job2);
         assertTrue(queueItem.cancelled());
