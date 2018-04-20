@@ -112,5 +112,19 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
-    // TODO: test the queueItem cancel api
+    public void testCancelQueueItem() throws Exception {
+        MockWebServer server = mockWebServer();
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        int queueItemId = 143;
+        boolean result = jenkinsApi.queueApi().cancel(queueItemId);
+        try {
+            assertTrue(result);
+            assertSentWithFormData(server, "POST", "/queue/cancelItem", "id=" + queueItemId);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+
+    }
 }
