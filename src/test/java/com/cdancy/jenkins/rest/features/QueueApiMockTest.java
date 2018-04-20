@@ -29,6 +29,7 @@ import org.testng.annotations.Test;
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
@@ -117,14 +118,32 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         server.enqueue(new MockResponse().setResponseCode(404));
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         int queueItemId = 143;
-        boolean result = jenkinsApi.queueApi().cancel(queueItemId);
+        RequestStatus result = jenkinsApi.queueApi().cancel(queueItemId);
         try {
-            assertTrue(result);
+            assertNotNull(result);
+            assertTrue(result.value());
+            assertTrue(result.errors().isEmpty());
             assertSentWithFormData(server, "POST", "/queue/cancelItem", "id=" + queueItemId);
         } finally {
             jenkinsApi.close();
             server.shutdown();
         }
+    }
 
+    public void testCancelNonExistentQueueItem() throws Exception {
+        MockWebServer server = mockWebServer();
+        server.enqueue(new MockResponse().setResponseCode(500));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        int queueItemId = 143;
+        RequestStatus result = jenkinsApi.queueApi().cancel(queueItemId);
+        try {
+            assertNotNull(result);
+            assertFalse(result.value());
+            assertFalse(result.errors().isEmpty());
+            assertSentWithFormData(server, "POST", "/queue/cancelItem", "id=" + queueItemId);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
     }
 }
