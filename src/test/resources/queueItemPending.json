@@ -1,0 +1,41 @@
+{
+  "_class" : "hudson.model.Queue$BlockedItem",
+  "actions" : [
+    {
+      "_class" : "hudson.model.ParametersAction",
+      "parameters" : [
+        {
+          "_class" : "hudson.model.StringParameterValue",
+          "name" : "a",
+          "value" : "4"
+        }
+      ]
+    },
+    {
+      "_class" : "hudson.model.CauseAction",
+      "causes" : [
+        {
+          "_class" : "hudson.model.Cause$UserIdCause",
+          "shortDescription" : "Started by user martin",
+          "userId" : "martin",
+          "userName" : "martin"
+        }
+      ]
+    }
+  ],
+  "blocked" : true,
+  "buildable" : false,
+  "id" : 143,
+  "inQueueSince" : 1524074568030,
+  "params" : "\na=4",
+  "stuck" : false,
+  "task" : {
+    "_class" : "hudson.model.FreeStyleProject",
+    "name" : "test",
+    "url" : "http://localhost:8082/job/test/",
+    "color" : "blue_anime"
+  },
+  "url" : "queue/item/143/",
+  "why" : "Build #9 is already in progress (ETA:15 sec)",
+  "buildableStartMilliseconds" : 1524074568030
+}

@@ -16,7 +16,9 @@
  */
 package com.cdancy.jenkins.rest.features;
 
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.List;
@@ -55,6 +57,94 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
             }
         }
         assertTrue(foundLastKickedJob);
+    }
+
+    @Test
+    public void testGetPendingQueueItem() {
+        Integer job1 = api.jobsApi().build("QueueTest");
+        assertNotNull(job1);
+        Integer job2 = api.jobsApi().build("QueueTest");
+        assertNotNull(job2);
+
+        // job2 is queue after job1, so while job1 runs, job2 is pending in the queue
+        QueueItem queueItem = api().queueItem(job2);
+        assertFalse(queueItem.cancelled());
+        assertNotNull(queueItem.why());
+        assertNull(queueItem.executable());
+    }
+
+    @Test
+    public void testGetRunningQueueItem() throws InterruptedException {
+        Integer job1 = api.jobsApi().build("QueueTest");
+        assertNotNull(job1);
+        Integer job2 = api.jobsApi().build("QueueTest");
+        assertNotNull(job2);
+
+        // job1 runs first, so we get its queueItem
+        QueueItem queueItem = getRunningQueueItem(job1);
+
+        // If null, it means the queueItem has been cancelled, which would not be normal in this test
+        assertNotNull(queueItem);
+        assertFalse(queueItem.cancelled());
+
+        //  We exepect this build to run, consequently:
+        //  * the why field should now be null
+        //  * the executable field should NOT be null
+        //  * the build number should be set to an integer
+        //  * the url for the build should be set to a string
+        assertNull(queueItem.why());
+        assertNotNull(queueItem.executable());
+    }
+
+    @Test
+    public void testGetCancelledQueueItem() throws InterruptedException {
+        Integer job1 = api.jobsApi().build("QueueTest");
+        assertNotNull(job1);
+        Integer job2 = api.jobsApi().build("QueueTest");
+        assertNotNull(job2);
+
+        RequestStatus success = api().cancel(job2);
+        assertNotNull(success);
+        assertTrue(success.value());
+        assertTrue(success.errors().isEmpty());
+
+        QueueItem queueItem = api().queueItem(job2);
+        assertTrue(queueItem.cancelled());
+        assertNull(queueItem.why());
+        assertNull(queueItem.executable());
+    }
+
+    @Test
+    public void testCancelNonExistentQueueItem() throws InterruptedException {
+        RequestStatus success = api().cancel(123456789);
+        assertNotNull(success);
+        assertTrue(success.value());
+        assertTrue(success.errors().isEmpty());
+    }
+
+    /**
+     * Return a queue item that is being built.
+     * If the queue item is canceled before the build is launched, null is returned.
+     * To prevent the test from hanging, this method times out after 10 attempts and the queue item is returned the way it is.
+     * @param queueId  The queue id returned when asking Jenkins to run a build.
+     * @return Null if the queue item has been canceled before it has had a chance to run,
+     *         otherwise the QueueItem element is returned, but this does not guarantee that the build runs.
+     *         The caller has to check the value of queueItem.executable, and if it is null, the queue item is still pending.
+     *
+     */
+    private QueueItem getRunningQueueItem(int queueId) throws InterruptedException {
+        int max = 10;
+        QueueItem queueItem = api().queueItem(queueId);
+        while (max > 0) {
+            if (queueItem.cancelled()) return null;
+            if (queueItem.executable() != null) {
+                return queueItem;
+            }
+            Thread.sleep(2000);
+            queueItem = api().queueItem(queueId);
+            max = max - 1;
+        }
+        return queueItem;
     }
 
     @AfterClass
