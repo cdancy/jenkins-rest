@@ -35,6 +35,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jclouds.Fallback;
+import org.jclouds.Fallbacks;
+import org.jclouds.rest.ResourceNotFoundException;
 
 public final class JenkinsFallbacks {
 
@@ -72,6 +74,27 @@ public final class JenkinsFallbacks {
         public Object createOrPropagate(final Throwable throwable) throws Exception {
             if (checkNotNull(throwable, "throwable") != null) {
                 try {
+                    return createRequestStatusFromErrors(getErrors(throwable));
+                } catch (JsonSyntaxException e) {
+                    final Error error = Error.create(null, throwable.getMessage(),
+                            throwable.getClass().getName());
+                    final List<Error> errors = Lists.newArrayList(error);
+                    return RequestStatus.create(false, errors);
+                }
+            }
+            throw propagate(throwable);
+        }
+    }
+
+    // fix/hack for Jenkins jira issue: JENKINS-21311
+    public static final class JENKINS_21311 implements Fallback<Object> {
+        @Override
+        public Object createOrPropagate(final Throwable throwable) throws Exception {
+            if (checkNotNull(throwable, "throwable") != null) {
+                try {
+                    if (throwable.getClass() == ResourceNotFoundException.class) {
+                        return RequestStatus.create(true, null);
+                    }
                     return createRequestStatusFromErrors(getErrors(throwable));
                 } catch (JsonSyntaxException e) {
                     final Error error = Error.create(null, throwable.getMessage(),

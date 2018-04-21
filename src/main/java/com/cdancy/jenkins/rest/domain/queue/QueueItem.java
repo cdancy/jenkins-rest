@@ -20,6 +20,7 @@ package com.cdancy.jenkins.rest.domain.queue;
 import java.util.Map;
 
 import org.jclouds.json.SerializedNames;
+import org.jclouds.javax.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.Maps;
@@ -43,17 +44,24 @@ public abstract class QueueItem {
 
    public abstract String url();
 
+   @Nullable
    public abstract String why();
 
    public abstract long buildableStartMilliseconds();
+
+   public abstract boolean cancelled();
+
+   @Nullable
+   public abstract Executable executable();
 
    QueueItem() {
    }
 
    @SerializedNames({ "blocked", "buildable", "id", "inQueueSince", "params", "stuck", "task", "url", "why",
-         "buildableStartMilliseconds" })
+         "buildableStartMilliseconds", "cancelled", "executable" })
    public static QueueItem create(boolean blocked, boolean buildable, int id, long inQueueSince, String params,
-         boolean stuck, Task task, String url, String why, long buildableStartMilliseconds) {
+         boolean stuck, Task task, String url, String why, long buildableStartMilliseconds,
+	 boolean cancelled, Executable executable) {
       Map<String, String> parameters = Maps.newHashMap();
       if (params != null) {
          params = params.trim();
@@ -65,6 +73,6 @@ public abstract class QueueItem {
          }
       }
       return new AutoValue_QueueItem(blocked, buildable, id, inQueueSince, parameters, stuck, task, url, why,
-            buildableStartMilliseconds);
+            buildableStartMilliseconds, cancelled, executable);
    }
 }
