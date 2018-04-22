@@ -1,3 +1,7 @@
+### Version 0.0.6 (April 21, 2018)
+
+* ADDED: `QueueApi` gained endpoints `cancel` and `queueItem`.
+
 ### Version 0.0.5 (April 18, 2018)
 
 * REFACTOR: Do not throw exception when deprecated headers are missing.
