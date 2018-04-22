@@ -1,3 +1,5 @@
+### Version 0.0.7 (TBA)
+
 ### Version 0.0.6 (April 21, 2018)
 
 * ADDED: `QueueApi` gained endpoints `cancel` and `queueItem`.
