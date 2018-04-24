@@ -52,6 +52,7 @@ public interface QueueApi {
 
     /**
      * Get a specific queue item.
+     * 
      * Queue items are builds that have been scheduled to run, but are waiting for a slot.
      * You can poll the queueItem that corresponds to a build to detect whether the build is still pending or is executing.
      * @param queueId The queue id value as returned by the JobsApi build or buildWithParameters methods.
@@ -60,10 +61,11 @@ public interface QueueApi {
     @Named("queue:item")
     @Path("/item/{queueId}/api/json")
     @GET
-    QueueItem queueItem(@PathParam("queueId") Integer queueId);
+    QueueItem queueItem(@PathParam("queueId") int queueId);
 
     /**
      * Cancel a queue item before it gets built.
+     * 
      * @param id The queue id value of the queue item to cancel.
      *           This is the value is returned by the JobsApi build or buildWithParameters methods.
      * @return Always returns true due to JENKINS-21311.
@@ -73,5 +75,5 @@ public interface QueueApi {
     @Fallback(JenkinsFallbacks.JENKINS_21311.class)
     @ResponseParser(RequestStatusParser.class)
     @POST
-    RequestStatus cancel(@FormParam("id") Integer id);
+    RequestStatus cancel(@FormParam("id") int id);
 }
