@@ -14,12 +14,21 @@ githubPages {
     repoUri = 'https://github.com/cdancy/jenkins-rest.git'
 
     pages {
-        from docsJar
+        from(javadoc.outputs.files) {
+            into 'docs/javadoc'
+        }
     }
     credentials {
-    	username = rootProject.findProperty('githubUsername')
-    	password = rootProject.findProperty('githubPassword')
+        username = resolveProperty('githubUsername')
+        password = resolveProperty('githubPassword')
     }
 }
 
 publishGhPages.dependsOn javadoc
+
+String resolveProperty(String propKey) {
+    String propValue = System.getenv()[propKey]
+    if(propValue) { return propValue }
+    hasProperty(propKey) ? getProperty(propKey) : null
+}
+
