@@ -1,4 +1,4 @@
-### Version 0.0.7 (TBA)
+### Version 0.0.7 (April 26, 2018)
 
 * BUG: Fix `QueueItem` incorrect parameter merging. - [Pull request 8](https://github.com/cdancy/jenkins-rest/pull/8)
 
