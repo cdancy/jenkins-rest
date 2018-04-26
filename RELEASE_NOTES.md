@@ -1,5 +1,7 @@
 ### Version 0.0.7 (TBA)
 
+* BUG: Fix `QueueItem` incorrect parameter merging. - [Pull request 8](https://github.com/cdancy/jenkins-rest/pull/8)
+
 ### Version 0.0.6 (April 21, 2018)
 
 * ADDED: `QueueApi` gained endpoints `cancel` and `queueItem`.
