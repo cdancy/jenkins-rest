@@ -16,12 +16,15 @@
  */
 package com.cdancy.jenkins.rest.features;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -31,6 +34,9 @@ import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 @Test(groups = "live", testName = "QueueApiLiveTest", singleThreaded = true)
 public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
 
@@ -38,6 +44,14 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
     public void init() {
         String config = payloadFromResource("/freestyle-project-sleep-task.xml");
         RequestStatus success = api.jobsApi().create("QueueTest", config);
+        assertTrue(success.value());
+
+        config = payloadFromResource("/freestyle-project.xml");
+        success = api.jobsApi().create("QueueTestSingleParam", config);
+        assertTrue(success.value());
+
+        config = payloadFromResource("/freestyle-project-sleep-task-multiple-params.xml");
+        success = api.jobsApi().create("QueueTestMultipleParams", config);
         assertTrue(success.value());
     }
 
@@ -97,6 +111,54 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test
+    public void testQueueItemSingleParameters() throws InterruptedException {
+        Map<String, List<String>> params = new HashMap<>();
+        params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue1"));
+        Integer job1 = api.jobsApi().buildWithParameters("QueueTestSingleParam", params);
+        assertNotNull(job1);
+
+        // Jenkins will reject two consecutive build requests when the build parameter values are the same
+        // So we must set some different parameter values
+        params = new HashMap<>();
+        params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue2"));
+        Integer job2 = api.jobsApi().buildWithParameters("QueueTestSingleParam", params);
+        assertNotNull(job2);
+
+        QueueItem queueItem = getRunningQueueItem(job1);
+        assertNotNull(queueItem);
+        assertFalse(queueItem.cancelled());
+
+        Map <String, String> map = Maps.newHashMap();
+        map.put("SomeKey", "SomeVeryNewValue1");
+        assertEquals(queueItem.params(), map);
+    }
+
+    @Test
+    public void testQueueItemMultipleParameters() throws InterruptedException {
+        Map<String, List<String>> params = new HashMap<>();
+        params.put("SomeKey1", Lists.newArrayList("SomeVeryNewValue1"));
+        Integer job1 = api.jobsApi().buildWithParameters("QueueTestMultipleParams",params);
+        assertNotNull(job1);
+
+        // Jenkins will reject two consecutive build requests when the build parameter values are the same
+        // So we must set some different parameter values
+        params = new HashMap<>();
+        params.put("SomeKey1", Lists.newArrayList("SomeVeryNewValue2"));
+        Integer job2 = api.jobsApi().buildWithParameters("QueueTestMultipleParams", params);
+        assertNotNull(job2);
+
+        QueueItem queueItem = getRunningQueueItem(job1);
+        assertNotNull(queueItem);
+        assertFalse(queueItem.cancelled());
+
+        Map <String, String> map = Maps.newHashMap();
+        map.put("SomeKey1", "SomeVeryNewValue1");
+        map.put("SomeKey2", "SomeValue2");
+        map.put("SomeKey3", "SomeValue3");
+        assertEquals(queueItem.params(), map);
+    }
+
+    @Test
     public void testGetCancelledQueueItem() throws InterruptedException {
         Integer job1 = api.jobsApi().build("QueueTest");
         assertNotNull(job1);
@@ -149,7 +211,15 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @AfterClass
     public void finish() {
-        final RequestStatus success = api.jobsApi().delete("QueueTest");
+        RequestStatus success = api.jobsApi().delete("QueueTest");
+        assertNotNull(success);
+        assertTrue(success.value());
+
+        success = api.jobsApi().delete("QueueTestSingleParam");
+        assertNotNull(success);
+        assertTrue(success.value());
+
+        success = api.jobsApi().delete("QueueTestMultipleParams");
         assertNotNull(success);
         assertTrue(success.value());
     }

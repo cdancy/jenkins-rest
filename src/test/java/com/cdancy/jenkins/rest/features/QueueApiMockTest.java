@@ -23,6 +23,7 @@ import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Map;
 
 import org.testng.annotations.Test;
 
@@ -30,6 +31,8 @@ import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
+
+import com.google.common.collect.Maps;
 
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
@@ -100,13 +103,36 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         int queueItemId = 143;
         int buildNumber = 14;
         QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
+        Map <String, String> map = Maps.newHashMap();
+        map.put("a", "4");
         try {
+            assertEquals(queueItem.params(), map);
             assertFalse(queueItem.cancelled());
             assertNull(queueItem.why());
             assertNotNull(queueItem.executable());
             assertEquals((int) queueItem.executable().number(), (int) buildNumber);
             assertEquals(queueItem.executable().url(), "http://localhost:8082/job/test/" + buildNumber + "/");
             assertSent(server, "GET", "/queue/item/" + queueItemId + "/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testQueueItemMultipleParameters() throws Exception {
+        MockWebServer server = mockWebServer();
+        String body = payloadFromResource("/queueItemMultipleParameters.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        int queueItemId = 143;
+        int buildNumber = 14;
+        QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
+        Map <String, String> map = Maps.newHashMap();
+        map.put("a", "1");
+        map.put("b", "2");
+        map.put("c", "3");
+        try {
+            assertEquals(queueItem.params(), map);
         } finally {
             jenkinsApi.close();
             server.shutdown();
