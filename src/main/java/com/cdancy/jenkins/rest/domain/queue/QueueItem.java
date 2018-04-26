@@ -66,7 +66,7 @@ public abstract class QueueItem {
       if (params != null) {
          params = params.trim();
          if (params.length() > 0) {
-            for (String keyValue : params.replaceFirst("\n", "").split("\n")) {
+            for (String keyValue : params.split("\n")) {
                String[] pair = keyValue.split("=");
                parameters.put(pair[0], pair[1]);
             }
