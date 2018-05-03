@@ -17,6 +17,7 @@
 
 package com.cdancy.jenkins.rest.features;
 
+import static com.cdancy.jenkins.rest.JenkinsConstants.OPTIONAL_FOLDER_PATH_PARAM;
 import java.util.List;
 import java.util.Map;
 
@@ -46,10 +47,12 @@ import com.cdancy.jenkins.rest.domain.job.JobInfo;
 import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
+import com.cdancy.jenkins.rest.filters.ScrubNullFolderParam;
 import com.cdancy.jenkins.rest.parsers.BuildNumberToInteger;
 import com.cdancy.jenkins.rest.parsers.LocationToQueueId;
 import com.cdancy.jenkins.rest.parsers.OutputToProgressiveText;
 import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
+import org.jclouds.javax.annotation.Nullable;
 
 @RequestFilters(JenkinsAuthenticationFilter.class)
 @Path("/")
@@ -71,14 +74,16 @@ public interface JobsApi {
             @PathParam("number") int buildNumber);
 
     @Named("jobs:create")
-    @Path("/createItem")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/createItem")
     @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
+    @RequestFilters(ScrubNullFolderParam.class)
     @ResponseParser(RequestStatusParser.class)
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.WILDCARD)
     @Payload("{configXML}")
     @POST
-    RequestStatus create(@QueryParam("name") String jobName,
+    RequestStatus create(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+            @QueryParam("name") String jobName,
             @PayloadParam(value = "configXML") String configXML);
 
     @Named("jobs:get-config")

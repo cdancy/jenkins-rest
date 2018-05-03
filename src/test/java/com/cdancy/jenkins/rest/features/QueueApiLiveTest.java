@@ -43,15 +43,15 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
     @BeforeClass
     public void init() {
         String config = payloadFromResource("/freestyle-project-sleep-task.xml");
-        RequestStatus success = api.jobsApi().create("QueueTest", config);
+        RequestStatus success = api.jobsApi().create(null, "QueueTest", config);
         assertTrue(success.value());
 
         config = payloadFromResource("/freestyle-project.xml");
-        success = api.jobsApi().create("QueueTestSingleParam", config);
+        success = api.jobsApi().create(null, "QueueTestSingleParam", config);
         assertTrue(success.value());
 
         config = payloadFromResource("/freestyle-project-sleep-task-multiple-params.xml");
-        success = api.jobsApi().create("QueueTestMultipleParams", config);
+        success = api.jobsApi().create(null, "QueueTestMultipleParams", config);
         assertTrue(success.value());
     }
 
