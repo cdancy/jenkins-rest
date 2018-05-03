@@ -125,7 +125,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            RequestStatus success = api.create("DevTest", configXML);
+            RequestStatus success = api.create(null, "DevTest", configXML);
             assertNotNull(success);
             assertTrue(success.value());
             assertTrue(success.errors().isEmpty());
@@ -145,7 +145,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            RequestStatus success = api.create("DevTest", configXML);
+            RequestStatus success = api.create(null, "DevTest", configXML);
             assertNotNull(success);
             assertFalse(success.value());
             assertFalse(success.errors().isEmpty());

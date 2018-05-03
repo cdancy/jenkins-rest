@@ -44,7 +44,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     @Test
     public void testCreateJob() {
         String config = payloadFromResource("/freestyle-project-no-params.xml");
-        RequestStatus success = api().create("DevTest", config);
+        RequestStatus success = api().create(null, "DevTest", config);
         assertTrue(success.value());
     }
 
@@ -114,7 +114,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     @Test(dependsOnMethods = "testGetBuildInfo")
     public void testCreateJobThatAlreadyExists() {
         String config = payloadFromResource("/freestyle-project.xml");
-        RequestStatus success = api().create("DevTest", config);
+        RequestStatus success = api().create(null, "DevTest", config);
         assertFalse(success.value());
     }
 
