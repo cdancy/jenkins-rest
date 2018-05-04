@@ -20,7 +20,11 @@ package com.cdancy.jenkins.rest;
 import com.cdancy.jenkins.rest.auth.AuthenticationType;
 import com.cdancy.jenkins.rest.config.JenkinsAuthenticationModule;
 import com.google.common.collect.Lists;
+import com.google.inject.Module;
+
+import java.util.List;
 import java.util.Properties;
+
 import org.jclouds.ContextBuilder;
 import org.jclouds.javax.annotation.Nullable;
 
@@ -30,13 +34,14 @@ public final class JenkinsClient {
     private final JenkinsAuthentication credentials;
     private final JenkinsApi jenkinsApi;
     private final Properties overrides;
+    private final List<Module> modules;
 
     /**
      * Create a JenkinsClient inferring endpoint and authentication from
      * environment and system properties.
      */
     public JenkinsClient() {
-        this(null, null, null);
+        this(null, null, null, null);
     }
 
     /**
@@ -52,7 +57,8 @@ public final class JenkinsClient {
      */
     public JenkinsClient(@Nullable final String endPoint,
             @Nullable final JenkinsAuthentication authentication,
-            @Nullable final Properties overrides) {
+            @Nullable final Properties overrides,
+            @Nullable final List<Module> modules) {
         this.endPoint = endPoint != null
                 ? endPoint
                 : JenkinsUtils.inferEndpoint();
@@ -60,14 +66,17 @@ public final class JenkinsClient {
                 ? authentication
                 : JenkinsUtils.inferAuthentication();
         this.overrides = mergeOverrides(overrides);
-        this.jenkinsApi = createApi(this.endPoint, this.credentials, this.overrides);
+        this.modules = modules;
+        this.jenkinsApi = createApi(this.endPoint, this.credentials, this.overrides, this.modules);
     }
 
-    private JenkinsApi createApi(final String endPoint, final JenkinsAuthentication authentication, final Properties overrides) {
+    private JenkinsApi createApi(final String endPoint, final JenkinsAuthentication authentication, final Properties overrides, final List<Module> modules) {
+        List<Module> allModules = Lists.newArrayList(new JenkinsAuthenticationModule(authentication));
+        allModules.addAll(modules);
         return ContextBuilder
                 .newBuilder(new JenkinsApiMetadata.Builder().build())
                 .endpoint(endPoint)
-                .modules(Lists.newArrayList(new JenkinsAuthenticationModule(authentication)))
+                .modules(allModules)
                 .overrides(overrides)
                 .buildApi(JenkinsApi.class);
     }
@@ -100,6 +109,10 @@ public final class JenkinsClient {
         return this.overrides;
     }
 
+    public List<Module> modules() {
+        return this.modules;
+    }
+
     public String authValue() {
         return this.credentials.authValue();
     }
@@ -121,6 +134,7 @@ public final class JenkinsClient {
         private String endPoint;
         private JenkinsAuthentication.Builder authBuilder;
         private Properties overrides;
+        private List<Module> modules;
 
         /**
          * Define the base endpoint to connect to.
@@ -173,6 +187,18 @@ public final class JenkinsClient {
         }
 
         /**
+         * Optional List of Module to add. Modules can be added, for logging
+         * for example.
+         *
+         * @param modules optional List of Module to add.
+         * @return this Builder.
+         */
+        public Builder modules(final List<Module> modules) {
+            this.modules = modules;
+            return this;
+        }
+
+        /**
          * Build an instance of JenkinsClient.
          * 
          * @return JenkinsClient
@@ -184,7 +210,7 @@ public final class JenkinsClient {
                     ? authBuilder.build()
                     : null;
 
-            return new JenkinsClient(endPoint, authentication, overrides);
+            return new JenkinsClient(endPoint, authentication, overrides, modules);
         } 
     }
 }
