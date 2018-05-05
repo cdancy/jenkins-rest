@@ -22,6 +22,7 @@ import com.cdancy.jenkins.rest.config.JenkinsAuthenticationModule;
 import com.google.common.collect.Lists;
 import com.google.inject.Module;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -54,6 +55,7 @@ public final class JenkinsClient {
      * @param endPoint URL of Jenkins instance.
      * @param authentication authentication used to connect to Jenkins instance.
      * @param overrides jclouds Properties to override defaults when creating a new JenkinsApi.
+     * @param modules a list of modules to be passed to the Contextbuilder, e.g. for logging.
      */
     public JenkinsClient(@Nullable final String endPoint,
             @Nullable final JenkinsAuthentication authentication,
@@ -66,19 +68,31 @@ public final class JenkinsClient {
                 ? authentication
                 : JenkinsUtils.inferAuthentication();
         this.overrides = mergeOverrides(overrides);
-        this.modules = modules;
+        this.modules = addModules(this.credentials, modules);
         this.jenkinsApi = createApi(this.endPoint, this.credentials, this.overrides, this.modules);
     }
 
     private JenkinsApi createApi(final String endPoint, final JenkinsAuthentication authentication, final Properties overrides, final List<Module> modules) {
-        List<Module> allModules = Lists.newArrayList(new JenkinsAuthenticationModule(authentication));
-        allModules.addAll(modules);
         return ContextBuilder
                 .newBuilder(new JenkinsApiMetadata.Builder().build())
                 .endpoint(endPoint)
-                .modules(allModules)
+                .modules(modules)
                 .overrides(overrides)
                 .buildApi(JenkinsApi.class);
+    }
+
+    /**
+     * Add the defaul built-in module, followed by the user modules.
+     *
+     * @param modules a list of user provided modules.
+     * @return The complete list of modules starting with the default ones.
+     */
+    private List<Module> addModules(final JenkinsAuthentication authentication, final List<Module> modules) {
+        final List<Module> allModules = Lists.newArrayList(new JenkinsAuthenticationModule(authentication));
+        if (modules != null) {
+            allModules.addAll(modules);
+        }
+        return allModules;
     }
 
     /**
@@ -134,7 +148,7 @@ public final class JenkinsClient {
         private String endPoint;
         private JenkinsAuthentication.Builder authBuilder;
         private Properties overrides;
-        private List<Module> modules;
+        private List<Module> modules = Lists.newArrayList();
 
         /**
          * Define the base endpoint to connect to.
@@ -193,8 +207,8 @@ public final class JenkinsClient {
          * @param modules optional List of Module to add.
          * @return this Builder.
          */
-        public Builder modules(final List<Module> modules) {
-            this.modules = modules;
+        public Builder modules(final Module... modules) {
+            this.modules.addAll(Arrays.asList(modules));
             return this;
         }
 
