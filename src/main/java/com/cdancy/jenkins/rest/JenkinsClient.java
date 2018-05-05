@@ -35,7 +35,6 @@ public final class JenkinsClient {
     private final JenkinsAuthentication credentials;
     private final JenkinsApi jenkinsApi;
     private final Properties overrides;
-    private final List<Module> modules;
 
     /**
      * Create a JenkinsClient inferring endpoint and authentication from
@@ -68,31 +67,20 @@ public final class JenkinsClient {
                 ? authentication
                 : JenkinsUtils.inferAuthentication();
         this.overrides = mergeOverrides(overrides);
-        this.modules = addModules(this.credentials, modules);
-        this.jenkinsApi = createApi(this.endPoint, this.credentials, this.overrides, this.modules);
+        this.jenkinsApi = createApi(this.endPoint, this.credentials, this.overrides, modules);
     }
 
     private JenkinsApi createApi(final String endPoint, final JenkinsAuthentication authentication, final Properties overrides, final List<Module> modules) {
-        return ContextBuilder
-                .newBuilder(new JenkinsApiMetadata.Builder().build())
-                .endpoint(endPoint)
-                .modules(modules)
-                .overrides(overrides)
-                .buildApi(JenkinsApi.class);
-    }
-
-    /**
-     * Add the defaul built-in module, followed by the user modules.
-     *
-     * @param modules a list of user provided modules.
-     * @return The complete list of modules starting with the default ones.
-     */
-    private List<Module> addModules(final JenkinsAuthentication authentication, final List<Module> modules) {
         final List<Module> allModules = Lists.newArrayList(new JenkinsAuthenticationModule(authentication));
         if (modules != null) {
             allModules.addAll(modules);
         }
-        return allModules;
+        return ContextBuilder
+                .newBuilder(new JenkinsApiMetadata.Builder().build())
+                .endpoint(endPoint)
+                .modules(allModules)
+                .overrides(overrides)
+                .buildApi(JenkinsApi.class);
     }
 
     /**
@@ -121,10 +109,6 @@ public final class JenkinsClient {
 
     public Properties overrides() {
         return this.overrides;
-    }
-
-    public List<Module> modules() {
-        return this.modules;
     }
 
     public String authValue() {
