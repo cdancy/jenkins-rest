@@ -67,27 +67,6 @@ jenkins-rest credentials can take 1 of 2 forms:
 The [mock](https://github.com/cdancy/jenkins-rest/tree/master/src/test/java/com/cdancy/jenkins/rest/features) and [live](https://github.com/cdancy/jenkins-rest/tree/master/src/test/java/com/cdancy/jenkins/rest/features) tests provide many examples
 that you can use in your own code.
 
-## Logging
-
-Sometimes it can be useful to activate logging and trace HTTP transactions.
-For these cases, you need to pass a logging framework to the builder modules list.
-For example using SLF4J, this can be done like so:
-
-```
-import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
-...
-JenkinsClient client = JenkinsClient.builder()
-    .modules(Lists.newArrayList(new SLF4JLoggingModule()))
-    .build();
-```
-
-In the case of the above example, the logging will require:
-- a compile time dependency such as `org.slf4j:slf4j-log4j12:<version>`
-- a `log4j.properties` file configuring the logger
-- passing the properties file to the application, for example with `JAVA_OPTS=-Dlog4j.configuration=file:log4j.properties`
-
-See a complete example under [examples/logging-slf4j](examples/logging-slf4j).
-
 ## Components
 
 - jclouds \- used as the backend for communicating with Jenkins REST API
