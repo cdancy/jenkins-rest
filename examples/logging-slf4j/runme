@@ -1,3 +1,0 @@
-#!bin/bash
-
-groovy slf4j.groovy -Dlog4j.configuration=log4j.properties groovy slf4j.groovy
