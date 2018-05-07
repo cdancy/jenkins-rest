@@ -1,3 +1,5 @@
+### Version 0.0.9 (TBA)
+
 ### Version 0.0.8 (May 7, 2018)
 
 * ADDED: Expose `modules` option in `JenkinsClient` builder. - [Pull request 12](https://github.com/cdancy/jenkins-rest/pull/12)
