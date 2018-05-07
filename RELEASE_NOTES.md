@@ -1,5 +1,7 @@
 ### Version 0.0.8 (TBA)
 
+* ADDED: Expose `modules` option in `JenkinsClient` builder. - [Pull request 12](https://github.com/cdancy/jenkins-rest/pull/12)
+
 ### Version 0.0.7 (April 26, 2018)
 
 * BUG: Fix `QueueItem` incorrect parameter merging. - [Pull request 8](https://github.com/cdancy/jenkins-rest/pull/8)
