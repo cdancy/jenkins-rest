@@ -60,7 +60,7 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
 
             // whether to add crumb header or not
             final Pair<Crumb, Boolean> localCrumb = getCrumb();
-            if (localCrumb.getKey() != null) {
+            if (localCrumb.getKey().value() != null) {
                 builder.addHeader(CRUMB_HEADER, localCrumb.getKey().value());
             } else {
                 if (localCrumb.getValue() == false) {
