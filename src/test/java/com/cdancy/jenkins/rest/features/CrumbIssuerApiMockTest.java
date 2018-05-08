@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
+import com.cdancy.jenkins.rest.domain.crumb.Crumb;
 
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
@@ -38,14 +39,14 @@ public class CrumbIssuerApiMockTest extends BaseJenkinsMockTest {
     public void testGetSystemInfo() throws Exception {
         MockWebServer server = mockWebServer();
 
-        final String body = "";
-        server.enqueue(new MockResponse().setBody("Jenkins-Crumb:04a1109fc2db171362c966ebe9fc87f0").setResponseCode(200));
+        final String value = "04a1109fc2db171362c966ebe9fc87f0";
+        server.enqueue(new MockResponse().setBody("Jenkins-Crumb:" + value).setResponseCode(200));
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         CrumbIssuerApi api = jenkinsApi.crumbIssuerApi();
         try {
-            final String instance = api.crumb();
+            final Crumb instance = api.crumb();
             assertNotNull(instance);
-            assertTrue(instance.contains(":"));
+            assertTrue(instance.value().equals(value));
             assertSentAccept(server, "GET", "/crumbIssuer/api/xml?xpath=concat%28//crumbRequestField,%22%3A%22,//crumb%29", MediaType.TEXT_PLAIN);
         } finally {
             jenkinsApi.close();
