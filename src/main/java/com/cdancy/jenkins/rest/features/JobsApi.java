@@ -33,6 +33,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.Fallbacks;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
 import org.jclouds.rest.annotations.Payload;
@@ -52,7 +53,6 @@ import com.cdancy.jenkins.rest.parsers.BuildNumberToInteger;
 import com.cdancy.jenkins.rest.parsers.LocationToQueueId;
 import com.cdancy.jenkins.rest.parsers.OutputToProgressiveText;
 import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
-import org.jclouds.javax.annotation.Nullable;
 
 @RequestFilters(JenkinsAuthenticationFilter.class)
 @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}")
