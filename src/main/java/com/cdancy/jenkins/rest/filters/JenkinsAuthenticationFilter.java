@@ -37,7 +37,6 @@ import org.jclouds.rest.ResourceNotFoundException;
 public class JenkinsAuthenticationFilter implements HttpRequestFilter {
     private final JenkinsAuthentication creds;
     private final JenkinsApi jenkinsApi;
-    //private static volatile Crumb crumbValue = null; // can be shared across requests
 
     // key = Crumb, value = true if exception is ResourceNotFoundException false otherwise
     private static volatile Pair<Crumb, Boolean> crumbPair = null; 
