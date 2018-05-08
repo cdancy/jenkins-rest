@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.cdancy.jenkins.rest.features;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+package com.cdancy.jenkins.rest.domain.crumb;
 
-import org.testng.annotations.Test;
+import java.util.List;
 
-import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
-import com.cdancy.jenkins.rest.domain.crumb.Crumb;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
-@Test(groups = "live", testName = "CrumbIssuerApiLiveTest", singleThreaded = true)
-public class CrumbIssuerApiLiveTest extends BaseJenkinsApiLiveTest {
+import com.cdancy.jenkins.rest.domain.common.Error;
+import com.cdancy.jenkins.rest.domain.common.ErrorsHolder;
+import com.cdancy.jenkins.rest.domain.common.Value;
+import com.cdancy.jenkins.rest.JenkinsUtils;
+import com.google.auto.value.AutoValue;
 
-    @Test
-    public void testGetCrumb() {
-        final Crumb crumb = api().crumb();
-        assertNotNull(crumb);
-        assertNotNull(crumb.value());
-        assertTrue(crumb.errors().isEmpty());
-    }
+@AutoValue
+public abstract class Crumb implements Value<String>, ErrorsHolder {
 
-    private CrumbIssuerApi api() {
-        return api.crumbIssuerApi();
+    @SerializedNames({ "value", "errors" })
+    public static Crumb create(@Nullable final String value,
+            final List<Error> errors) {
+
+        return new AutoValue_Crumb(value,
+                JenkinsUtils.nullToEmpty(errors));
     }
 }
