@@ -23,6 +23,7 @@ import javax.inject.Singleton;
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.JenkinsAuthentication;
 import com.cdancy.jenkins.rest.auth.AuthenticationType;
+import com.cdancy.jenkins.rest.domain.crumb.Crumb;
 
 import org.jclouds.http.HttpException;
 import org.jclouds.http.HttpRequest;
@@ -30,11 +31,16 @@ import org.jclouds.http.HttpRequestFilter;
 
 import com.google.common.net.HttpHeaders;
 
+import org.jclouds.rest.ResourceNotFoundException;
+
 @Singleton
 public class JenkinsAuthenticationFilter implements HttpRequestFilter {
     private final JenkinsAuthentication creds;
     private final JenkinsApi jenkinsApi;
-    private static volatile String crumbValue = null; // can be shared across requests
+    //private static volatile Crumb crumbValue = null; // can be shared across requests
+
+    // key = Crumb, value = true if exception is ResourceNotFoundException false otherwise
+    private static volatile Pair<Crumb, Boolean> crumbPair = null; 
     private static final String CRUMB_HEADER = "Jenkins-Crumb";
 
     @Inject
@@ -49,23 +55,53 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
             return request;
         } else {
             final String authHeader = creds.authType() + " " + creds.authValue();
-            return request.toBuilder()
-                    .addHeader(HttpHeaders.AUTHORIZATION, authHeader)
-                    .addHeader(CRUMB_HEADER, getCrumbValue())
-                    .build();
+            final HttpRequest.Builder<? extends HttpRequest.Builder<?>> builder = request.toBuilder();
+            builder.addHeader(HttpHeaders.AUTHORIZATION, authHeader);
+
+            // whether to add crumb header or not
+            final Pair<Crumb, Boolean> localCrumb = getCrumb();
+            if (localCrumb.getKey() != null) {
+                builder.addHeader(CRUMB_HEADER, localCrumb.getKey().value());
+            } else {
+                if (localCrumb.getValue() == false) {
+                    throw new RuntimeException("Unexpected exception being thrown: error=" + localCrumb.getKey().errors().get(0));
+                }
+            }
+
+            return builder.build();
         }
     }
 
-    private String getCrumbValue() {
-        String crumbValueInit = JenkinsAuthenticationFilter.crumbValue;
+    private Pair<Crumb, Boolean> getCrumb() {
+        Pair<Crumb, Boolean> crumbValueInit = JenkinsAuthenticationFilter.crumbPair;
         if (crumbValueInit == null) {
             synchronized(this) {
-                crumbValueInit = JenkinsAuthenticationFilter.crumbValue;
+                crumbValueInit = JenkinsAuthenticationFilter.crumbPair;
                 if (crumbValueInit == null) {
-                    JenkinsAuthenticationFilter.crumbValue = crumbValueInit = jenkinsApi.crumbIssuerApi().crumb().split(":")[1];
+                    final Crumb crumb = jenkinsApi.crumbIssuerApi().crumb();
+                    final Boolean isRNFE = crumb.errors().isEmpty()
+                            ? true
+                            : crumb.errors().get(0).exceptionName().endsWith(ResourceNotFoundException.class.getSimpleName());
+                    JenkinsAuthenticationFilter.crumbPair = crumbValueInit = new Pair(crumb, isRNFE);
                 }
             }
         }
         return crumbValueInit;
+    }
+ 
+    // simple impl/copy of javafx.util.Pair
+    private class Pair<A, B> {
+        private final A a;
+        private final B b;
+        public Pair(final A a, final B b) {
+            this.a = a;
+            this.b = b;
+        }
+        public A getKey() {
+            return a;
+        }
+        public B getValue() {
+            return b;
+        }
     }
 }

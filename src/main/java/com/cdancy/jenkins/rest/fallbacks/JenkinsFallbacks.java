@@ -22,20 +22,17 @@ import static com.google.common.base.Throwables.propagate;
 
 import static org.jclouds.http.HttpUtils.returnValueOnCodeOrNull;
 
-import com.cdancy.jenkins.rest.JenkinsUtils;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.common.Error;
+import com.cdancy.jenkins.rest.domain.crumb.Crumb;
 import com.cdancy.jenkins.rest.domain.system.SystemInfo;
+
 import com.google.common.collect.Lists;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import java.util.Iterator;
+
 import java.util.List;
 
 import org.jclouds.Fallback;
-import org.jclouds.Fallbacks;
 import org.jclouds.rest.ResourceNotFoundException;
 
 public final class JenkinsFallbacks {
@@ -74,12 +71,23 @@ public final class JenkinsFallbacks {
         public Object createOrPropagate(final Throwable throwable) throws Exception {
             if (checkNotNull(throwable, "throwable") != null) {
                 try {
-                    return createRequestStatusFromErrors(getErrors(throwable));
+                    return RequestStatus.create(false, getErrors(throwable));
                 } catch (JsonSyntaxException e) {
-                    final Error error = Error.create(null, throwable.getMessage(),
-                            throwable.getClass().getName());
-                    final List<Error> errors = Lists.newArrayList(error);
-                    return RequestStatus.create(false, errors);
+                    return RequestStatus.create(false, getErrors(e));
+                }
+            }
+            throw propagate(throwable);
+        }
+    }
+
+    public static final class CrumbOnError implements Fallback<Object> {
+        @Override
+        public Object createOrPropagate(final Throwable throwable) throws Exception {
+            if (checkNotNull(throwable, "throwable") != null) {
+                try {
+                    return Crumb.create(null, getErrors(throwable));
+                } catch (JsonSyntaxException e) {
+                    return Crumb.create(null, getErrors(e));
                 }
             }
             throw propagate(throwable);
@@ -94,13 +102,11 @@ public final class JenkinsFallbacks {
                 try {
                     if (throwable.getClass() == ResourceNotFoundException.class) {
                         return RequestStatus.create(true, null);
+                    } else {
+                        return RequestStatus.create(false, getErrors(throwable));
                     }
-                    return createRequestStatusFromErrors(getErrors(throwable));
                 } catch (JsonSyntaxException e) {
-                    final Error error = Error.create(null, throwable.getMessage(),
-                            throwable.getClass().getName());
-                    final List<Error> errors = Lists.newArrayList(error);
-                    return RequestStatus.create(false, errors);
+                    return RequestStatus.create(false, getErrors(e));
                 }
             }
             throw propagate(throwable);
@@ -113,8 +119,16 @@ public final class JenkinsFallbacks {
                 illegalValue, illegalValue, illegalValue, errors);
     }
 
-    public static RequestStatus createRequestStatusFromErrors(final List<Error> errors) {
-        return RequestStatus.create(false, errors);
+    /**
+     * Parse list of Error's from generic Exception.
+     *
+     * @param output Exception containing error data
+     * @return List of culled Error's
+     */
+    public static List<Error> getErrors(final Exception output) {
+        final Error error = Error.create(null, output.getMessage(),
+                output.getClass().getName());
+        return Lists.newArrayList(error);
     }
 
     /**
