@@ -3,6 +3,7 @@ com.cdancy.jenkins.rest.auth
 com.cdancy.jenkins.rest.binders
 com.cdancy.jenkins.rest.config
 com.cdancy.jenkins.rest.domain.common
+com.cdancy.jenkins.rest.domain.crumb
 com.cdancy.jenkins.rest.domain.job
 com.cdancy.jenkins.rest.domain.queue
 com.cdancy.jenkins.rest.domain.statistics
