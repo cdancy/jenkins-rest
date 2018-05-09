@@ -55,11 +55,11 @@ import com.cdancy.jenkins.rest.parsers.OutputToProgressiveText;
 import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
 
 @RequestFilters(JenkinsAuthenticationFilter.class)
-@Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}")
+@Path("/")
 public interface JobsApi {
 
     @Named("jobs:job-info")
-    @Path("/job/{name}/api/json")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/api/json")
     @RequestFilters(ScrubNullFolderParam.class)
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -68,7 +68,7 @@ public interface JobsApi {
                     @PathParam("name") String jobName);
 
     @Named("jobs:build-info")
-    @Path("/job/{name}/{number}/api/json")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/{number}/api/json")
     @RequestFilters(ScrubNullFolderParam.class)
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -78,7 +78,7 @@ public interface JobsApi {
                         @PathParam("number") int buildNumber);
 
     @Named("jobs:create")
-    @Path("/createItem")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/createItem")
     @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
     @RequestFilters(ScrubNullFolderParam.class)
     @ResponseParser(RequestStatusParser.class)
@@ -91,7 +91,7 @@ public interface JobsApi {
                          @PayloadParam(value = "configXML") String configXML);
 
     @Named("jobs:get-config")
-    @Path("/job/{name}/config.xml")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/config.xml")
     @RequestFilters(ScrubNullFolderParam.class)
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_PLAIN)
@@ -100,7 +100,7 @@ public interface JobsApi {
                   @PathParam("name") String jobName);
 
     @Named("jobs:update-config")
-    @Path("/job/{name}/config.xml")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/config.xml")
     @RequestFilters(ScrubNullFolderParam.class)
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Produces(MediaType.APPLICATION_XML)
@@ -112,7 +112,7 @@ public interface JobsApi {
                    @PayloadParam(value = "configXML") String configXML);
 
     @Named("jobs:get-description")
-    @Path("/job/{name}/description")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/description")
     @RequestFilters(ScrubNullFolderParam.class)
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_PLAIN)
@@ -121,7 +121,7 @@ public interface JobsApi {
                        @PathParam("name") String jobName);
 
     @Named("jobs:set-description")
-    @Path("/job/{name}/description")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/description")
     @RequestFilters(ScrubNullFolderParam.class)
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_HTML)
@@ -131,7 +131,7 @@ public interface JobsApi {
                         @FormParam("description") String description);
 
     @Named("jobs:delete")
-    @Path("/job/{name}/doDelete")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/doDelete")
     @RequestFilters(ScrubNullFolderParam.class)
     @Consumes(MediaType.TEXT_HTML)
     @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
@@ -141,7 +141,7 @@ public interface JobsApi {
                          @PathParam("name") String jobName);
 
     @Named("jobs:enable")
-    @Path("/job/{name}/enable")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/enable")
     @RequestFilters(ScrubNullFolderParam.class)
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_HTML)
@@ -150,7 +150,7 @@ public interface JobsApi {
                    @PathParam("name") String jobName);
 
     @Named("jobs:disable")
-    @Path("/job/{name}/disable")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/disable")
     @RequestFilters(ScrubNullFolderParam.class)
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_HTML)
@@ -159,7 +159,7 @@ public interface JobsApi {
                     @PathParam("name") String jobName);
 
     @Named("jobs:build")
-    @Path("/job/{name}/build")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/build")
     @RequestFilters(ScrubNullFolderParam.class)
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @ResponseParser(LocationToQueueId.class)
@@ -169,7 +169,7 @@ public interface JobsApi {
                   @PathParam("name") String jobName);
 
     @Named("jobs:build-with-params")
-    @Path("/job/{name}/buildWithParameters")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/buildWithParameters")
     @RequestFilters(ScrubNullFolderParam.class)
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @ResponseParser(LocationToQueueId.class)
@@ -180,7 +180,7 @@ public interface JobsApi {
                                 @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
 
     @Named("jobs:last-build-number")
-    @Path("/job/{name}/lastBuild/buildNumber")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/lastBuild/buildNumber")
     @RequestFilters(ScrubNullFolderParam.class)
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @ResponseParser(BuildNumberToInteger.class)
@@ -190,7 +190,7 @@ public interface JobsApi {
                             @PathParam("name") String jobName);
 
     @Named("jobs:last-build-timestamp")
-    @Path("/job/{name}/lastBuild/buildTimestamp")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/lastBuild/buildTimestamp")
     @RequestFilters(ScrubNullFolderParam.class)
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_PLAIN)
@@ -199,7 +199,7 @@ public interface JobsApi {
                               @PathParam("name") String jobName);
 
     @Named("jobs:progressive-text")
-    @Path("/job/{name}/lastBuild/logText/progressiveText")
+    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/lastBuild/logText/progressiveText")
     @RequestFilters(ScrubNullFolderParam.class)
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @ResponseParser(OutputToProgressiveText.class)
