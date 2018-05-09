@@ -30,7 +30,6 @@ import org.jclouds.http.HttpCommand;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
-import org.jclouds.logging.Logger;
 import org.jclouds.rest.ResourceAlreadyExistsException;
 import org.jclouds.rest.ResourceNotFoundException;
 import org.jclouds.rest.AuthorizationException;
@@ -42,8 +41,6 @@ import com.google.common.base.Throwables;
  * Handle errors and propagate exception
  */
 public class JenkinsErrorHandler implements HttpErrorHandler {
-   @Resource
-   protected Logger logger = Logger.NULL;
 
     @Override
     public void handleError(final HttpCommand command, final HttpResponse response) {
