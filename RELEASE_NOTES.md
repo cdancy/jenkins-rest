@@ -1,5 +1,7 @@
 ### Version 0.0.9 (TBA)
 
+* REFACTOR: don't assume "crumb validation" being enabled. - [Pull request 15](https://github.com/cdancy/jenkins-rest/pull/15)
+
 ### Version 0.0.8 (May 7, 2018)
 
 * ADDED: Expose `modules` option in `JenkinsClient` builder. - [Pull request 12](https://github.com/cdancy/jenkins-rest/pull/12)
