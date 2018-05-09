@@ -1,4 +1,4 @@
-### Version 0.0.9 (TBA)
+### Version 0.0.9 (May 9, 2018)
 
 * REFACTOR: don't assume "crumb validation" being enabled. - [Pull request 15](https://github.com/cdancy/jenkins-rest/pull/15)
 
