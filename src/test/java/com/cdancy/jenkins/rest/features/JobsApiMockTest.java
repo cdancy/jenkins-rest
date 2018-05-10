@@ -34,6 +34,7 @@ import com.cdancy.jenkins.rest.domain.job.BuildInfo;
 import com.cdancy.jenkins.rest.domain.job.JobInfo;
 import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
+import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 
 import com.google.common.collect.Lists;
@@ -399,9 +400,10 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            Integer output = api.build("DevTest");
+            IntegerResponse output = api.build("DevTest");
             assertNotNull(output);
-            assertTrue(output == 1);
+            assertTrue(output.value() == 1);
+            assertTrue(output.errors().size() == 0);
             assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
         } finally {
             jenkinsApi.close();
@@ -417,9 +419,13 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            Integer output = api.build("DevTest");
+            IntegerResponse output = api.build("DevTest");
             assertNotNull(output);
-            assertTrue(output == 0);
+            assertNull(output.value());
+            assertTrue(output.errors().size() == 1);
+            assertTrue(output.errors().get(0).context().equals("No context"));
+            assertTrue(output.errors().get(0).message().equals("No queue item Location header could be found despite getting a valid HTTP response."));
+            assertTrue(output.errors().get(0).exceptionName().equals("None"));
             assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
         } finally {
             jenkinsApi.close();
@@ -434,8 +440,13 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            Integer output = api.build("DevTest");
-            assertNull(output);
+            IntegerResponse output = api.build("DevTest");
+            assertNotNull(output);
+            assertNull(output.value());
+            assertTrue(output.errors().size() == 1);
+            assertTrue(output.errors().get(0).message().equals(""));
+            assertTrue(output.errors().get(0).exceptionName().equals("org.jclouds.rest.ResourceNotFoundException"));
+            assertNotNull(output.errors().get(0).context());
             assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
         } finally {
             jenkinsApi.close();
@@ -453,9 +464,10 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         try {
             Map<String, List<String>> params = new HashMap<>();
             params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-            Integer output = api.buildWithParameters("DevTest", params);
+            IntegerResponse output = api.buildWithParameters("DevTest", params);
             assertNotNull(output);
-            assertTrue(output == 1);
+            assertTrue(output.value() == 1);
+            assertTrue(output.errors().size() == 0);
             assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
         } finally {
             jenkinsApi.close();
@@ -472,8 +484,13 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         try {
             Map<String, List<String>> params = new HashMap<>();
             params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-            Integer output = api.buildWithParameters("DevTest", params);
-            assertNull(output);
+            IntegerResponse output = api.buildWithParameters("DevTest", params);
+            assertNotNull(output);
+            assertNull(output.value());
+            assertTrue(output.errors().size() == 1);
+            assertTrue(output.errors().get(0).message().equals(""));
+            assertTrue(output.errors().get(0).exceptionName().equals("org.jclouds.rest.ResourceNotFoundException"));
+            assertNotNull(output.errors().get(0).context());
             assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
         } finally {
             jenkinsApi.close();
