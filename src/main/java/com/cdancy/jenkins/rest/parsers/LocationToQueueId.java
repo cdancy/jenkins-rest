@@ -17,6 +17,10 @@
 
 package com.cdancy.jenkins.rest.parsers;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,26 +28,36 @@ import javax.inject.Singleton;
 
 import org.jclouds.http.HttpResponse;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Function;
+import com.google.common.base.Throwables;
+import com.google.common.collect.Lists;
+import com.google.common.io.CharStreams;
+
+import com.cdancy.jenkins.rest.domain.common.Error;
+import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 
 /**
  * Created by dancc on 3/11/16.
  */
 @Singleton
-public class LocationToQueueId implements Function<HttpResponse, Integer> {
+public class LocationToQueueId implements Function<HttpResponse, IntegerResponse> {
 
    private static final Pattern pattern = Pattern.compile("^.*/queue/item/(\\d+)/$");
 
-   public Integer apply(HttpResponse response) {
+   public IntegerResponse apply(HttpResponse response) {
 
       String url = response.getFirstHeaderOrNull("Location");
+      List<Error> errors = Lists.newArrayList();
       if (url != null) {
          Matcher matcher = pattern.matcher(url);
          if (matcher.find() && matcher.groupCount() == 1) {
-            return Integer.valueOf(matcher.group(1));
+            return IntegerResponse.create(Integer.valueOf(matcher.group(1)), errors);
          }
       }
-
-      return 0;
+      errors.add(Error.create("No context",
+         "No queue item Location header could be found despite getting a valid HTTP response.",
+         "None"));
+      return IntegerResponse.create(null, errors);
    }
 }
