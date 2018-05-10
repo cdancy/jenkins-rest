@@ -15,36 +15,31 @@
  * limitations under the License.
  */
 
-package com.cdancy.jenkins.rest;
+package com.cdancy.jenkins.rest.features;
 
-import java.io.Closeable;
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 
-import org.jclouds.rest.annotations.Delegate;
+import org.jclouds.rest.annotations.RequestFilters;
 
-import com.cdancy.jenkins.rest.features.CrumbIssuerApi;
-import com.cdancy.jenkins.rest.features.JobsApi;
-import com.cdancy.jenkins.rest.features.PluginManagerApi;
-import com.cdancy.jenkins.rest.features.QueueApi;
-import com.cdancy.jenkins.rest.features.StatisticsApi;
-import com.cdancy.jenkins.rest.features.SystemApi;
+import com.cdancy.jenkins.rest.domain.plugins.Plugins;
+import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
 
-public interface JenkinsApi extends Closeable {
+import javax.ws.rs.QueryParam;
 
-    @Delegate
-    CrumbIssuerApi crumbIssuerApi();
+import org.jclouds.javax.annotation.Nullable;
 
-    @Delegate
-    JobsApi jobsApi();
+@RequestFilters(JenkinsAuthenticationFilter.class)
+@Consumes(MediaType.APPLICATION_JSON)
+@Path("/pluginManager")
+public interface PluginManagerApi {
 
-    @Delegate
-    PluginManagerApi pluginManagerApi();
-
-    @Delegate
-    QueueApi queueApi();
-
-    @Delegate
-    StatisticsApi statisticsApi();
-
-    @Delegate
-    SystemApi systemApi();
+    @Named("pluginManager:plugins")
+    @Path("/api/json")
+    @GET
+    Plugins plugins(@QueryParam("depth") Integer depth,
+            @Nullable @QueryParam("tree") String tree);
 }

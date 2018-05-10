@@ -24,8 +24,6 @@ import com.cdancy.jenkins.rest.exception.UnsupportedMediaTypeException;
 
 import java.io.IOException;
 
-import javax.annotation.Resource;
-
 import org.jclouds.http.HttpCommand;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.HttpResponse;
