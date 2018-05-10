@@ -25,6 +25,7 @@ import static org.jclouds.http.HttpUtils.returnValueOnCodeOrNull;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.common.Error;
 import com.cdancy.jenkins.rest.domain.crumb.Crumb;
+import com.cdancy.jenkins.rest.domain.plugins.Plugins;
 import com.cdancy.jenkins.rest.domain.system.SystemInfo;
 
 import com.google.common.collect.Lists;
@@ -36,25 +37,6 @@ import org.jclouds.Fallback;
 import org.jclouds.rest.ResourceNotFoundException;
 
 public final class JenkinsFallbacks {
-
-    public static final class FalseOn503 implements Fallback<Boolean> {
-        public Boolean createOrPropagate(Throwable t) throws Exception {
-            if (checkNotNull(t, "throwable") != null && t.getMessage().contains("{\"health\": \"false\"}")
-                    && returnValueOnCodeOrNull(t, true, equalTo(503)) != null) {
-                return Boolean.FALSE;
-            }
-            throw propagate(t);
-        }
-    }
-
-    public static final class FalseOn400AndJobAlreadyExists implements Fallback<Boolean> {
-        public Boolean createOrPropagate(Throwable t) throws Exception {
-            if (checkNotNull(t, "throwable") != null && t.getMessage().contains("A job already exists with the name")) {
-               return Boolean.FALSE;
-            }
-            throw propagate(t);
-        }
-    }
 
     public static final class SystemInfoOnError implements Fallback<Object> {
         @Override
@@ -88,6 +70,20 @@ public final class JenkinsFallbacks {
                     return Crumb.create(null, getErrors(throwable));
                 } catch (JsonSyntaxException e) {
                     return Crumb.create(null, getErrors(e));
+                }
+            }
+            throw propagate(throwable);
+        }
+    }
+
+    public static final class PluginsOnError implements Fallback<Object> {
+        @Override
+        public Object createOrPropagate(final Throwable throwable) throws Exception {
+            if (checkNotNull(throwable, "throwable") != null) {
+                try {
+                    return Plugins.create(null, null, getErrors(throwable));
+                } catch (JsonSyntaxException e) {
+                    return Plugins.create(null, null, getErrors(e));
                 }
             }
             throw propagate(throwable);

@@ -16,6 +16,7 @@
  */
 package com.cdancy.jenkins.rest.features;
 
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.assertFalse;
@@ -67,9 +68,9 @@ public class PluginManagerApiMockTest extends BaseJenkinsMockTest {
         try {
             final Plugins plugins = api.plugins(3, null);
             assertNotNull(plugins);
-            assertTrue(plugins.errors().isEmpty());
-            assertFalse(plugins.plugins().isEmpty());
-            assertNotNull(plugins.plugins().get(0).shortName());
+            assertNull(plugins.clazz());
+            assertFalse(plugins.errors().isEmpty());
+            assertTrue(plugins.errors().get(0).exceptionName().endsWith("AuthorizationException"));
             final Map<String, Object> queryParams = Maps.newHashMap();
             queryParams.put("depth", 3);
             assertSent(server, "GET", "/pluginManager/api/json", queryParams);
