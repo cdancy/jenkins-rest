@@ -40,6 +40,7 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
 import com.cdancy.jenkins.rest.binders.BindMapToForm;
+import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.job.BuildInfo;
 import com.cdancy.jenkins.rest.domain.job.JobInfo;
@@ -137,19 +138,19 @@ public interface JobsApi {
 
     @Named("jobs:build")
     @Path("/job/{name}/build")
-    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Fallback(JenkinsFallbacks.IntegerResponseOnError.class)
     @ResponseParser(LocationToQueueId.class)
     @Consumes("application/unknown")
     @POST
-    Integer build(@PathParam("name") String jobName);
+    IntegerResponse build(@PathParam("name") String jobName);
 
     @Named("jobs:build-with-params")
     @Path("/job/{name}/buildWithParameters")
-    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Fallback(JenkinsFallbacks.IntegerResponseOnError.class)
     @ResponseParser(LocationToQueueId.class)
     @Consumes("application/unknown")
     @POST
-    Integer buildWithParameters(@PathParam("name") String jobName,
+    IntegerResponse buildWithParameters(@PathParam("name") String jobName,
             @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
 
     @Named("jobs:last-build-number")
