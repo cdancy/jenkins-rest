@@ -21,6 +21,7 @@ import com.cdancy.jenkins.rest.JenkinsUtils;
 import com.cdancy.jenkins.rest.domain.common.ErrorsHolder;
 import com.cdancy.jenkins.rest.domain.common.Error;
 
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 import com.google.auto.value.AutoValue;
@@ -30,6 +31,7 @@ import java.util.List;
 @AutoValue
 public abstract class Plugins implements ErrorsHolder {
 
+    @Nullable
     public abstract String clazz();
     
     public abstract List<Plugin> plugins();
