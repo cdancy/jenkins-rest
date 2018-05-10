@@ -22,15 +22,15 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
-
-import org.jclouds.rest.annotations.RequestFilters;
-
-import com.cdancy.jenkins.rest.domain.plugins.Plugins;
-import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
-
 import javax.ws.rs.QueryParam;
 
+import com.cdancy.jenkins.rest.domain.plugins.Plugins;
+import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
+import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
+
+import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.rest.annotations.Fallback;
 
 @RequestFilters(JenkinsAuthenticationFilter.class)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -39,6 +39,7 @@ public interface PluginManagerApi {
 
     @Named("pluginManager:plugins")
     @Path("/api/json")
+    @Fallback(JenkinsFallbacks.PluginsOnError.class)
     @GET
     Plugins plugins(@QueryParam("depth") Integer depth,
             @Nullable @QueryParam("tree") String tree);
