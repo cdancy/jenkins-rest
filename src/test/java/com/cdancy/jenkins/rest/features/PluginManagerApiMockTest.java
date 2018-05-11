@@ -25,6 +25,7 @@ import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
 import com.google.common.collect.Maps;
 
@@ -74,6 +75,43 @@ public class PluginManagerApiMockTest extends BaseJenkinsMockTest {
             final Map<String, Object> queryParams = Maps.newHashMap();
             queryParams.put("depth", 3);
             assertSent(server, "GET", "/pluginManager/api/json", queryParams);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testInstallNecessaryPlugins() throws Exception {
+        final MockWebServer server = mockWebServer();
+        server.enqueue(new MockResponse().setResponseCode(200));
+        
+        final JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        final PluginManagerApi api = jenkinsApi.pluginManagerApi();
+        try {
+            final RequestStatus status = api.installNecessaryPlugins("artifactory@2.2.1");
+            assertNotNull(status);
+            assertTrue(status.value());
+            assertTrue(status.errors().isEmpty());
+            assertSent(server, "POST", "/pluginManager/installNecessaryPlugins");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testInstallNecessaryPluginsOnAuthException() throws Exception {
+        final MockWebServer server = mockWebServer();
+        server.enqueue(new MockResponse().setResponseCode(401));
+        
+        final JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        final PluginManagerApi api = jenkinsApi.pluginManagerApi();
+        try {
+            final RequestStatus status = api.installNecessaryPlugins("artifactory@2.2.1");
+            assertNotNull(status);
+            assertFalse(status.value());
+            assertFalse(status.errors().isEmpty());
+            assertTrue(status.errors().get(0).exceptionName().endsWith("AuthorizationException"));
+            assertSent(server, "POST", "/pluginManager/installNecessaryPlugins");
         } finally {
             jenkinsApi.close();
             server.shutdown();
