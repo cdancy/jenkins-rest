@@ -23,18 +23,27 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
 
 @Test(groups = "live", testName = "PluginManagerApiLiveTest", singleThreaded = true)
 public class PluginManagerApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test
-    public void testGetSystemInfo() {
+    public void testGetPlugins() {
         final Plugins plugins = api().plugins(3, null);
         assertNotNull(plugins);
         assertTrue(plugins.errors().isEmpty());
         assertFalse(plugins.plugins().isEmpty());
         assertNotNull(plugins.plugins().get(0).shortName());
+    }
+
+    @Test
+    public void testInstallNecessaryPlugins() {
+        final RequestStatus status = api().installNecessaryPlugins("artifactory@2.2.1");
+        assertNotNull(status);
+        assertTrue(status.value());
+        assertTrue(status.errors().isEmpty());
     }
 
     private PluginManagerApi api() {
