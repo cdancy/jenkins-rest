@@ -41,6 +41,6 @@ public interface PluginManagerApi {
     @Path("/api/json")
     @Fallback(JenkinsFallbacks.PluginsOnError.class)
     @GET
-    Plugins plugins(@QueryParam("depth") Integer depth,
+    Plugins plugins(@Nullable @QueryParam("depth") Integer depth,
             @Nullable @QueryParam("tree") String tree);
 }
