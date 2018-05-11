@@ -19,27 +19,28 @@ package com.cdancy.jenkins.rest.features;
 
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.HEAD;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.QueryParam;
 
-import org.jclouds.rest.annotations.RequestFilters;
-import org.jclouds.rest.annotations.ResponseParser;
-import org.jclouds.rest.annotations.Fallback;
-
-import com.cdancy.jenkins.rest.domain.system.SystemInfo;
+import com.cdancy.jenkins.rest.domain.plugins.Plugins;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
-import com.cdancy.jenkins.rest.parsers.SystemInfoFromJenkinsHeaders;
+
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.rest.annotations.Fallback;
 
 @RequestFilters(JenkinsAuthenticationFilter.class)
 @Consumes(MediaType.APPLICATION_JSON)
-@Path("/")
-public interface SystemApi {
+@Path("/pluginManager")
+public interface PluginManagerApi {
 
-   @Named("system:info")
-   @Fallback(JenkinsFallbacks.SystemInfoOnError.class)
-   @ResponseParser(SystemInfoFromJenkinsHeaders.class)
-   @HEAD
-   SystemInfo systemInfo();
+    @Named("pluginManager:plugins")
+    @Path("/api/json")
+    @Fallback(JenkinsFallbacks.PluginsOnError.class)
+    @GET
+    Plugins plugins(@Nullable @QueryParam("depth") Integer depth,
+            @Nullable @QueryParam("tree") String tree);
 }
