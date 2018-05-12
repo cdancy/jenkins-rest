@@ -44,24 +44,24 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
     @BeforeClass
     public void init() {
         String config = payloadFromResource("/freestyle-project-sleep-task.xml");
-        RequestStatus success = api.jobsApi().create("QueueTest", config);
+        RequestStatus success = api.jobsApi().create(null,"QueueTest", config);
         assertTrue(success.value());
 
         config = payloadFromResource("/freestyle-project.xml");
-        success = api.jobsApi().create("QueueTestSingleParam", config);
+        success = api.jobsApi().create(null,"QueueTestSingleParam", config);
         assertTrue(success.value());
 
         config = payloadFromResource("/freestyle-project-sleep-task-multiple-params.xml");
-        success = api.jobsApi().create("QueueTestMultipleParams", config);
+        success = api.jobsApi().create(null,"QueueTestMultipleParams", config);
         assertTrue(success.value());
     }
 
     @Test
     public void testGetQueue() {
-        IntegerResponse job1 = api.jobsApi().build("QueueTest");
+        IntegerResponse job1 = api.jobsApi().build(null, "QueueTest");
         assertNotNull(job1);
         assertTrue(job1.errors().size() == 0);
-        IntegerResponse job2 = api.jobsApi().build("QueueTest");
+        IntegerResponse job2 = api.jobsApi().build(null, "QueueTest");
         assertNotNull(job2);
         assertTrue(job2.errors().size() == 0);
         List<QueueItem> queueItems = api().queue();
@@ -78,10 +78,10 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test
     public void testGetPendingQueueItem() {
-        IntegerResponse job1 = api.jobsApi().build("QueueTest");
+        IntegerResponse job1 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job1);
         assertTrue(job1.errors().size() == 0);
-        IntegerResponse job2 = api.jobsApi().build("QueueTest");
+        IntegerResponse job2 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job2);
         assertTrue(job2.errors().size() == 0);
 
@@ -94,10 +94,10 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test
     public void testGetRunningQueueItem() throws InterruptedException {
-        IntegerResponse job1 = api.jobsApi().build("QueueTest");
+        IntegerResponse job1 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job1);
         assertTrue(job1.errors().size() == 0);
-        IntegerResponse job2 = api.jobsApi().build("QueueTest");
+        IntegerResponse job2 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job2);
         assertTrue(job2.errors().size() == 0);
 
@@ -121,7 +121,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testQueueItemSingleParameters() throws InterruptedException {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue1"));
-        IntegerResponse job1 = api.jobsApi().buildWithParameters("QueueTestSingleParam", params);
+        IntegerResponse job1 = api.jobsApi().buildWithParameters(null,"QueueTestSingleParam", params);
         assertNotNull(job1);
         assertTrue(job1.value() > 0);
         assertTrue(job1.errors().size() == 0);
@@ -130,7 +130,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         // So we must set some different parameter values
         params = new HashMap<>();
         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue2"));
-        IntegerResponse job2 = api.jobsApi().buildWithParameters("QueueTestSingleParam", params);
+        IntegerResponse job2 = api.jobsApi().buildWithParameters(null,"QueueTestSingleParam", params);
         assertNotNull(job2);
         assertTrue(job2.value() > 0);
         assertTrue(job2.errors().size() == 0);
@@ -148,7 +148,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testQueueItemMultipleParameters() throws InterruptedException {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey1", Lists.newArrayList("SomeVeryNewValue1"));
-        IntegerResponse job1 = api.jobsApi().buildWithParameters("QueueTestMultipleParams",params);
+        IntegerResponse job1 = api.jobsApi().buildWithParameters(null, "QueueTestMultipleParams",params);
         assertNotNull(job1);
         assertTrue(job1.value() > 0);
         assertTrue(job1.errors().size() == 0);
@@ -157,7 +157,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         // So we must set some different parameter values
         params = new HashMap<>();
         params.put("SomeKey1", Lists.newArrayList("SomeVeryNewValue2"));
-        IntegerResponse job2 = api.jobsApi().buildWithParameters("QueueTestMultipleParams", params);
+        IntegerResponse job2 = api.jobsApi().buildWithParameters(null, "QueueTestMultipleParams", params);
         assertNotNull(job2);
         assertTrue(job2.value() > 0);
         assertTrue(job2.errors().size() == 0);
@@ -175,10 +175,10 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test
     public void testGetCancelledQueueItem() throws InterruptedException {
-        IntegerResponse job1 = api.jobsApi().build("QueueTest");
+        IntegerResponse job1 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job1);
         assertTrue(job1.errors().size() == 0);
-        IntegerResponse job2 = api.jobsApi().build("QueueTest");
+        IntegerResponse job2 = api.jobsApi().build(null, "QueueTest");
         assertNotNull(job2);
         assertTrue(job2.errors().size() == 0);
 
@@ -228,15 +228,15 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @AfterClass
     public void finish() {
-        RequestStatus success = api.jobsApi().delete("QueueTest");
+        RequestStatus success = api.jobsApi().delete(null,"QueueTest");
         assertNotNull(success);
         assertTrue(success.value());
 
-        success = api.jobsApi().delete("QueueTestSingleParam");
+        success = api.jobsApi().delete(null,"QueueTestSingleParam");
         assertNotNull(success);
         assertTrue(success.value());
 
-        success = api.jobsApi().delete("QueueTestMultipleParams");
+        success = api.jobsApi().delete(null,"QueueTestMultipleParams");
         assertNotNull(success);
         assertTrue(success.value());
     }
