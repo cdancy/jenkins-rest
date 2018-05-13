@@ -44,6 +44,8 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     private IntegerResponse queueId;
     private IntegerResponse queueIdForAnotherJob;
     private Integer buildNumber;
+    private static final String FOLDER_PLUGIN_NAME = "cloudbees-folder";
+    private static final String FOLDER_PLUGIN_VERSION = "6.4";
 
     @Test
     public void testCreateJob() {
@@ -191,21 +193,29 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     /*
      * check for the presence of folder-plugin
-     * If not present, skip the chain of tests below
+     * If not present, attempt to install it.
      */
     @Test
-    public void testFolderPluginPresence() {
-        boolean isFolderPluginPresent = false;
-        Plugins plugins = api.pluginManagerApi().plugins(3, null);
-        for(Plugin plugin:plugins.plugins()) {
-            if(plugin.shortName().equals("cloudbees-folder") && plugin.version().equals("6.4")) {
-                isFolderPluginPresent = true;
+    public void testInstallFolderPlugin() throws Exception{
+        long endTime = 0;
+        long maxWaitTime = 5 * 60 * 1000;
+        if(!isFolderPluginInstalled()) {
+            RequestStatus status = api.pluginManagerApi().installNecessaryPlugins(FOLDER_PLUGIN_NAME + "@" + FOLDER_PLUGIN_VERSION);
+            assertTrue(status.value());
+            while(endTime <= maxWaitTime) {
+                if(!isFolderPluginInstalled()) {
+                    Thread.sleep(10000);
+                    endTime += 10000;
+                }
+                else {
+                    break;
+                }
             }
         }
-        assertTrue(isFolderPluginPresent);
+        assertTrue(isFolderPluginInstalled());
     }
 
-    @Test(dependsOnMethods = "testFolderPluginPresence")
+    @Test(dependsOnMethods = "testInstallFolderPlugin")
     public void testCreateFolderInJenkins() {
         String config = payloadFromResource("/folder-config.xml");
         RequestStatus success = api().create(null, "test-folder", config);
@@ -360,6 +370,17 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertNotNull(output.errors().get(0).context());
         assertNotNull(output.errors().get(0).message());
         assertTrue(output.errors().get(0).exceptionName().equals("org.jclouds.rest.ResourceNotFoundException"));
+    }
+
+    private boolean isFolderPluginInstalled() {
+        boolean installed = false;
+        Plugins plugins = api.pluginManagerApi().plugins(3, null);
+        for(Plugin plugin:plugins.plugins()) {
+            if(plugin.shortName().equals(FOLDER_PLUGIN_NAME) && plugin.version().equals(FOLDER_PLUGIN_VERSION)) {
+                installed = true;
+            }
+        }
+        return installed;
     }
 
     private JobsApi api() {
