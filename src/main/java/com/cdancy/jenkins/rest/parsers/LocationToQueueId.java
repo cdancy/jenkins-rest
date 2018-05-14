@@ -17,9 +17,6 @@
 
 package com.cdancy.jenkins.rest.parsers;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,11 +25,8 @@ import javax.inject.Singleton;
 
 import org.jclouds.http.HttpResponse;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Function;
-import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
-import com.google.common.io.CharStreams;
 
 import com.cdancy.jenkins.rest.domain.common.Error;
 import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
