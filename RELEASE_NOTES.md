@@ -1,7 +1,8 @@
-### Version 0.0.10 (TBA)
+### Version 0.0.10 (May 14, 2018)
 
 * ADDED: `PluginManagerApi` with initial endpoint `plugins`. - [Pull request 17](https://github.com/cdancy/jenkins-rest/pull/17)
 * REFACTOR: convert all endpoints which return an Integer into an `IntegerResposne` so that we can capture any errors. - [Pull request 18](https://github.com/cdancy/jenkins-rest/pull/18)
+* ADDED: all endpoints within `JobsApi` that can take an optional folder path have been amended to provide an optional parameter to do so. - [Pull request 20](https://github.com/cdancy/jenkins-rest/pull/20)
 
 ### Version 0.0.9 (May 9, 2018)
 
