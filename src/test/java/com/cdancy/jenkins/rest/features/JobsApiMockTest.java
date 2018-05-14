@@ -423,9 +423,9 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             assertNotNull(output);
             assertNull(output.value());
             assertTrue(output.errors().size() == 1);
-            assertTrue(output.errors().get(0).context().equals("No context"));
+            assertNull(output.errors().get(0).context());
             assertTrue(output.errors().get(0).message().equals("No queue item Location header could be found despite getting a valid HTTP response."));
-            assertTrue(output.errors().get(0).exceptionName().equals("None"));
+            assertTrue(output.errors().get(0).exceptionName().equals(NumberFormatException.class.getCanonicalName()));
             assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
         } finally {
             jenkinsApi.close();

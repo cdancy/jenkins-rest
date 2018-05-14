@@ -42,16 +42,15 @@ public class LocationToQueueId implements Function<HttpResponse, IntegerResponse
    public IntegerResponse apply(HttpResponse response) {
 
       String url = response.getFirstHeaderOrNull("Location");
-      List<Error> errors = Lists.newArrayList();
       if (url != null) {
          Matcher matcher = pattern.matcher(url);
          if (matcher.find() && matcher.groupCount() == 1) {
-            return IntegerResponse.create(Integer.valueOf(matcher.group(1)), errors);
+            return IntegerResponse.create(Integer.valueOf(matcher.group(1)), null);
          }
       }
-      errors.add(Error.create("No context",
-         "No queue item Location header could be found despite getting a valid HTTP response.",
-         "None"));
-      return IntegerResponse.create(null, errors);
+      final Error error = Error.create(null,
+         "No queue item Location header could be found despite getting a valid HTTP response.", 
+         NumberFormatException.class.getCanonicalName());
+      return IntegerResponse.create(null, Lists.newArrayList(error));
    }
 }
