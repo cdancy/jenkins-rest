@@ -1,6 +1,7 @@
 ### Version 0.0.10 (TBA)
 
 * ADDED: `PluginManagerApi` with initial endpoint `plugins`. - [Pull request 17](https://github.com/cdancy/jenkins-rest/pull/17)
+* REFACTOR: convert all endpoints which return an Integer into an `IntegerResposne` so that we can capture any errors. - [Pull request 18](https://github.com/cdancy/jenkins-rest/pull/18)
 
 ### Version 0.0.9 (May 9, 2018)
 
