@@ -45,7 +45,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     private IntegerResponse queueIdForAnotherJob;
     private Integer buildNumber;
     private static final String FOLDER_PLUGIN_NAME = "cloudbees-folder";
-    private static final String FOLDER_PLUGIN_VERSION = "6.4";
+    private static final String FOLDER_PLUGIN_VERSION = "latest";
 
     @Test
     public void testCreateJob() {
@@ -206,8 +206,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
                 if(!isFolderPluginInstalled()) {
                     Thread.sleep(10000);
                     endTime += 10000;
-                }
-                else {
+                } else {
                     break;
                 }
             }
@@ -376,8 +375,9 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         boolean installed = false;
         Plugins plugins = api.pluginManagerApi().plugins(3, null);
         for(Plugin plugin:plugins.plugins()) {
-            if(plugin.shortName().equals(FOLDER_PLUGIN_NAME) && plugin.version().equals(FOLDER_PLUGIN_VERSION)) {
+            if(plugin.shortName().equals(FOLDER_PLUGIN_NAME)) {
                 installed = true;
+                break;
             }
         }
         return installed;
