@@ -31,7 +31,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.cdancy.jenkins.rest.filters.ScrubNullFolderParam;
 import org.jclouds.Fallbacks;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.BinderParam;
@@ -49,6 +48,7 @@ import com.cdancy.jenkins.rest.domain.job.JobInfo;
 import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
+import com.cdancy.jenkins.rest.filters.ScrubNullFolderParam;
 import com.cdancy.jenkins.rest.parsers.BuildNumberToInteger;
 import com.cdancy.jenkins.rest.parsers.LocationToQueueId;
 import com.cdancy.jenkins.rest.parsers.OutputToProgressiveText;
