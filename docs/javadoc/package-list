@@ -5,6 +5,7 @@ com.cdancy.jenkins.rest.config
 com.cdancy.jenkins.rest.domain.common
 com.cdancy.jenkins.rest.domain.crumb
 com.cdancy.jenkins.rest.domain.job
+com.cdancy.jenkins.rest.domain.plugins
 com.cdancy.jenkins.rest.domain.queue
 com.cdancy.jenkins.rest.domain.statistics
 com.cdancy.jenkins.rest.domain.system
