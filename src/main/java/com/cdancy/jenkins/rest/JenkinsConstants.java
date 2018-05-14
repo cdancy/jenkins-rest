@@ -39,6 +39,8 @@ public class JenkinsConstants {
     public static final String JCLOUDS_VARIABLE_ID = "JCLOUDS_";
     public static final String JENKINS_REST_VARIABLE_ID = "JENKINS_REST_" + JCLOUDS_VARIABLE_ID;
 
+    public static final String OPTIONAL_FOLDER_PATH_PARAM = "optionalFolderPath";
+
     protected JenkinsConstants() {
         throw new UnsupportedOperationException("Purposefully not implemented");
     }
