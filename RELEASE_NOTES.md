@@ -1,3 +1,5 @@
+### Version 0.0.11 (TBA)
+
 ### Version 0.0.10 (May 14, 2018)
 
 * ADDED: `PluginManagerApi` with initial endpoint `plugins`. - [Pull request 17](https://github.com/cdancy/jenkins-rest/pull/17)
