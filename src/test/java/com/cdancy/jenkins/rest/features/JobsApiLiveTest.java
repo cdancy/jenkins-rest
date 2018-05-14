@@ -28,6 +28,7 @@ import java.util.Map;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
+import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.job.BuildInfo;
 import com.cdancy.jenkins.rest.domain.job.JobInfo;
@@ -38,7 +39,7 @@ import com.google.common.collect.Lists;
 @Test(groups = "live", testName = "SystemApiLiveTest", singleThreaded = true)
 public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
-    private Integer queueId;
+    private IntegerResponse queueId;
     private Integer buildNumber;
 
     @Test
@@ -74,7 +75,8 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testBuildJob() {
         queueId = api().build("DevTest");
         assertNotNull(queueId);
-        assertTrue(queueId > 0);
+        assertTrue(queueId.value() > 0);
+        assertTrue(queueId.errors().size() == 0);
     }
 
     @Test(dependsOnMethods = "testBuildJob")
@@ -108,7 +110,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         BuildInfo output = api().buildInfo("DevTest", buildNumber);
         assertNotNull(output);
         assertTrue(output.fullDisplayName().equals("DevTest #" + buildNumber));
-        assertTrue(output.queueId() == queueId);
+        assertTrue(output.queueId() == queueId.value());
     }
 
     @Test(dependsOnMethods = "testGetBuildInfo")
@@ -147,9 +149,10 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testBuildJobWithParameters() {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-        Integer output = api().buildWithParameters("DevTest", params);
+        IntegerResponse output = api().buildWithParameters("DevTest", params);
         assertNotNull(output);
-        assertTrue(output > 0);
+        assertTrue(output.value() > 0);
+        assertTrue(output.errors().size() == 0);
     }
 
     @Test(dependsOnMethods = "testBuildJobWithParameters")
@@ -216,8 +219,13 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test
     public void testBuildNonExistentJob() {
-        Integer output = api().build(randomString());
-        assertNull(output);
+        IntegerResponse output = api().build(randomString());
+        assertNotNull(output);
+        assertNull(output.value());
+        assertTrue(output.errors().size() > 0);
+        assertNotNull(output.errors().get(0).context());
+        assertNotNull(output.errors().get(0).message());
+        assertTrue(output.errors().get(0).exceptionName().equals("org.jclouds.rest.ResourceNotFoundException"));
     }
 
     @Test
@@ -230,8 +238,13 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testBuildNonExistentJobWithParams() {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-        Integer output = api().buildWithParameters(randomString(), params);
-        assertNull(output);
+        IntegerResponse output = api().buildWithParameters(randomString(), params);
+        assertNotNull(output);
+        assertNull(output.value());
+        assertTrue(output.errors().size() > 0);
+        assertNotNull(output.errors().get(0).context());
+        assertNotNull(output.errors().get(0).message());
+        assertTrue(output.errors().get(0).exceptionName().equals("org.jclouds.rest.ResourceNotFoundException"));
     }
 
     private JobsApi api() {
