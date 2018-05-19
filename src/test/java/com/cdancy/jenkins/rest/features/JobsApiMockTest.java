@@ -156,6 +156,25 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
+    public void testSimpleFolderPath() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String configXML = payloadFromResource("/freestyle-project.xml");
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus success = api.create("test-folder/test-folder-1", "JobInFolder", configXML);
+            assertNotNull(success);
+            assertTrue(success.value());
+            assertTrue(success.errors().isEmpty());
+            assertSentWithXMLFormDataAccept(server, "POST", "/job/test-folder/job/test-folder-1/createItem?name=JobInFolder", configXML, MediaType.WILDCARD);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
     public void testCreateJobAlreadyExists() throws Exception {
         MockWebServer server = mockWebServer();
 
