@@ -35,6 +35,7 @@ import org.jclouds.Fallbacks;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.ParamParser;
 import org.jclouds.rest.annotations.Payload;
 import org.jclouds.rest.annotations.PayloadParam;
 import org.jclouds.rest.annotations.RequestFilters;
@@ -53,6 +54,7 @@ import com.cdancy.jenkins.rest.parsers.BuildNumberToInteger;
 import com.cdancy.jenkins.rest.parsers.LocationToQueueId;
 import com.cdancy.jenkins.rest.parsers.OutputToProgressiveText;
 import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
+import com.cdancy.jenkins.rest.parsers.optionalFolderPathParser;
 
 import static com.cdancy.jenkins.rest.JenkinsConstants.OPTIONAL_FOLDER_PATH_PARAM;
 
@@ -66,7 +68,7 @@ public interface JobsApi {
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.APPLICATION_JSON)
     @GET
-    JobInfo jobInfo(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    JobInfo jobInfo(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                     @PathParam("name") String jobName);
 
     @Named("jobs:build-info")
@@ -75,7 +77,7 @@ public interface JobsApi {
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.APPLICATION_JSON)
     @GET
-    BuildInfo buildInfo(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    BuildInfo buildInfo(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                         @PathParam("name") String jobName,
                         @PathParam("number") int buildNumber);
 
@@ -88,7 +90,7 @@ public interface JobsApi {
     @Consumes(MediaType.WILDCARD)
     @Payload("{configXML}")
     @POST
-    RequestStatus create(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    RequestStatus create(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                          @QueryParam("name") String jobName,
                          @PayloadParam(value = "configXML") String configXML);
 
@@ -98,7 +100,7 @@ public interface JobsApi {
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
-    String config(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    String config(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                   @PathParam("name") String jobName);
 
     @Named("jobs:update-config")
@@ -109,7 +111,7 @@ public interface JobsApi {
     @Consumes(MediaType.TEXT_HTML)
     @Payload("{configXML}")
     @POST
-    boolean config(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    boolean config(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                    @PathParam("name") String jobName,
                    @PayloadParam(value = "configXML") String configXML);
 
@@ -119,7 +121,7 @@ public interface JobsApi {
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
-    String description(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    String description(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                        @PathParam("name") String jobName);
 
     @Named("jobs:set-description")
@@ -128,7 +130,7 @@ public interface JobsApi {
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_HTML)
     @POST
-    boolean description(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    boolean description(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                         @PathParam("name") String jobName,
                         @FormParam("description") String description);
 
@@ -139,7 +141,7 @@ public interface JobsApi {
     @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
     @ResponseParser(RequestStatusParser.class)
     @POST
-    RequestStatus delete(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    RequestStatus delete(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                          @PathParam("name") String jobName);
 
     @Named("jobs:enable")
@@ -148,7 +150,7 @@ public interface JobsApi {
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_HTML)
     @POST
-    boolean enable(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    boolean enable(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                    @PathParam("name") String jobName);
 
     @Named("jobs:disable")
@@ -157,7 +159,7 @@ public interface JobsApi {
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_HTML)
     @POST
-    boolean disable(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    boolean disable(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                     @PathParam("name") String jobName);
 
     @Named("jobs:build")
@@ -167,7 +169,7 @@ public interface JobsApi {
     @ResponseParser(LocationToQueueId.class)
     @Consumes("application/unknown")
     @POST
-    IntegerResponse build(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    IntegerResponse build(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                   @PathParam("name") String jobName);
 
     @Named("jobs:build-with-params")
@@ -177,7 +179,7 @@ public interface JobsApi {
     @ResponseParser(LocationToQueueId.class)
     @Consumes("application/unknown")
     @POST
-    IntegerResponse buildWithParameters(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    IntegerResponse buildWithParameters(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                                 @PathParam("name") String jobName,
                                 @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
 
@@ -188,7 +190,7 @@ public interface JobsApi {
     @ResponseParser(BuildNumberToInteger.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
-    Integer lastBuildNumber(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    Integer lastBuildNumber(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                             @PathParam("name") String jobName);
 
     @Named("jobs:last-build-timestamp")
@@ -197,7 +199,7 @@ public interface JobsApi {
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
-    String lastBuildTimestamp(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    String lastBuildTimestamp(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                               @PathParam("name") String jobName);
 
     @Named("jobs:progressive-text")
@@ -207,7 +209,7 @@ public interface JobsApi {
     @ResponseParser(OutputToProgressiveText.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
-    ProgressiveText progressiveText(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) String optionalFolderPath,
+    ProgressiveText progressiveText(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
                                     @PathParam("name") String jobName,
                                     @QueryParam("start") int start);
 }
