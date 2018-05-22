@@ -60,7 +60,7 @@ import com.cdancy.jenkins.rest.parsers.OptionalFolderPathParser;
 public interface JobsApi {
 
     @Named("jobs:job-info")
-    @Path("{optionalFolderPath}/job/{name}/api/json")
+    @Path("{optionalFolderPath}job/{name}/api/json")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.APPLICATION_JSON)
     @GET
@@ -68,7 +68,7 @@ public interface JobsApi {
                     @PathParam("name") String jobName);
 
     @Named("jobs:build-info")
-    @Path("{optionalFolderPath}/job/{name}/{number}/api/json")
+    @Path("{optionalFolderPath}job/{name}/{number}/api/json")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.APPLICATION_JSON)
     @GET
@@ -77,7 +77,7 @@ public interface JobsApi {
                         @PathParam("number") int buildNumber);
 
     @Named("jobs:create")
-    @Path("{optionalFolderPath}/createItem")
+    @Path("{optionalFolderPath}createItem")
     @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
     @ResponseParser(RequestStatusParser.class)
     @Produces(MediaType.APPLICATION_XML)
@@ -89,7 +89,7 @@ public interface JobsApi {
                          @PayloadParam(value = "configXML") String configXML);
 
     @Named("jobs:get-config")
-    @Path("{optionalFolderPath}/job/{name}/config.xml")
+    @Path("{optionalFolderPath}job/{name}/config.xml")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
@@ -97,7 +97,7 @@ public interface JobsApi {
                   @PathParam("name") String jobName);
 
     @Named("jobs:update-config")
-    @Path("{optionalFolderPath}/job/{name}/config.xml")
+    @Path("{optionalFolderPath}job/{name}/config.xml")
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.TEXT_HTML)
@@ -108,7 +108,7 @@ public interface JobsApi {
                    @PayloadParam(value = "configXML") String configXML);
 
     @Named("jobs:get-description")
-    @Path("{optionalFolderPath}/job/{name}/description")
+    @Path("{optionalFolderPath}job/{name}/description")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
@@ -116,7 +116,7 @@ public interface JobsApi {
                        @PathParam("name") String jobName);
 
     @Named("jobs:set-description")
-    @Path("{optionalFolderPath}/job/{name}/description")
+    @Path("{optionalFolderPath}job/{name}/description")
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_HTML)
     @POST
@@ -125,7 +125,7 @@ public interface JobsApi {
                         @FormParam("description") String description);
 
     @Named("jobs:delete")
-    @Path("{optionalFolderPath}/job/{name}/doDelete")
+    @Path("{optionalFolderPath}job/{name}/doDelete")
     @Consumes(MediaType.TEXT_HTML)
     @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
     @ResponseParser(RequestStatusParser.class)
@@ -134,7 +134,7 @@ public interface JobsApi {
                          @PathParam("name") String jobName);
 
     @Named("jobs:enable")
-    @Path("{optionalFolderPath}/job/{name}/enable")
+    @Path("{optionalFolderPath}job/{name}/enable")
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_HTML)
     @POST
@@ -142,7 +142,7 @@ public interface JobsApi {
                    @PathParam("name") String jobName);
 
     @Named("jobs:disable")
-    @Path("{optionalFolderPath}/job/{name}/disable")
+    @Path("{optionalFolderPath}job/{name}/disable")
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_HTML)
     @POST
@@ -150,7 +150,7 @@ public interface JobsApi {
                     @PathParam("name") String jobName);
 
     @Named("jobs:build")
-    @Path("{optionalFolderPath}/job/{name}/build")
+    @Path("{optionalFolderPath}job/{name}/build")
     @Fallback(JenkinsFallbacks.IntegerResponseOnError.class)
     @ResponseParser(LocationToQueueId.class)
     @Consumes("application/unknown")
@@ -159,7 +159,7 @@ public interface JobsApi {
                   @PathParam("name") String jobName);
 
     @Named("jobs:build-with-params")
-    @Path("{optionalFolderPath}/job/{name}/buildWithParameters")
+    @Path("{optionalFolderPath}job/{name}/buildWithParameters")
     @Fallback(JenkinsFallbacks.IntegerResponseOnError.class)
     @ResponseParser(LocationToQueueId.class)
     @Consumes("application/unknown")
@@ -169,7 +169,7 @@ public interface JobsApi {
                                 @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
 
     @Named("jobs:last-build-number")
-    @Path("{optionalFolderPath}/job/{name}/lastBuild/buildNumber")
+    @Path("{optionalFolderPath}job/{name}/lastBuild/buildNumber")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @ResponseParser(BuildNumberToInteger.class)
     @Consumes(MediaType.TEXT_PLAIN)
@@ -178,7 +178,7 @@ public interface JobsApi {
                             @PathParam("name") String jobName);
 
     @Named("jobs:last-build-timestamp")
-    @Path("{optionalFolderPath}/job/{name}/lastBuild/buildTimestamp")
+    @Path("{optionalFolderPath}job/{name}/lastBuild/buildTimestamp")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
@@ -186,7 +186,7 @@ public interface JobsApi {
                               @PathParam("name") String jobName);
 
     @Named("jobs:progressive-text")
-    @Path("{optionalFolderPath}/job/{name}/lastBuild/logText/progressiveText")
+    @Path("{optionalFolderPath}job/{name}/lastBuild/logText/progressiveText")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @ResponseParser(OutputToProgressiveText.class)
     @Consumes(MediaType.TEXT_PLAIN)
