@@ -14,6 +14,19 @@ public class OptionalFolderPathParser implements Function<Object,String> {
     public static final String EMPTY_STRING = "";
     @Override
     public String apply(Object optionalFolderPath) {
-        return (optionalFolderPath == null) ? EMPTY_STRING : JenkinsUtils.amendFolderPath(String.class.cast(optionalFolderPath));
+        if(optionalFolderPath == null) {
+            return EMPTY_STRING;
+        }
+
+        String folderPath = String.class.cast(optionalFolderPath);
+        String amendedPath = "";
+        if(folderPath.startsWith("/") || folderPath.endsWith("/")) {
+            throw new RuntimeException("Incorrect folder Path format - " + folderPath);
+        }
+        String[] folderNames = folderPath.split("/");
+        for (String folder:folderNames) {
+            amendedPath += "job/" + folder + "/";
+        }
+        return amendedPath;
     }
 }
