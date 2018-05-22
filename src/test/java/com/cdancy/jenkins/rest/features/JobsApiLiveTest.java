@@ -27,8 +27,6 @@ import java.util.Map;
 
 import com.cdancy.jenkins.rest.domain.plugins.Plugin;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
-import com.cdancy.jenkins.rest.filters.ScrubNullFolderParam;
-import org.jclouds.http.HttpRequest;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
@@ -221,14 +219,14 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         String config = payloadFromResource("/folder-config.xml");
         RequestStatus success1 = api().create(null, "test-folder", config);
         assertTrue(success1.value());
-        RequestStatus success2 = api().create("job/test-folder", "test-folder-1", config);
+        RequestStatus success2 = api().create("test-folder", "test-folder-1", config);
         assertTrue(success2.value());
     }
 
     @Test(dependsOnMethods = "testCreateFoldersInJenkins")
     public void testCreateJobInFolder() {
         String config = payloadFromResource("/freestyle-project-no-params.xml");
-        RequestStatus success = api().create("job/test-folder/job/test-folder-1", "JobInFolder", config);
+        RequestStatus success = api().create("test-folder/test-folder-1", "JobInFolder", config);
         assertTrue(success.value());
     }
 
@@ -285,37 +283,37 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     @Test(dependsOnMethods = "testCreateJobInFolder")
     public void testUpdateJobConfigInFolder() {
         String config = payloadFromResource("/freestyle-project.xml");
-        boolean success = api().config("job/test-folder/job/test-folder-1", "JobInFolder", config);
+        boolean success = api().config("test-folder/test-folder-1", "JobInFolder", config);
         assertTrue(success);
     }
 
     @Test(dependsOnMethods = "testUpdateJobConfigInFolder")
     public void testDisableJobInFolder() {
-        boolean success = api().disable("job/test-folder/job/test-folder-1", "JobInFolder");
+        boolean success = api().disable("test-folder/test-folder-1", "JobInFolder");
         assertTrue(success);
     }
 
     @Test(dependsOnMethods = "testDisableJobInFolder")
     public void testEnableJobInFolder() {
-        boolean success = api().enable("job/test-folder/job/test-folder-1", "JobInFolder");
+        boolean success = api().enable("test-folder/test-folder-1", "JobInFolder");
         assertTrue(success);
     }
 
     @Test(dependsOnMethods = "testEnableJobInFolder")
     public void testSetDescriptionOfJobInFolder() {
-        boolean success = api().description("job/test-folder/job/test-folder-1", "JobInFolder", "RandomDescription");
+        boolean success = api().description("test-folder/test-folder-1", "JobInFolder", "RandomDescription");
         assertTrue(success);
     }
 
     @Test(dependsOnMethods = "testSetDescriptionOfJobInFolder")
     public void testGetDescriptionOfJobInFolder() {
-        String output = api().description("job/test-folder/job/test-folder-1", "JobInFolder");
+        String output = api().description("test-folder/test-folder-1", "JobInFolder");
         assertTrue(output.equals("RandomDescription"));
     }
 
     @Test(dependsOnMethods = "testGetDescriptionOfJobInFolder")
     public void testGetJobInfoInFolder() {
-        JobInfo output = api().jobInfo("job/test-folder/job/test-folder-1", "JobInFolder");
+        JobInfo output = api().jobInfo("test-folder/test-folder-1", "JobInFolder");
         assertNotNull(output);
         assertTrue(output.name().equals("JobInFolder"));
         assertTrue(output.builds().isEmpty());

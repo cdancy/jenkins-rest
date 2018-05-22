@@ -49,167 +49,149 @@ import com.cdancy.jenkins.rest.domain.job.JobInfo;
 import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
-import com.cdancy.jenkins.rest.filters.ScrubNullFolderParam;
 import com.cdancy.jenkins.rest.parsers.BuildNumberToInteger;
 import com.cdancy.jenkins.rest.parsers.LocationToQueueId;
 import com.cdancy.jenkins.rest.parsers.OutputToProgressiveText;
 import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
-import com.cdancy.jenkins.rest.parsers.optionalFolderPathParser;
-
-import static com.cdancy.jenkins.rest.JenkinsConstants.OPTIONAL_FOLDER_PATH_PARAM;
+import com.cdancy.jenkins.rest.parsers.OptionalFolderPathParser;
 
 @RequestFilters(JenkinsAuthenticationFilter.class)
 @Path("/")
 public interface JobsApi {
 
     @Named("jobs:job-info")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/api/json")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/job/{name}/api/json")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.APPLICATION_JSON)
     @GET
-    JobInfo jobInfo(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    JobInfo jobInfo(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                     @PathParam("name") String jobName);
 
     @Named("jobs:build-info")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/{number}/api/json")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/job/{name}/{number}/api/json")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.APPLICATION_JSON)
     @GET
-    BuildInfo buildInfo(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    BuildInfo buildInfo(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                         @PathParam("name") String jobName,
                         @PathParam("number") int buildNumber);
 
     @Named("jobs:create")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/createItem")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/createItem")
     @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
     @ResponseParser(RequestStatusParser.class)
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.WILDCARD)
     @Payload("{configXML}")
     @POST
-    RequestStatus create(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    RequestStatus create(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                          @QueryParam("name") String jobName,
                          @PayloadParam(value = "configXML") String configXML);
 
     @Named("jobs:get-config")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/config.xml")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/job/{name}/config.xml")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
-    String config(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    String config(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                   @PathParam("name") String jobName);
 
     @Named("jobs:update-config")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/config.xml")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/job/{name}/config.xml")
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.TEXT_HTML)
     @Payload("{configXML}")
     @POST
-    boolean config(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    boolean config(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                    @PathParam("name") String jobName,
                    @PayloadParam(value = "configXML") String configXML);
 
     @Named("jobs:get-description")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/description")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/job/{name}/description")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
-    String description(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    String description(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                        @PathParam("name") String jobName);
 
     @Named("jobs:set-description")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/description")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/job/{name}/description")
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_HTML)
     @POST
-    boolean description(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    boolean description(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                         @PathParam("name") String jobName,
                         @FormParam("description") String description);
 
     @Named("jobs:delete")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/doDelete")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/job/{name}/doDelete")
     @Consumes(MediaType.TEXT_HTML)
     @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
     @ResponseParser(RequestStatusParser.class)
     @POST
-    RequestStatus delete(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    RequestStatus delete(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                          @PathParam("name") String jobName);
 
     @Named("jobs:enable")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/enable")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/job/{name}/enable")
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_HTML)
     @POST
-    boolean enable(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    boolean enable(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                    @PathParam("name") String jobName);
 
     @Named("jobs:disable")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/disable")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/job/{name}/disable")
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_HTML)
     @POST
-    boolean disable(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    boolean disable(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                     @PathParam("name") String jobName);
 
     @Named("jobs:build")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/build")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/job/{name}/build")
     @Fallback(JenkinsFallbacks.IntegerResponseOnError.class)
     @ResponseParser(LocationToQueueId.class)
     @Consumes("application/unknown")
     @POST
-    IntegerResponse build(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    IntegerResponse build(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                   @PathParam("name") String jobName);
 
     @Named("jobs:build-with-params")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/buildWithParameters")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/job/{name}/buildWithParameters")
     @Fallback(JenkinsFallbacks.IntegerResponseOnError.class)
     @ResponseParser(LocationToQueueId.class)
     @Consumes("application/unknown")
     @POST
-    IntegerResponse buildWithParameters(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    IntegerResponse buildWithParameters(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                                 @PathParam("name") String jobName,
                                 @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
 
     @Named("jobs:last-build-number")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/lastBuild/buildNumber")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/job/{name}/lastBuild/buildNumber")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @ResponseParser(BuildNumberToInteger.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
-    Integer lastBuildNumber(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    Integer lastBuildNumber(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                             @PathParam("name") String jobName);
 
     @Named("jobs:last-build-timestamp")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/lastBuild/buildTimestamp")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/job/{name}/lastBuild/buildTimestamp")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
-    String lastBuildTimestamp(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    String lastBuildTimestamp(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                               @PathParam("name") String jobName);
 
     @Named("jobs:progressive-text")
-    @Path("{" + OPTIONAL_FOLDER_PATH_PARAM + "}/job/{name}/lastBuild/logText/progressiveText")
-    @RequestFilters(ScrubNullFolderParam.class)
+    @Path("{optionalFolderPath}/job/{name}/lastBuild/logText/progressiveText")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @ResponseParser(OutputToProgressiveText.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
-    ProgressiveText progressiveText(@Nullable @PathParam(OPTIONAL_FOLDER_PATH_PARAM) @ParamParser(optionalFolderPathParser.class) String optionalFolderPath,
+    ProgressiveText progressiveText(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                                     @PathParam("name") String jobName,
                                     @QueryParam("start") int start);
 }
