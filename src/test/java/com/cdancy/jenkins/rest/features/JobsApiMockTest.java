@@ -175,6 +175,74 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
+    public void testIncorrectFolderPathOne() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String configXML = payloadFromResource("/freestyle-project.xml");
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus success = api.create("/test-folder/test-folder-1/", "JobInFolder", configXML);
+        } catch (Exception e) {
+            assertTrue(e.getMessage().contains("Incorrect folder Path format"));
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testIncorrectFolderPathTwo() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String configXML = payloadFromResource("/freestyle-project.xml");
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus success = api.create("//test-folder/test-folder-1", "JobInFolder", configXML);
+        } catch (Exception e) {
+            assertTrue(e.getMessage().contains("Incorrect folder Path format"));
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testIncorrectFolderPathThree() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String configXML = payloadFromResource("/freestyle-project.xml");
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus success = api.create("test-folder/test-folder-1//", "JobInFolder", configXML);
+        } catch (Exception e) {
+            assertTrue(e.getMessage().contains("Incorrect folder Path format"));
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testIncorrectFolderPathFour() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String configXML = payloadFromResource("/freestyle-project.xml");
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus success = api.create("/test-foldertest-folder-1", "JobInFolder", configXML);
+        } catch (Exception e) {
+            assertTrue(e.getMessage().contains("Incorrect folder Path format"));
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
     public void testCreateJobAlreadyExists() throws Exception {
         MockWebServer server = mockWebServer();
 
