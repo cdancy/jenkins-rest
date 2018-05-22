@@ -46,8 +46,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.jclouds.javax.annotation.Nullable;
 
@@ -289,29 +287,6 @@ public class JenkinsUtils {
                 }
             }
         }
-    }
-
-    /**
-     * amend the path to job by appending "/job/" before every folder name
-     *
-     * @param folderPath simple folder path expression
-     *
-     * @return folder path appended with "job/" before every folder name.
-     */
-    public static String amendFolderPath(final String folderPath) {
-        if(folderPath.startsWith("/") || folderPath.endsWith("/")) {
-            throw new RuntimeException("Incorrect folder Path format - " + folderPath);
-        }
-
-        String amendedPath = "";
-        String[] folderNames = folderPath.split("/");
-        for (int i=0; i<folderNames.length; i++) {
-            amendedPath += "job/" + folderNames[i];
-            if(i < folderNames.length-1) {
-                amendedPath += "/";
-            }
-        }
-        return amendedPath;
     }
 
     protected JenkinsUtils() {
