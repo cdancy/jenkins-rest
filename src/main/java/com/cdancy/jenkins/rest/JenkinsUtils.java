@@ -296,16 +296,9 @@ public class JenkinsUtils {
      *
      * @param folderPath simple folder path expression
      *
-     * @return amendedFodlerPath which optional folder
-     *         path reconstructed to match the jenkins URL style.
+     * @return folder path appended with "job/" before every folder name.
      */
-    public static String amendFolderPath(String folderPath) {
-        Pattern pattern = Pattern.compile("(job/[^!@#$%^&*<>]+/*)+");
-        Matcher m = pattern.matcher(folderPath);
-        if(m.matches()) {
-            return folderPath;
-        }
-
+    public static String amendFolderPath(final String folderPath) {
         if(folderPath.startsWith("/") || folderPath.endsWith("/")) {
             throw new RuntimeException("Incorrect folder Path format - " + folderPath);
         }

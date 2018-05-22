@@ -145,7 +145,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            RequestStatus success = api.create("job/test-folder", "JobInFolder", configXML);
+            RequestStatus success = api.create("test-folder", "JobInFolder", configXML);
             assertNotNull(success);
             assertTrue(success.value());
             assertTrue(success.errors().isEmpty());
