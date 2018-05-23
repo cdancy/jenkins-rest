@@ -231,53 +231,10 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test(dependsOnMethods = "testCreateFoldersInJenkins")
-    public void testCreateJobWithIncorrectFolderPathFormatOne() {
-        try {
-            String jobConfig = payloadFromResource("/freestyle-project-no-params.xml");
-            RequestStatus success = api().create("/test-folder/test-folder-1/", "JobInFolder", jobConfig);
-        } catch(Exception e) {
-            assertTrue(e.getMessage().contains("Incorrect folder Path format"));
-        }
-    }
-
-    @Test(dependsOnMethods = "testCreateFoldersInJenkins")
-    public void testCreateJobWithIncorrectFolderPathFormatTwo() {
-        try {
-            String jobConfig = payloadFromResource("/freestyle-project-no-params.xml");
-            RequestStatus success = api().create("//test-folder/test-folder-1", "JobInFolder", jobConfig);
-        } catch(Exception e) {
-            assertTrue(e.getMessage().contains("Incorrect folder Path format"));
-        }
-    }
-
-    @Test(dependsOnMethods = "testCreateFoldersInJenkins")
-    public void testCreateJobWithIncorrectFolderPathFormatThree() {
-        try {
-            String jobConfig = payloadFromResource("/freestyle-project-no-params.xml");
-            RequestStatus success = api().create("test-folder/test-folder-1//", "JobInFolder", jobConfig);
-        } catch(Exception e) {
-            assertTrue(e.getMessage().contains("Incorrect folder Path format"));
-        }
-    }
-
-    @Test(dependsOnMethods = "testCreateFoldersInJenkins")
-    public void testCreateJobWithIncorrectFolderPathFormatFour() {
-        try {
-            String jobConfig = payloadFromResource("/freestyle-project-no-params.xml");
-            RequestStatus success = api().create("/test-foldertest-folder-1", "JobInFolder", jobConfig);
-        } catch(Exception e) {
-            assertTrue(e.getMessage().contains("Incorrect folder Path format"));
-        }
-    }
-
-    @Test(dependsOnMethods = "testCreateFoldersInJenkins")
-    public void testCreateJobWithIncorrectFolderPathFormatFive() {
-        try {
-            String jobConfig = payloadFromResource("/freestyle-project-no-params.xml");
-            RequestStatus success = api().create("/job/test-folder/job/test-folder-1", "JobInFolder", jobConfig);
-        } catch(Exception e) {
-            assertTrue(e.getMessage().contains("Incorrect folder Path format"));
-        }
+    public void testCreateJobWithIncorrectFolderPath() {
+        String config = payloadFromResource("/folder-config.xml");
+        RequestStatus success = api().create("/test-folder//test-folder-1/", "Job",config);
+        assertFalse(success.value());
     }
 
     @Test(dependsOnMethods = "testCreateJobInFolder")
@@ -348,6 +305,19 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertNotNull(output);
         assertTrue(output.fullDisplayName().contains("JobInFolder #1"));
         assertTrue(output.queueId() == queueIdForAnotherJob.value());
+    }
+
+    @Test(dependsOnMethods = "testCreateFoldersInJenkins")
+    public void testCreateJobWithLeadingAndTrailingForwardSlashes() {
+        String config = payloadFromResource("/freestyle-project-no-params.xml");
+        RequestStatus success = api().create("/test-folder/test-folder-1/", "Job", config);
+        assertTrue(success.value());
+    }
+
+    @Test(dependsOnMethods = "testCreateJobWithLeadingAndTrailingForwardSlashes")
+    public void testDeleteJobWithLeadingAndTrailingForwardSlashes() {
+        RequestStatus success = api().delete("/test-folder/test-folder-1/", "Job");
+        assertTrue(success.value());
     }
 
     @Test(dependsOnMethods = "testGetBuildInfoOfJobInFolder")
