@@ -12,6 +12,8 @@ import javax.inject.Singleton;
 public class OptionalFolderPathParser implements Function<Object,String> {
 
     public static final String EMPTY_STRING = "";
+    public static final String FOLDER_NAME_PREFIX = "job/";
+    public static final Character FOLDER_NAME_SEPARATOR = '/';
 
     @Override
     public String apply(Object optionalFolderPath) {
@@ -20,19 +22,17 @@ public class OptionalFolderPathParser implements Function<Object,String> {
         }
 
         StringBuilder path = new StringBuilder(String.class.cast(optionalFolderPath));
-        StringBuilder amendedPath = new StringBuilder();
-
-        if(path.charAt(0) == '/'){
+        if(path.charAt(0) == FOLDER_NAME_SEPARATOR){
             path.deleteCharAt(0);
         }
-        if(path.charAt(path.length()-1) == '/') {
+        if(path.charAt(path.length()-1) == FOLDER_NAME_SEPARATOR) {
             path.deleteCharAt(path.length()-1);
         }
-
-        String[] folders = path.toString().split("/");
+        String[] folders = path.toString().split(Character.toString(FOLDER_NAME_SEPARATOR));
+        path.setLength(0);
         for(String folder:folders) {
-            amendedPath.append("job/").append(folder).append("/");
+            path.append(FOLDER_NAME_PREFIX).append(folder).append(FOLDER_NAME_SEPARATOR);
         }
-        return amendedPath.toString();
+        return path.toString();
     }
 }
