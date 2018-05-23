@@ -20,9 +20,15 @@ public class OptionalFolderPathParser implements Function<Object,String> {
 
         String folderPath = String.class.cast(optionalFolderPath);
         String amendedPath = "";
-        if(folderPath.startsWith("/") || folderPath.endsWith("/")) {
-            throw new RuntimeException("Incorrect folder Path format - " + folderPath);
+
+        if(folderPath.startsWith("/")) {
+            folderPath = folderPath.replaceAll("^/+","");
         }
+
+        if(folderPath.endsWith("/")) {
+            folderPath = folderPath.replaceAll("/+$","");
+        }
+
         String[] folderNames = folderPath.split("/");
         for (String folder:folderNames) {
             amendedPath += "job/" + folder + "/";
