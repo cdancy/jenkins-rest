@@ -46,6 +46,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Objects;
 import java.util.Properties;
+
 import org.jclouds.javax.annotation.Nullable;
 
 /**
@@ -60,7 +61,7 @@ public class JenkinsUtils {
 
     /**
      * Convert passed Iterable into an ImmutableList.
-     * 
+     *
      * @param <T> an arbitrary type.
      * @param input the Iterable to copy.
      * @return ImmutableList or empty ImmutableList if `input` is null.
@@ -71,7 +72,7 @@ public class JenkinsUtils {
 
     /**
      * Convert passed Map into an ImmutableMap.
-     * 
+     *
      * @param <K> an arbitrary type.
      * @param <V> an arbitrary type.
      * @param input the Map to copy.
@@ -83,7 +84,7 @@ public class JenkinsUtils {
 
     /**
      * Convert passed Map into a JsonElement.
-     * 
+     *
      * @param input the Map to convert.
      * @return JsonElement or empty JsonElement if `input` is null.
      */
@@ -93,7 +94,7 @@ public class JenkinsUtils {
 
     /**
      * Convert passed Map into a JsonElement.
-     * 
+     *
      * @param input the Map to convert.
      * @return JsonElement or empty JsonElement if `input` is null.
      */
@@ -103,7 +104,7 @@ public class JenkinsUtils {
 
     /**
      * Convert passed String into a JsonElement.
-     * 
+     *
      * @param input the String to convert.
      * @return JsonElement or empty JsonElement if `input` is null.
      */
@@ -117,7 +118,7 @@ public class JenkinsUtils {
      * was found, and environmentVariable is non-null, we will attempt to
      * query the `Environment Variables` for a value and return it. If
      * both are either null or can't be found than null will be returned.
-     * 
+     *
      * @param systemProperty possibly existent System Property.
      * @param environmentVariable possibly existent Environment Variable.
      * @return found external value or null.
@@ -189,7 +190,7 @@ public class JenkinsUtils {
     /**
      * Find jclouds overrides (e.g. Properties) first searching within System
      * Properties and then within Environment Variables (former takes precedance).
-     * 
+     *
      * @return Properties object with populated jclouds properties.
      */
     public static Properties inferOverrides() {
@@ -222,13 +223,13 @@ public class JenkinsUtils {
                 }
             }
         }
-        
+
         return overrides;
     }
 
     /**
      * Add the passed environment variables to the currently existing env-vars.
-     * 
+     *
      * @param addEnvVars the env-vars to add.
      */
     public static void addEnvironmentVariables(final Map<String, String> addEnvVars) {
@@ -240,7 +241,7 @@ public class JenkinsUtils {
 
     /**
      * Remove the passed environment variables keys from the environment.
-     * 
+     *
      * @param removeEnvVars the env-var keys to be removed.
      */
     public static void removeEnvironmentVariables(final Collection<String> removeEnvVars) {
@@ -252,7 +253,7 @@ public class JenkinsUtils {
 
     /**
      * Re-set the environment variables with passed map.
-     * 
+     *
      * @param newEnvVars map to reset env-vars with.
      */
     public static void setEnvironmentVariables(final Map<String, String> newEnvVars) {

@@ -215,53 +215,62 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test(dependsOnMethods = "testInstallFolderPlugin")
-    public void testCreateFolderInJenkins() {
+    public void testCreateFoldersInJenkins() {
         String config = payloadFromResource("/folder-config.xml");
-        RequestStatus success = api().create(null, "test-folder", config);
+        RequestStatus success1 = api().create(null, "test-folder", config);
+        assertTrue(success1.value());
+        RequestStatus success2 = api().create("test-folder", "test-folder-1", config);
+        assertTrue(success2.value());
+    }
+
+    @Test(dependsOnMethods = "testCreateFoldersInJenkins")
+    public void testCreateJobInFolder() {
+        String config = payloadFromResource("/freestyle-project-no-params.xml");
+        RequestStatus success = api().create("test-folder/test-folder-1", "JobInFolder", config);
         assertTrue(success.value());
     }
 
-    @Test(dependsOnMethods = "testCreateFolderInJenkins")
-    public void testCreateJobInFolder() {
-        String config = payloadFromResource("/freestyle-project-no-params.xml");
-        RequestStatus success = api().create("job/test-folder", "JobInFolder", config);
-        assertTrue(success.value());
+    @Test(dependsOnMethods = "testCreateFoldersInJenkins")
+    public void testCreateJobWithIncorrectFolderPath() {
+        String config = payloadFromResource("/folder-config.xml");
+        RequestStatus success = api().create("/test-folder//test-folder-1/", "Job",config);
+        assertFalse(success.value());
     }
 
     @Test(dependsOnMethods = "testCreateJobInFolder")
     public void testUpdateJobConfigInFolder() {
         String config = payloadFromResource("/freestyle-project.xml");
-        boolean success = api().config("job/test-folder", "JobInFolder", config);
+        boolean success = api().config("test-folder/test-folder-1", "JobInFolder", config);
         assertTrue(success);
     }
 
     @Test(dependsOnMethods = "testUpdateJobConfigInFolder")
     public void testDisableJobInFolder() {
-        boolean success = api().disable("job/test-folder", "JobInFolder");
+        boolean success = api().disable("test-folder/test-folder-1", "JobInFolder");
         assertTrue(success);
     }
 
     @Test(dependsOnMethods = "testDisableJobInFolder")
     public void testEnableJobInFolder() {
-        boolean success = api().enable("job/test-folder", "JobInFolder");
+        boolean success = api().enable("test-folder/test-folder-1", "JobInFolder");
         assertTrue(success);
     }
 
     @Test(dependsOnMethods = "testEnableJobInFolder")
     public void testSetDescriptionOfJobInFolder() {
-        boolean success = api().description("job/test-folder", "JobInFolder", "RandomDescription");
+        boolean success = api().description("test-folder/test-folder-1", "JobInFolder", "RandomDescription");
         assertTrue(success);
     }
 
     @Test(dependsOnMethods = "testSetDescriptionOfJobInFolder")
     public void testGetDescriptionOfJobInFolder() {
-        String output = api().description("job/test-folder", "JobInFolder");
+        String output = api().description("test-folder/test-folder-1", "JobInFolder");
         assertTrue(output.equals("RandomDescription"));
     }
 
     @Test(dependsOnMethods = "testGetDescriptionOfJobInFolder")
     public void testGetJobInfoInFolder() {
-        JobInfo output = api().jobInfo("job/test-folder", "JobInFolder");
+        JobInfo output = api().jobInfo("test-folder/test-folder-1", "JobInFolder");
         assertNotNull(output);
         assertTrue(output.name().equals("JobInFolder"));
         assertTrue(output.builds().isEmpty());
@@ -271,20 +280,20 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testBuildWithParameters() {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-        queueIdForAnotherJob = api().buildWithParameters("job/test-folder", "JobInFolder", params);
+        queueIdForAnotherJob = api().buildWithParameters("test-folder/test-folder-1", "JobInFolder", params);
         assertNotNull(queueIdForAnotherJob);
         assertTrue(queueIdForAnotherJob.value() > 0);
     }
 
     @Test(dependsOnMethods = "testBuildWithParameters")
     public void testLastBuildTimestampOfJobInFolder() {
-        String output = api().lastBuildTimestamp("job/test-folder", "JobInFolder");
+        String output = api().lastBuildTimestamp("test-folder/test-folder-1", "JobInFolder");
         assertNotNull(output);
     }
 
     @Test(dependsOnMethods = "testLastBuildTimestampOfJobInFolder")
     public void testGetProgressiveText() {
-        ProgressiveText output = api().progressiveText("job/test-folder", "JobInFolder", 0);
+        ProgressiveText output = api().progressiveText("test-folder/test-folder-1", "JobInFolder", 0);
         assertNotNull(output);
         assertTrue(output.size() > 0);
         assertFalse(output.hasMoreData());
@@ -292,22 +301,37 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test(dependsOnMethods = "testGetProgressiveText")
     public void testGetBuildInfoOfJobInFolder() {
-        BuildInfo output = api().buildInfo("job/test-folder", "JobInFolder", 1);
+        BuildInfo output = api().buildInfo("test-folder/test-folder-1", "JobInFolder", 1);
         assertNotNull(output);
         assertTrue(output.fullDisplayName().contains("JobInFolder #1"));
         assertTrue(output.queueId() == queueIdForAnotherJob.value());
     }
 
+    @Test(dependsOnMethods = "testCreateFoldersInJenkins")
+    public void testCreateJobWithLeadingAndTrailingForwardSlashes() {
+        String config = payloadFromResource("/freestyle-project-no-params.xml");
+        RequestStatus success = api().create("/test-folder/test-folder-1/", "Job", config);
+        assertTrue(success.value());
+    }
+
+    @Test(dependsOnMethods = "testCreateJobWithLeadingAndTrailingForwardSlashes")
+    public void testDeleteJobWithLeadingAndTrailingForwardSlashes() {
+        RequestStatus success = api().delete("/test-folder/test-folder-1/", "Job");
+        assertTrue(success.value());
+    }
+
     @Test(dependsOnMethods = "testGetBuildInfoOfJobInFolder")
     public void testDeleteJobInFolder() {
-        RequestStatus success = api().delete("job/test-folder", "JobInFolder");
+        RequestStatus success = api().delete("test-folder/test-folder-1", "JobInFolder");
         assertTrue(success.value());
     }
 
     @Test(dependsOnMethods = "testDeleteJobInFolder")
-    public void testDeleteFolder() {
-        RequestStatus success = api().delete(null, "test-folder");
-        assertTrue(success.value());
+    public void testDeleteFolders() {
+        RequestStatus success1 = api().delete("test-folder", "test-folder-1");
+        assertTrue(success1.value());
+        RequestStatus success2 = api().delete(null, "test-folder");
+        assertTrue(success2.value());
     }
 
     @Test
