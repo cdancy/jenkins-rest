@@ -1,4 +1,4 @@
-### Version 0.0.11 (TBA)
+### Version 0.0.11 (May 24, 2018)
 
 * ADDED: all `JobsApi` endpoints gained the `optionalFolderPath` argument. - [Pull request 22](https://github.com/cdancy/jenkins-rest/pull/22)
 
