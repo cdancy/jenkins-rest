@@ -34,7 +34,8 @@ Can be found in jcenter like so:
 
 ## Documentation
 
-javadocs can be found via [github pages here](http://cdancy.github.io/jenkins-rest/docs/javadoc/)
+* javadocs can be found via [github pages here](http://cdancy.github.io/jenkins-rest/docs/javadoc/)
+* the [wiki](https://github.com/cdancy/jenkins-rest/wiki)
 
 ## Property based setup
 
