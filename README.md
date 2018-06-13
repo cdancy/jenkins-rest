@@ -6,7 +6,7 @@
 
 # jenkins-rest
 
-java-based client to interact with Jenkins REST API. 
+Java client, built on top of jclouds, for working with Jenkins REST API.
 
 ## Setup
 
