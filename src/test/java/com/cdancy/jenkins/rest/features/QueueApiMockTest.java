@@ -139,6 +139,26 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
+    public void testQueueItemEmptyParameterValue() throws Exception {
+        MockWebServer server = mockWebServer();
+        String body = payloadFromResource("/queueItemEmptyParameterValue.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        int queueItemId = 143;
+        int buildNumber = 14;
+        QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
+        Map <String, String> map = Maps.newHashMap();
+        map.put("a", "1");
+        map.put("b", "");
+        map.put("c", "3");
+        try {
+            assertEquals(queueItem.params(), map);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
     public void testCancelQueueItem() throws Exception {
         MockWebServer server = mockWebServer();
         server.enqueue(new MockResponse().setResponseCode(404));
