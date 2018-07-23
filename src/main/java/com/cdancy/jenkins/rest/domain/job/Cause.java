@@ -29,6 +29,7 @@ public abstract class Cause {
     @Nullable
     public abstract String userId();
 
+    @Nullable
     public abstract String userName();
 
     Cause() {
