@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cdancy.jenkins.rest.domain.job.Parameter;
 import com.cdancy.jenkins.rest.domain.plugins.Plugin;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
 import org.testng.annotations.Test;
@@ -305,6 +306,14 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertNotNull(output);
         assertTrue(output.fullDisplayName().contains("JobInFolder #1"));
         assertTrue(output.queueId() == queueIdForAnotherJob.value());
+    }
+
+    @Test(dependsOnMethods = "testGetProgressiveText")
+    public void testGetBuildParametersofJob() {
+        List<Parameter> parameters = api().buildInfo("test-folder/test-folder-1", "JobInFolder",1).actions().get(0).parameters();
+        assertNotNull(parameters);
+        assertTrue(parameters.get(0).name().equals("SomeKey"));
+        assertTrue(parameters.get(0).value().equals("SomeVeryNewValue"));
     }
 
     @Test(dependsOnMethods = "testCreateFoldersInJenkins")
