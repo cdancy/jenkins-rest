@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cdancy.jenkins.rest.domain.job.Cause;
 import com.cdancy.jenkins.rest.domain.job.Parameter;
 import com.cdancy.jenkins.rest.domain.plugins.Plugin;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
@@ -314,6 +315,15 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertNotNull(parameters);
         assertTrue(parameters.get(0).name().equals("SomeKey"));
         assertTrue(parameters.get(0).value().equals("SomeVeryNewValue"));
+    }
+
+    @Test(dependsOnMethods = "testGetProgressiveText")
+    public void testGetBuildCausesOfJob() {
+        List<Cause> causes = api().buildInfo("test-folder/test-folder-1", "JobInFolder",1).actions().get(1).causes();
+        assertNotNull(causes);
+        assertTrue(causes.get(0).shortDescription().equals("Started by user admin"));
+        assertTrue(causes.get(0).userId().equals("admin"));
+        assertTrue(causes.get(0).userName().equals("admin"));
     }
 
     @Test(dependsOnMethods = "testCreateFoldersInJenkins")
