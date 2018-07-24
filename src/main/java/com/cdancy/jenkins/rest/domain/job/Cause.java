@@ -39,7 +39,7 @@ public abstract class Cause {
     }
 
     @SerializedNames({"_class", "shortDescription", "userId", "userName"})
-    public static Cause create(final String clazz, String shortDescription, String userId, String userName) {
+    public static Cause create(final String clazz, final String shortDescription, final String userId, final String userName) {
         return new AutoValue_Cause(clazz, shortDescription, userId, userName);
     }
 }

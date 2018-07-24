@@ -36,7 +36,7 @@ public abstract class Parameter {
     }
 
     @SerializedNames({"_class", "name", "value"})
-    public static Parameter create(final String clazz, String name, String value) {
+    public static Parameter create(final String clazz, final String name, final String value) {
         return new AutoValue_Parameter(clazz, name, value);
     }
 }
