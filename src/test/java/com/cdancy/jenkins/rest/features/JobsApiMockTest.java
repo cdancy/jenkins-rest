@@ -586,23 +586,13 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            List<Action> output = api.buildInfo(null,"fish", 10).actions();
-            List<Parameter> parameters = new ArrayList<>();
-            for (Action action : output) {
-                if (!action.parameters().isEmpty()) {
-                    parameters = action.parameters();
-                }
-            }
-            for (Parameter parameter : parameters) {
-                if (parameter.name().equals("bear")) {
-                    assertNull(parameter.value());
-                }
-                if (parameter.name().equals("fish")) {
-                    assertTrue(parameter.value().isEmpty());
-                }
-            }
+            List<Parameter> output = api.buildInfo(null,"fish", 10).actions().get(0).parameters();
+            assertNotNull(output);
+            assertTrue(output.get(0).name().equals("bear"));
+            assertNull(output.get(0).value());
+            assertTrue(output.get(1).name().equals("fish"));
+            assertTrue(output.get(1).value().isEmpty());
             assertSent(server, "GET", "/job/fish/10/api/json");
-
         } finally {
             jenkinsApi.close();
             server.shutdown();
