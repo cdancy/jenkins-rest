@@ -19,6 +19,7 @@ package com.cdancy.jenkins.rest.domain.job;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public abstract class Action {
     }
 
     @SerializedNames({"causes", "parameters"})
-    public static Action create(List<Cause> causes, List<Parameter> parameters) {
+    public static Action create(final List<Cause> causes, final List<Parameter> parameters) {
         return new AutoValue_Action(
             causes != null ? ImmutableList.copyOf(causes) : ImmutableList.<Cause>of(),
             parameters != null ? ImmutableList.copyOf(parameters) : ImmutableList.<Parameter>of());
