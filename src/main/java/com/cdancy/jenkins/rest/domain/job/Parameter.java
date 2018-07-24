@@ -24,6 +24,9 @@ import org.jclouds.json.SerializedNames;
 @AutoValue
 public abstract class Parameter {
 
+    @Nullable
+    public abstract String clazz();
+
     public abstract String name();
 
     @Nullable
@@ -32,8 +35,8 @@ public abstract class Parameter {
     Parameter() {
     }
 
-    @SerializedNames({"name", "value"})
-    public static Parameter create(String name, String value) {
-        return new AutoValue_Parameter(name, value);
+    @SerializedNames({"_class", "name", "value"})
+    public static Parameter create(final String clazz, String name, String value) {
+        return new AutoValue_Parameter(clazz, name, value);
     }
 }
