@@ -21,6 +21,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -571,6 +572,37 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             List<Parameter> output = api.buildInfo(null,"fish", 10).actions().get(0).parameters();
             assertTrue(output.size() == 0);
             assertSent(server, "GET", "/job/fish/10/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetParamsWhenEmptyorNullParams() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String body = payloadFromResource("/build-info-empty-and-null-params.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            List<Action> output = api.buildInfo(null,"fish", 10).actions();
+            List<Parameter> parameters = new ArrayList<>();
+            for (Action action : output) {
+                if (!action.parameters().isEmpty()) {
+                    parameters = action.parameters();
+                }
+            }
+            for (Parameter parameter : parameters) {
+                if (parameter.name().equals("bear")) {
+                    assertNull(parameter.value());
+                }
+                if (parameter.name().equals("fish")) {
+                    assertTrue(parameter.value().isEmpty());
+                }
+            }
+            assertSent(server, "GET", "/job/fish/10/api/json");
+
         } finally {
             jenkinsApi.close();
             server.shutdown();
