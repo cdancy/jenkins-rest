@@ -24,6 +24,9 @@ import org.jclouds.json.SerializedNames;
 @AutoValue
 public abstract class Cause {
 
+    @Nullable
+    public abstract String clazz();
+
     public abstract String shortDescription();
 
     @Nullable
@@ -35,8 +38,8 @@ public abstract class Cause {
     Cause() {
     }
 
-    @SerializedNames({ "shortDescription", "userId", "userName"})
-    public static Cause create(String shortDescription, String userId, String userName) {
-        return new AutoValue_Cause(shortDescription, userId, userName);
+    @SerializedNames({"_class", "shortDescription", "userId", "userName"})
+    public static Cause create(final String clazz, String shortDescription, String userId, String userName) {
+        return new AutoValue_Cause(clazz, shortDescription, userId, userName);
     }
 }
