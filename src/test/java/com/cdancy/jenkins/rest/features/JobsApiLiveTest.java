@@ -332,6 +332,42 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertTrue(causes.get(0).userName().equals("admin"));
     }
 
+    public void testCreateJobForEmptyAndNullParams() {
+        String config = payloadFromResource("/freestyle-project-empty-and-null-params.xml");
+        RequestStatus success = api().create(null, "JobForEmptyAndNullParams", config);
+        assertTrue(success.value());
+    }
+
+    @Test(dependsOnMethods = "testCreateJobForEmptyAndNullParams")
+    public void testBuildWithParametersOfJobForEmptyAndNullParams() {
+        Map<String, List<String>> params = new HashMap<>();
+        params.put("SomeKey1", Lists.newArrayList(""));
+        params.put("SomeKey2", null);
+        IntegerResponse job1 = api.jobsApi().buildWithParameters(null, "JobForEmptyAndNullParams", params);
+        assertNotNull(job1);
+        assertTrue(job1.value() > 0);
+        assertTrue(job1.errors().size() == 0);
+    }
+
+    @Test(dependsOnMethods = "testBuildWithParametersOfJobForEmptyAndNullParams")
+    public void testGetBuildParametersOfJobForEmptyAndNullParams() {
+        while (api().jobInfo(null, "JobForEmptyAndNullParams").lastBuild() == null) {
+            continue;
+        }
+        List<Parameter> parameters = api().buildInfo(null, "JobForEmptyAndNullParams", 1).actions().get(0).parameters();
+        assertNotNull(parameters);
+        assertTrue(parameters.get(0).name().equals("SomeKey1"));
+        assertTrue(parameters.get(0).value().isEmpty());
+        assertTrue(parameters.get(1).name().equals("SomeKey2"));
+        assertTrue(parameters.get(1).value().isEmpty());
+    }
+
+    @Test(dependsOnMethods = "testGetBuildParametersOfJobForEmptyAndNullParams")
+    public void testDeleteJobForEmptyAndNullParams() {
+        RequestStatus success = api().delete(null, "JobForEmptyAndNullParams");
+        assertTrue(success.value());
+    }
+
     @Test(dependsOnMethods = "testCreateFoldersInJenkins")
     public void testCreateJobWithLeadingAndTrailingForwardSlashes() {
         String config = payloadFromResource("/freestyle-project-no-params.xml");
