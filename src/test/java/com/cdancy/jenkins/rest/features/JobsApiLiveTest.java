@@ -121,6 +121,12 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test(dependsOnMethods = "testGetBuildInfo")
+    public void testGetBuildParametersOfLastJob() {
+        List<Parameter> parameters = api().buildInfo(null, "DevTest", 1).actions().get(0).parameters();
+        assertTrue(parameters.size() == 0);
+    }
+
+    @Test(dependsOnMethods = "testGetBuildParametersOfLastJob")
     public void testCreateJobThatAlreadyExists() {
         String config = payloadFromResource("/freestyle-project.xml");
         RequestStatus success = api().create(null, "DevTest", config);
