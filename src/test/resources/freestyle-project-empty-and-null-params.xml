@@ -9,17 +9,10 @@
         <hudson.model.StringParameterDefinition>
           <name>SomeKey1</name>
           <description>whatever1</description>
-          <defaultValue>SomeValue1</defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>SomeKey2</name>
           <description>whatever2</description>
-          <defaultValue>SomeValue2</defaultValue>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>SomeKey3</name>
-          <description>whatever3</description>
-          <defaultValue>SomeValue3</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
