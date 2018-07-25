@@ -589,7 +589,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             List<Parameter> output = api.buildInfo(null,"fish", 10).actions().get(0).parameters();
             assertNotNull(output);
             assertTrue(output.get(0).name().equals("bear"));
-            assertNull(output.get(0).value());
+            assertTrue(output.get(0).value().equals("null"));
             assertTrue(output.get(1).name().equals("fish"));
             assertTrue(output.get(1).value().isEmpty());
             assertSent(server, "GET", "/job/fish/10/api/json");
