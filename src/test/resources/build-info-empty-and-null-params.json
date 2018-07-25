@@ -4,7 +4,7 @@
       "parameters" : [
         {
           "name" : "bear",
-          "value" : null
+          "value" : "null"
         },
         {
           "name" : "fish",
