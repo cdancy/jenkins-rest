@@ -25,8 +25,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cdancy.jenkins.rest.domain.job.Cause;
+import com.cdancy.jenkins.rest.domain.job.Parameter;
 import com.cdancy.jenkins.rest.domain.plugins.Plugin;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
+import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
@@ -119,6 +122,12 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test(dependsOnMethods = "testGetBuildInfo")
+    public void testGetBuildParametersOfLastJob() {
+        List<Parameter> parameters = api().buildInfo(null, "DevTest", 1).actions().get(0).parameters();
+        assertTrue(parameters.size() == 0);
+    }
+
+    @Test(dependsOnMethods = "testGetBuildParametersOfLastJob")
     public void testCreateJobThatAlreadyExists() {
         String config = payloadFromResource("/freestyle-project.xml");
         RequestStatus success = api().create(null, "DevTest", config);
@@ -277,12 +286,14 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test(dependsOnMethods = "testGetJobInfoInFolder")
-    public void testBuildWithParameters() {
+    public void testBuildWithParameters() throws InterruptedException {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
         queueIdForAnotherJob = api().buildWithParameters("test-folder/test-folder-1", "JobInFolder", params);
         assertNotNull(queueIdForAnotherJob);
         assertTrue(queueIdForAnotherJob.value() > 0);
+        QueueItem queueItem = getRunningQueueItem(queueIdForAnotherJob.value());
+        assertNotNull(queueItem);
     }
 
     @Test(dependsOnMethods = "testBuildWithParameters")
@@ -305,6 +316,59 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertNotNull(output);
         assertTrue(output.fullDisplayName().contains("JobInFolder #1"));
         assertTrue(output.queueId() == queueIdForAnotherJob.value());
+    }
+
+    @Test(dependsOnMethods = "testGetProgressiveText")
+    public void testGetBuildParametersofJob() {
+        List<Parameter> parameters = api().buildInfo("test-folder/test-folder-1", "JobInFolder",1).actions().get(0).parameters();
+        assertNotNull(parameters);
+        assertTrue(parameters.get(0).name().equals("SomeKey"));
+        assertTrue(parameters.get(0).value().equals("SomeVeryNewValue"));
+    }
+
+    @Test(dependsOnMethods = "testGetProgressiveText")
+    public void testGetBuildCausesOfJob() {
+        List<Cause> causes = api().buildInfo("test-folder/test-folder-1", "JobInFolder",1).actions().get(1).causes();
+        assertNotNull(causes);
+        assertTrue(causes.size() > 0);
+        assertNotNull(causes.get(0).shortDescription());
+        assertNotNull(causes.get(0).userId());
+        assertNotNull(causes.get(0).userName());
+    }
+
+    public void testCreateJobForEmptyAndNullParams() {
+        String config = payloadFromResource("/freestyle-project-empty-and-null-params.xml");
+        RequestStatus success = api().create(null, "JobForEmptyAndNullParams", config);
+        assertTrue(success.value());
+    }
+
+    @Test(dependsOnMethods = "testCreateJobForEmptyAndNullParams")
+    public void testBuildWithParametersOfJobForEmptyAndNullParams() throws InterruptedException {
+        Map<String, List<String>> params = new HashMap<>();
+        params.put("SomeKey1", Lists.newArrayList(""));
+        params.put("SomeKey2", null);
+        IntegerResponse job1 = api.jobsApi().buildWithParameters(null, "JobForEmptyAndNullParams", params);
+        assertNotNull(job1);
+        assertTrue(job1.value() > 0);
+        assertTrue(job1.errors().size() == 0);
+        QueueItem queueItem = getRunningQueueItem(job1.value());
+        assertNotNull(queueItem);
+    }
+
+    @Test(dependsOnMethods = "testBuildWithParametersOfJobForEmptyAndNullParams")
+    public void testGetBuildParametersOfJobForEmptyAndNullParams() {
+        List<Parameter> parameters = api().buildInfo(null, "JobForEmptyAndNullParams", 1).actions().get(0).parameters();
+        assertNotNull(parameters);
+        assertTrue(parameters.get(0).name().equals("SomeKey1"));
+        assertTrue(parameters.get(0).value().isEmpty());
+        assertTrue(parameters.get(1).name().equals("SomeKey2"));
+        assertTrue(parameters.get(1).value().isEmpty());
+    }
+
+    @Test(dependsOnMethods = "testGetBuildParametersOfJobForEmptyAndNullParams")
+    public void testDeleteJobForEmptyAndNullParams() {
+        RequestStatus success = api().delete(null, "JobForEmptyAndNullParams");
+        assertTrue(success.value());
     }
 
     @Test(dependsOnMethods = "testCreateFoldersInJenkins")

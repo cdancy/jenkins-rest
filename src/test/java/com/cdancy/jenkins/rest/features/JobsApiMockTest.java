@@ -21,12 +21,16 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
+import com.cdancy.jenkins.rest.domain.job.Action;
+import com.cdancy.jenkins.rest.domain.job.Cause;
+import com.cdancy.jenkins.rest.domain.job.Parameter;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
@@ -530,6 +534,85 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             assertTrue(output.errors().get(0).exceptionName().equals("org.jclouds.rest.ResourceNotFoundException"));
             assertNotNull(output.errors().get(0).context());
             assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetParams() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String body = payloadFromResource("/build-info.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            List<Parameter> output = api.buildInfo(null,"fish", 10).actions().get(0).parameters();
+            assertNotNull(output);
+            assertTrue(output.get(0).name().equals("bear"));
+            assertTrue(output.get(0).value().equals("true"));
+            assertTrue(output.get(1).name().equals("fish"));
+            assertTrue(output.get(1).value().equals("salmon"));
+            assertSent(server, "GET", "/job/fish/10/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetParamsWhenNoBuildParams() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String body = payloadFromResource("/build-info-no-params.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            List<Parameter> output = api.buildInfo(null,"fish", 10).actions().get(0).parameters();
+            assertTrue(output.size() == 0);
+            assertSent(server, "GET", "/job/fish/10/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetParamsWhenEmptyorNullParams() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String body = payloadFromResource("/build-info-empty-and-null-params.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            List<Parameter> output = api.buildInfo(null,"fish", 10).actions().get(0).parameters();
+            assertNotNull(output);
+            assertTrue(output.get(0).name().equals("bear"));
+            assertTrue(output.get(0).value().equals("null"));
+            assertTrue(output.get(1).name().equals("fish"));
+            assertTrue(output.get(1).value().isEmpty());
+            assertSent(server, "GET", "/job/fish/10/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetCause() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String body = payloadFromResource("/build-info-no-params.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            List<Cause> output = api.buildInfo(null,"fish", 10).actions().get(0).causes();
+            assertNotNull(output);
+            assertTrue(output.get(0).shortDescription().equals("Started by user anonymous"));
+            assertNull(output.get(0).userId());
+            assertTrue(output.get(0).userName().equals("anonymous"));
+            assertSent(server, "GET", "/job/fish/10/api/json");
         } finally {
             jenkinsApi.close();
             server.shutdown();
