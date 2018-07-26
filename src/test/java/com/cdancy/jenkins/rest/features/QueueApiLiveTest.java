@@ -220,31 +220,6 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         assertTrue(success.errors().isEmpty());
     }
 
-    /**
-     * Return a queue item that is being built.
-     * If the queue item is canceled before the build is launched, null is returned.
-     * To prevent the test from hanging, this method times out after 10 attempts and the queue item is returned the way it is.
-     * @param queueId  The queue id returned when asking Jenkins to run a build.
-     * @return Null if the queue item has been canceled before it has had a chance to run,
-     *         otherwise the QueueItem element is returned, but this does not guarantee that the build runs.
-     *         The caller has to check the value of queueItem.executable, and if it is null, the queue item is still pending.
-     *
-     */
-    private QueueItem getRunningQueueItem(int queueId) throws InterruptedException {
-        int max = 10;
-        QueueItem queueItem = api().queueItem(queueId);
-        while (max > 0) {
-            if (queueItem.cancelled()) return null;
-            if (queueItem.executable() != null) {
-                return queueItem;
-            }
-            Thread.sleep(2000);
-            queueItem = api().queueItem(queueId);
-            max = max - 1;
-        }
-        return queueItem;
-    }
-
     @AfterClass
     public void finish() {
         RequestStatus success = api.jobsApi().delete(null,"QueueTest");
