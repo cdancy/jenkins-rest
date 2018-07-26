@@ -1,5 +1,5 @@
-### Version 0.0.13 (TBA)
-*
+### Version 0.0.13 (July 26, 2018)
+* ADDED: Endpoint `Jobs.buildInfo` now returns `Actions` as part of response. - [Pull Request 29](https://github.com/cdancy/jenkins-rest/pull/29)
 
 ### Version 0.0.12 (July 15, 2018)
 * FIX: for when a build parameter is set to the empty string, the `QueueItem.create()` method should set the parameter value to the empty string.
