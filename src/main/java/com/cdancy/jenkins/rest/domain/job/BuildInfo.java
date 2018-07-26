@@ -30,6 +30,8 @@ public abstract class BuildInfo {
 
    public abstract List<Artifact> artifacts();
 
+   public abstract List<Action> actions();
+
    public abstract boolean building();
 
    @Nullable
@@ -70,14 +72,16 @@ public abstract class BuildInfo {
    BuildInfo() {
    }
 
-   @SerializedNames({ "artifacts", "building", "description", "displayName", "duration", "estimatedDuration",
+   @SerializedNames({ "artifacts", "actions", "building", "description", "displayName", "duration", "estimatedDuration",
          "fullDisplayName", "id", "keepLog", "number", "queueId", "result", "timestamp", "url", "builtOn", "culprits" })
-   public static BuildInfo create(List<Artifact> artifacts, boolean building, String description, String displayName,
+   public static BuildInfo create(List<Artifact> artifacts, List<Action> actions, boolean building, String description, String displayName,
          long duration, long estimatedDuration, String fullDisplayName, String id, boolean keepLog, int number,
          int queueId, String result, long timestamp, String url, String builtOn, List<Culprit> culprits) {
       return new AutoValue_BuildInfo(
-            artifacts != null ? ImmutableList.copyOf(artifacts) : ImmutableList.<Artifact> of(), building, description,
-            displayName, duration, estimatedDuration, fullDisplayName, id, keepLog, number, queueId, result, timestamp,
-            url, builtOn, culprits != null ? ImmutableList.copyOf(culprits) : ImmutableList.<Culprit> of());
+            artifacts != null ? ImmutableList.copyOf(artifacts) : ImmutableList.<Artifact> of(),
+            actions != null ? ImmutableList.copyOf(actions) : ImmutableList.<Action> of(),
+            building, description, displayName, duration, estimatedDuration, fullDisplayName,
+            id, keepLog, number, queueId, result, timestamp, url, builtOn,
+            culprits != null ? ImmutableList.copyOf(culprits) : ImmutableList.<Culprit> of());
    }
 }

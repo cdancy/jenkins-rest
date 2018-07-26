@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.inject.Singleton;
 
+import com.google.common.collect.Lists;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpRequest.Builder;
 import org.jclouds.rest.Binder;
@@ -42,7 +43,11 @@ public class BindMapToForm implements Binder {
          if (prop.getKey() != null) {
             String potentialKey = prop.getKey().trim();
             if (potentialKey.length() > 0) {
-               builder.addFormParam(potentialKey, prop.getValue().toArray(new String[prop.getValue().size()]));
+                if (prop.getValue() == null) {
+                    prop.setValue(Lists.newArrayList(""));
+                }
+
+                builder.addFormParam(potentialKey, prop.getValue().toArray(new String[prop.getValue().size()]));
             }
          }
       }

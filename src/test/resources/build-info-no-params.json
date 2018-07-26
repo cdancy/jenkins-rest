@@ -1,0 +1,70 @@
+{
+  "_class" : "org.jenkinsci.plugins.workflow.job.WorkflowRun",
+  "actions" : [
+    {
+      "_class" : "hudson.model.CauseAction",
+      "causes" : [
+        {
+          "_class" : "hudson.model.Cause$UserIdCause",
+          "shortDescription" : "Started by user anonymous",
+          "userId" : null,
+          "userName" : "anonymous"
+        }
+      ]
+    },
+    {
+      "_class" : "jenkins.metrics.impl.TimeInQueueAction"
+    },
+    {
+
+    },
+    {
+
+    },
+    {
+
+    },
+    {
+
+    },
+    {
+      "_class" : "org.jenkinsci.plugins.workflow.job.views.FlowGraphAction"
+    },
+    {
+
+    },
+    {
+
+    }
+  ],
+  "artifacts" : [
+
+  ],
+  "building" : false,
+  "description" : null,
+  "displayName" : "#10",
+  "duration" : 60750,
+  "estimatedDuration" : 60258,
+  "executor" : null,
+  "fullDisplayName" : "fish #10",
+  "id" : "10",
+  "keepLog" : false,
+  "number" : 10,
+  "queueId" : 73,
+  "result" : "SUCCESS",
+  "timestamp" : 1461091892486,
+  "url" : "http://localhost:32769/job/fish/10/",
+  "builtOn" : "",
+  "changeSet" : {
+    "items" : [
+
+    ],
+    "kind" : null
+  },
+  "culprits" : [
+    {
+      "absoluteUrl": "http://localhost:8080/user/username",
+      "fullName": "username"
+    }
+  ]
+}
