@@ -1,3 +1,5 @@
+### Version 0.0.14 (TBA)
+
 ### Version 0.0.13 (July 26, 2018)
 * ADDED: Endpoint `Jobs.buildInfo` now returns `Actions` as part of response. - [Pull Request 29](https://github.com/cdancy/jenkins-rest/pull/29)
 
