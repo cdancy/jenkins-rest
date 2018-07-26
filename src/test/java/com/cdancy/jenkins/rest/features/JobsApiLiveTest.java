@@ -29,6 +29,7 @@ import com.cdancy.jenkins.rest.domain.job.Cause;
 import com.cdancy.jenkins.rest.domain.job.Parameter;
 import com.cdancy.jenkins.rest.domain.plugins.Plugin;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
+import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
@@ -285,12 +286,14 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test(dependsOnMethods = "testGetJobInfoInFolder")
-    public void testBuildWithParameters() {
+    public void testBuildWithParameters() throws InterruptedException {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
         queueIdForAnotherJob = api().buildWithParameters("test-folder/test-folder-1", "JobInFolder", params);
         assertNotNull(queueIdForAnotherJob);
         assertTrue(queueIdForAnotherJob.value() > 0);
+        QueueItem queueItem = getRunningQueueItem(queueIdForAnotherJob.value());
+        assertNotNull(queueItem);
     }
 
     @Test(dependsOnMethods = "testBuildWithParameters")
@@ -339,7 +342,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test(dependsOnMethods = "testCreateJobForEmptyAndNullParams")
-    public void testBuildWithParametersOfJobForEmptyAndNullParams() {
+    public void testBuildWithParametersOfJobForEmptyAndNullParams() throws InterruptedException {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey1", Lists.newArrayList(""));
         params.put("SomeKey2", null);
@@ -347,13 +350,12 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertNotNull(job1);
         assertTrue(job1.value() > 0);
         assertTrue(job1.errors().size() == 0);
+        QueueItem queueItem = getRunningQueueItem(job1.value());
+        assertNotNull(queueItem);
     }
 
     @Test(dependsOnMethods = "testBuildWithParametersOfJobForEmptyAndNullParams")
     public void testGetBuildParametersOfJobForEmptyAndNullParams() {
-        while (api().jobInfo(null, "JobForEmptyAndNullParams").lastBuild() == null) {
-            continue;
-        }
         List<Parameter> parameters = api().buildInfo(null, "JobForEmptyAndNullParams", 1).actions().get(0).parameters();
         assertNotNull(parameters);
         assertTrue(parameters.get(0).name().equals("SomeKey1"));
