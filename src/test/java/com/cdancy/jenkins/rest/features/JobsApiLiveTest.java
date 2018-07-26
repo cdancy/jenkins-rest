@@ -330,9 +330,10 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testGetBuildCausesOfJob() {
         List<Cause> causes = api().buildInfo("test-folder/test-folder-1", "JobInFolder",1).actions().get(1).causes();
         assertNotNull(causes);
-        assertTrue(causes.get(0).shortDescription().equals("Started by user admin"));
-        assertTrue(causes.get(0).userId().equals("admin"));
-        assertTrue(causes.get(0).userName().equals("admin"));
+        assertTrue(causes.size() > 0);
+        assertNotNull(causes.get(0).shortDescription());
+        assertNotNull(causes.get(0).userId());
+        assertNotNull(causes.get(0).userName());
     }
 
     public void testCreateJobForEmptyAndNullParams() {
