@@ -22,6 +22,8 @@ import com.cdancy.jenkins.rest.config.JenkinsAuthenticationModule;
 import com.google.common.collect.Lists;
 import com.google.inject.Module;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -29,7 +31,7 @@ import java.util.Properties;
 import org.jclouds.ContextBuilder;
 import org.jclouds.javax.annotation.Nullable;
 
-public final class JenkinsClient {
+public final class JenkinsClient implements Closeable {
 
     private final String endPoint;
     private final JenkinsAuthentication credentials;
@@ -46,7 +48,7 @@ public final class JenkinsClient {
 
     /**
      * Create an JenkinsClient. If any of the passed in variables are null we
-     * will query System Properties and Environment Variables, in order, to 
+     * will query System Properties and Environment Variables, in order, to
      * search for values that may be set in a devops/CI fashion. The only
      * difference is the `overrides` which gets merged, but takes precedence,
      * with those System Properties and Environment Variables found.
@@ -86,7 +88,7 @@ public final class JenkinsClient {
     /**
      * Query System Properties and Environment Variables for overrides and merge
      * the potentially passed in overrides with those.
-     * 
+     *
      * @param possibleOverrides Optional passed in overrides.
      * @return Properties object.
      */
@@ -122,9 +124,16 @@ public final class JenkinsClient {
     public JenkinsApi api() {
         return this.jenkinsApi;
     }
-    
+
     public static Builder builder() {
         return new Builder();
+    }
+
+    @Override
+    public void close() throws IOException {
+        if (this.api() != null) {
+            this.api().close();
+        }
     }
 
     public static class Builder {
@@ -136,7 +145,7 @@ public final class JenkinsClient {
 
         /**
          * Define the base endpoint to connect to.
-         * 
+         *
          * @param endPoint Jenkins base endpoint.
          * @return this Builder.
          */
@@ -148,7 +157,7 @@ public final class JenkinsClient {
         /**
          * Optional credentials to use for authentication. Must take the form of
          * `username:password` or its base64 encoded version.
-         * 
+         *
          * @param optionallyBase64EncodedCredentials authentication credentials.
          * @return this Builder.
          */
@@ -159,7 +168,7 @@ public final class JenkinsClient {
         }
 
         /**
-         * Optional token to use for authentication. 
+         * Optional token to use for authentication.
          *
          * @param token authentication token.
          * @return this Builder.
@@ -173,7 +182,7 @@ public final class JenkinsClient {
         /**
          * Optional jclouds Properties to override. What can be overridden can
          * be found here:
-         * 
+         *
          * <p>https://github.com/jclouds/jclouds/blob/master/core/src/main/java/org/jclouds/Constants.java
          *
          * @param overrides optional jclouds Properties to override.
@@ -198,7 +207,7 @@ public final class JenkinsClient {
 
         /**
          * Build an instance of JenkinsClient.
-         * 
+         *
          * @return JenkinsClient
          */
         public JenkinsClient build() {
@@ -209,6 +218,6 @@ public final class JenkinsClient {
                     : null;
 
             return new JenkinsClient(endPoint, authentication, overrides, modules);
-        } 
+        }
     }
 }
