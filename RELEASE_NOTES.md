@@ -1,4 +1,6 @@
-### Version 0.0.14 (TBA)
+### Version 0.0.15 (TBA)
+
+### Version 0.0.14 (August 17, 2018)
 * `JenkinsClient` now implements `Closeable` to better work with jdk8+ try-with-resources.
 * Bump `jclouds` to `2.1.1`.
 * Bump `AutoValue` to `1.6.2`
