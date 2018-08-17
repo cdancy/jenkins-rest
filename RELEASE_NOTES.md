@@ -1,4 +1,6 @@
 ### Version 0.0.14 (TBA)
+* `JenkinsClient` now implements `Closeable` to better work with jdk8+ try-with-resources.
+* Bump `jclouds` to `2.1.1`.
 
 ### Version 0.0.13 (July 26, 2018)
 * ADDED: Endpoint `Jobs.buildInfo` now returns `Actions` as part of response. - [Pull Request 29](https://github.com/cdancy/jenkins-rest/pull/29)
