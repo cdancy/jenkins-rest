@@ -25,18 +25,18 @@ repositories {
 }
 
 dependencies {
-    ext.jcloudsVersion = '2.1.0'
+    ext.jcloudsVersion = '2.1.1'
 
-    compile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}") 
-    compile ('com.google.auto.service:auto-service:1.0-rc3') 
+    compile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}")
+    compile ('com.google.auto.service:auto-service:1.0-rc3')
     compileOnly ('com.google.auto.value:auto-value:1.5.3')
-    
+
     testCompile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}:tests")
-    testCompile ("org.apache.jclouds.driver:jclouds-slf4j:${jcloudsVersion}") 
-    testCompile ('org.testng:testng:6.11') 
-    testCompile ('org.assertj:assertj-core:3.8.0') 
-    testCompile ('com.squareup.okhttp:mockwebserver:2.7.5') 
-    testCompile ('ch.qos.logback:logback-core:1.2.3') 
+    testCompile ("org.apache.jclouds.driver:jclouds-slf4j:${jcloudsVersion}")
+    testCompile ('org.testng:testng:6.11')
+    testCompile ('org.assertj:assertj-core:3.8.0')
+    testCompile ('com.squareup.okhttp:mockwebserver:2.7.5')
+    testCompile ('ch.qos.logback:logback-core:1.2.3')
     testCompile ('ch.qos.logback:logback-classic:1.2.3')
 }
 
@@ -60,7 +60,7 @@ tasks.withType(JavaCompile) {
 }
 
 task mockTest(type: Test) {
-    useTestNG() 
+    useTestNG()
     include '**/**MockTest*'
     maxParallelForks = 2
     testLogging {
@@ -78,7 +78,7 @@ task integTest(type: Test, dependsOn: mockTest) {
             }
         }
     }
-    useTestNG() 
+    useTestNG()
     include "**/**LiveTest*"
     maxParallelForks = 1
     testLogging {
