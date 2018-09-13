@@ -29,6 +29,7 @@ Can be found in jcenter like so:
   <groupId>com.cdancy</groupId>
   <artifactId>jenkins-rest</artifactId>
   <version>X.Y.Z</version>
+  <classifier>sources|tests|javadoc|all</classifier> (Optional)
 </dependency>
 ```
 
