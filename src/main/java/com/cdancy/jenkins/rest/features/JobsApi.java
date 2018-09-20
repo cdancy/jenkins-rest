@@ -185,6 +185,23 @@ public interface JobsApi {
     String lastBuildTimestamp(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                               @PathParam("name") String jobName);
 
+    @Named("jobs:last-stable-build-number")
+    @Path("{optionalFolderPath}job/{name}/lastStableBuild/buildNumber")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @ResponseParser(BuildNumberToInteger.class)
+    @Consumes(MediaType.TEXT_PLAIN)
+    @GET
+    Integer lastStableBuildNumber(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                            @PathParam("name") String jobName);
+
+    @Named("jobs:last-stable-build-timestamp")
+    @Path("{optionalFolderPath}job/{name}/lastStableBuild/buildTimestamp")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Consumes(MediaType.TEXT_PLAIN)
+    @GET
+    String lastStableBuildTimestamp(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                              @PathParam("name") String jobName);
+
     @Named("jobs:progressive-text")
     @Path("{optionalFolderPath}job/{name}/lastBuild/logText/progressiveText")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
