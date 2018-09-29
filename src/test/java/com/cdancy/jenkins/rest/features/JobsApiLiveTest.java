@@ -79,6 +79,18 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertNull(output);
     }
 
+    @Test(dependsOnMethods = "testGetJobInfo")
+    public void testLastStableBuildNumberOnJobWithNoBuilds() {
+        Integer output = api().lastStableBuildNumber(null, "DevTest");
+        assertNull(output);
+    }
+
+    @Test(dependsOnMethods = "testLastStableBuildNumberOnJobWithNoBuilds")
+    public void testLastStableBuildTimestampOnJobWithNoBuilds() {
+        String output = api().lastStableBuildTimestamp(null, "DevTest");
+        assertNull(output);
+    }
+
     @Test(dependsOnMethods = "testLastBuildTimestampOnJobWithNoBuilds")
     public void testBuildJob() {
         queueId = api().build(null, "DevTest");
