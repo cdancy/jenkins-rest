@@ -653,6 +653,40 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
+    public void testGetLastStableBuildNumber() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String body = payloadFromResource("/stable-build-number.txt");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            Integer output = api.lastStableBuildNumber(null,"DevTest");
+            assertNotNull(output);
+            assertTrue(output == 1314);
+            assertSentAcceptText(server, "GET", "/job/DevTest/lastStableBuild/buildNumber");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetLastStableBuildNumberJobNotExist() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            Integer output = api.lastStableBuildNumber(null,"DevTest");
+            assertNull(output);
+            assertSentAcceptText(server, "GET", "/job/DevTest/lastStableBuild/buildNumber");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
     public void testGetLastBuildTimeStamp() throws Exception {
         MockWebServer server = mockWebServer();
 
@@ -681,6 +715,40 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             String output = api.lastBuildTimestamp(null,"DevTest");
             assertNull(output);
             assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildTimestamp");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetLastStableBuildTimeStamp() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String body = payloadFromResource("/stable-build-timestamp.txt");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            String output = api.lastStableBuildTimestamp(null,"DevTest");
+            assertNotNull(output);
+            assertTrue(output.equals(body));
+            assertSentAcceptText(server, "GET", "/job/DevTest/lastStableBuild/buildTimestamp");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetLastStableBuildTimeStampJobNotExist() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            String output = api.lastStableBuildTimestamp(null,"DevTest");
+            assertNull(output);
+            assertSentAcceptText(server, "GET", "/job/DevTest/lastStableBuild/buildTimestamp");
         } finally {
             jenkinsApi.close();
             server.shutdown();
