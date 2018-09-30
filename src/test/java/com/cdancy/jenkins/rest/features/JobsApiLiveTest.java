@@ -73,11 +73,24 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertNull(output);
     }
 
+    @Test(dependsOnMethods = "testGetJobInfo")
+    public void testLastStableBuildNumberOnJobWithNoBuilds() {
+        Integer output = api().lastStableBuildNumber(null, "DevTest");
+        assertNull(output);
+    }
+
     @Test(dependsOnMethods = "testLastBuildNumberOnJobWithNoBuilds")
     public void testLastBuildTimestampOnJobWithNoBuilds() {
         String output = api().lastBuildTimestamp(null, "DevTest");
         assertNull(output);
     }
+
+    @Test(dependsOnMethods = "testLastStableBuildNumberOnJobWithNoBuilds")
+    public void testLastStableBuildTimestampOnJobWithNoBuilds() {
+        String output = api().lastStableBuildTimestamp(null, "DevTest");
+        assertNull(output);
+    }
+
 
     @Test(dependsOnMethods = "testLastBuildTimestampOnJobWithNoBuilds")
     public void testBuildJob() {
@@ -305,6 +318,14 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     @Test(dependsOnMethods = "testLastBuildTimestampOfJobInFolder")
     public void testGetProgressiveText() {
         ProgressiveText output = api().progressiveText("test-folder/test-folder-1", "JobInFolder", 0);
+        assertNotNull(output);
+        assertTrue(output.size() > 0);
+        assertFalse(output.hasMoreData());
+    }
+
+    @Test(dependsOnMethods = "testLastBuildTimestampOfJobInFolder")
+    public void testGetBuildNumberProgressiveText() {
+        ProgressiveText output = api().buildNumberProgressiveText("test-folder/test-folder-1", "JobInFolder", 1, 0);
         assertNotNull(output);
         assertTrue(output.size() > 0);
         assertFalse(output.hasMoreData());
