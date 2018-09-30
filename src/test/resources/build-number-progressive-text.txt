@@ -1,0 +1,3 @@
+Started by user anonymous
+Building in workspace /var/jenkins_home/workspace/DevTest
+Finished: SUCCESS
