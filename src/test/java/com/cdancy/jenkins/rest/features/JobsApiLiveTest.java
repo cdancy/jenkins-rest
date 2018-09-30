@@ -322,6 +322,14 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertFalse(output.hasMoreData());
     }
 
+    @Test(dependsOnMethods = "testLastBuildTimestampOfJobInFolder")
+    public void testGetBuildNumberProgressiveText() {
+        ProgressiveText output = api().buildNumberProgressiveText("test-folder/test-folder-1", "JobInFolder", 1, 0);
+        assertNotNull(output);
+        assertTrue(output.size() > 0);
+        assertFalse(output.hasMoreData());
+    }
+
     @Test(dependsOnMethods = "testGetProgressiveText")
     public void testGetBuildInfoOfJobInFolder() {
         BuildInfo output = api().buildInfo("test-folder/test-folder-1", "JobInFolder", 1);
