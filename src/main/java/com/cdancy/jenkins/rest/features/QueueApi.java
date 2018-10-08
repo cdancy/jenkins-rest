@@ -36,7 +36,7 @@ import org.jclouds.rest.annotations.SelectJson;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
-import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
+import com.cdancy.jenkins.rest.parsers.RequestStatusBooleanParser;
 import org.jclouds.rest.annotations.ResponseParser;
 
 @RequestFilters(JenkinsAuthenticationFilter.class)
@@ -73,7 +73,7 @@ public interface QueueApi {
     @Named("queue:cancel")
     @Path("/cancelItem")
     @Fallback(JenkinsFallbacks.JENKINS_21311.class)
-    @ResponseParser(RequestStatusParser.class)
+    @ResponseParser(RequestStatusBooleanParser.class)
     @POST
-    RequestStatus cancel(@FormParam("id") int id);
+    RequestStatus<Boolean> cancel(@FormParam("id") int id);
 }

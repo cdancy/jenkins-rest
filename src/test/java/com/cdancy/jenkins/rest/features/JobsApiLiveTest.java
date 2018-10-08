@@ -33,7 +33,6 @@ import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
-import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.job.BuildInfo;
 import com.cdancy.jenkins.rest.domain.job.JobInfo;
@@ -44,8 +43,8 @@ import com.google.common.collect.Lists;
 @Test(groups = "live", testName = "SystemApiLiveTest", singleThreaded = true)
 public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
-    private IntegerResponse queueId;
-    private IntegerResponse queueIdForAnotherJob;
+    private RequestStatus<Integer> queueId;
+    private RequestStatus<Integer> queueIdForAnotherJob;
     private Integer buildNumber;
     private static final String FOLDER_PLUGIN_NAME = "cloudbees-folder";
     private static final String FOLDER_PLUGIN_VERSION = "latest";
@@ -53,7 +52,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     @Test
     public void testCreateJob() {
         String config = payloadFromResource("/freestyle-project-no-params.xml");
-        RequestStatus success = api().create(null, "DevTest", config);
+        RequestStatus<Boolean> success = api().create(null, "DevTest", config);
         assertTrue(success.value());
     }
 
@@ -120,7 +119,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test(dependsOnMethods = "testLastBuildTimestamp")
     public void testLastBuildGetProgressiveText() {
-        ProgressiveText output = api().progressiveText(null, "DevTest", 0);
+        ProgressiveText output = api().lastBuildProgressiveText(null, "DevTest", 0);
         assertNotNull(output);
         assertTrue(output.size() > 0);
         assertFalse(output.hasMoreData());
@@ -143,7 +142,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     @Test(dependsOnMethods = "testGetBuildParametersOfLastJob")
     public void testCreateJobThatAlreadyExists() {
         String config = payloadFromResource("/freestyle-project.xml");
-        RequestStatus success = api().create(null, "DevTest", config);
+        RequestStatus<Boolean> success = api().create(null, "DevTest", config);
         assertFalse(success.value());
     }
 
@@ -176,7 +175,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testBuildJobWithParameters() {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-        IntegerResponse output = api().buildWithParameters(null, "DevTest", params);
+        RequestStatus<Integer> output = api().buildWithParameters(null, "DevTest", params);
         assertNotNull(output);
         assertTrue(output.value() > 0);
         assertTrue(output.errors().size() == 0);
@@ -208,7 +207,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test(dependsOnMethods = "testEnableJobAlreadyEnabled")
     public void testDeleteJob() {
-        RequestStatus success = api().delete(null, "DevTest");
+        RequestStatus<Boolean> success = api().delete(null, "DevTest");
         assertNotNull(success);
         assertTrue(success.value());
     }
@@ -222,7 +221,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         long endTime = 0;
         long maxWaitTime = 5 * 60 * 1000;
         if(!isFolderPluginInstalled()) {
-            RequestStatus status = api.pluginManagerApi().installNecessaryPlugins(FOLDER_PLUGIN_NAME + "@" + FOLDER_PLUGIN_VERSION);
+            RequestStatus<Boolean> status = api.pluginManagerApi().installNecessaryPlugins(FOLDER_PLUGIN_NAME + "@" + FOLDER_PLUGIN_VERSION);
             assertTrue(status.value());
             while(endTime <= maxWaitTime) {
                 if(!isFolderPluginInstalled()) {
@@ -239,23 +238,23 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     @Test(dependsOnMethods = "testInstallFolderPlugin")
     public void testCreateFoldersInJenkins() {
         String config = payloadFromResource("/folder-config.xml");
-        RequestStatus success1 = api().create(null, "test-folder", config);
+        RequestStatus<Boolean> success1 = api().create(null, "test-folder", config);
         assertTrue(success1.value());
-        RequestStatus success2 = api().create("test-folder", "test-folder-1", config);
+        RequestStatus<Boolean> success2 = api().create("test-folder", "test-folder-1", config);
         assertTrue(success2.value());
     }
 
     @Test(dependsOnMethods = "testCreateFoldersInJenkins")
     public void testCreateJobInFolder() {
         String config = payloadFromResource("/freestyle-project-no-params.xml");
-        RequestStatus success = api().create("test-folder/test-folder-1", "JobInFolder", config);
+        RequestStatus<Boolean> success = api().create("test-folder/test-folder-1", "JobInFolder", config);
         assertTrue(success.value());
     }
 
     @Test(dependsOnMethods = "testCreateFoldersInJenkins")
     public void testCreateJobWithIncorrectFolderPath() {
         String config = payloadFromResource("/folder-config.xml");
-        RequestStatus success = api().create("/test-folder//test-folder-1/", "Job",config);
+        RequestStatus<Boolean> success = api().create("/test-folder//test-folder-1/", "Job",config);
         assertFalse(success.value());
     }
 
@@ -317,7 +316,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test(dependsOnMethods = "testLastBuildTimestampOfJobInFolder")
     public void testGetProgressiveText() {
-        ProgressiveText output = api().progressiveText("test-folder/test-folder-1", "JobInFolder", 0);
+        ProgressiveText output = api().lastBuildProgressiveText("test-folder/test-folder-1", "JobInFolder", 0);
         assertNotNull(output);
         assertTrue(output.size() > 0);
         assertFalse(output.hasMoreData());
@@ -325,7 +324,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test(dependsOnMethods = "testLastBuildTimestampOfJobInFolder")
     public void testGetBuildNumberProgressiveText() {
-        ProgressiveText output = api().buildNumberProgressiveText("test-folder/test-folder-1", "JobInFolder", 1, 0);
+        ProgressiveText output = api().progressiveText("test-folder/test-folder-1", "JobInFolder", 1, 0);
         assertNotNull(output);
         assertTrue(output.size() > 0);
         assertFalse(output.hasMoreData());
@@ -359,7 +358,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     public void testCreateJobForEmptyAndNullParams() {
         String config = payloadFromResource("/freestyle-project-empty-and-null-params.xml");
-        RequestStatus success = api().create(null, "JobForEmptyAndNullParams", config);
+        RequestStatus<Boolean> success = api().create(null, "JobForEmptyAndNullParams", config);
         assertTrue(success.value());
     }
 
@@ -368,7 +367,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey1", Lists.newArrayList(""));
         params.put("SomeKey2", null);
-        IntegerResponse job1 = api.jobsApi().buildWithParameters(null, "JobForEmptyAndNullParams", params);
+        RequestStatus<Integer> job1 = api.jobsApi().buildWithParameters(null, "JobForEmptyAndNullParams", params);
         assertNotNull(job1);
         assertTrue(job1.value() > 0);
         assertTrue(job1.errors().size() == 0);
@@ -388,34 +387,34 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test(dependsOnMethods = "testGetBuildParametersOfJobForEmptyAndNullParams")
     public void testDeleteJobForEmptyAndNullParams() {
-        RequestStatus success = api().delete(null, "JobForEmptyAndNullParams");
+        RequestStatus<Boolean> success = api().delete(null, "JobForEmptyAndNullParams");
         assertTrue(success.value());
     }
 
     @Test(dependsOnMethods = "testCreateFoldersInJenkins")
     public void testCreateJobWithLeadingAndTrailingForwardSlashes() {
         String config = payloadFromResource("/freestyle-project-no-params.xml");
-        RequestStatus success = api().create("/test-folder/test-folder-1/", "Job", config);
+        RequestStatus<Boolean> success = api().create("/test-folder/test-folder-1/", "Job", config);
         assertTrue(success.value());
     }
 
     @Test(dependsOnMethods = "testCreateJobWithLeadingAndTrailingForwardSlashes")
     public void testDeleteJobWithLeadingAndTrailingForwardSlashes() {
-        RequestStatus success = api().delete("/test-folder/test-folder-1/", "Job");
+        RequestStatus<Boolean> success = api().delete("/test-folder/test-folder-1/", "Job");
         assertTrue(success.value());
     }
 
     @Test(dependsOnMethods = "testGetBuildInfoOfJobInFolder")
     public void testDeleteJobInFolder() {
-        RequestStatus success = api().delete("test-folder/test-folder-1", "JobInFolder");
+        RequestStatus<Boolean> success = api().delete("test-folder/test-folder-1", "JobInFolder");
         assertTrue(success.value());
     }
 
     @Test(dependsOnMethods = "testDeleteJobInFolder")
     public void testDeleteFolders() {
-        RequestStatus success1 = api().delete("test-folder", "test-folder-1");
+        RequestStatus<Boolean> success1 = api().delete("test-folder", "test-folder-1");
         assertTrue(success1.value());
-        RequestStatus success2 = api().delete(null, "test-folder");
+        RequestStatus<Boolean> success2 = api().delete(null, "test-folder");
         assertTrue(success2.value());
     }
 
@@ -427,7 +426,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test
     public void testDeleteJobNonExistent() {
-        RequestStatus success = api().delete(null, randomString());
+        RequestStatus<Boolean> success = api().delete(null, randomString());
         assertNotNull(success);
         assertFalse(success.value());
     }
@@ -452,7 +451,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test
     public void testBuildNonExistentJob() {
-        IntegerResponse output = api().build(null, randomString());
+        RequestStatus<Integer> output = api().build(null, randomString());
         assertNotNull(output);
         assertNull(output.value());
         assertTrue(output.errors().size() > 0);
@@ -471,7 +470,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testBuildNonExistentJobWithParams() {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-        IntegerResponse output = api().buildWithParameters(null, randomString(), params);
+        RequestStatus<Integer> output = api().buildWithParameters(null, randomString(), params);
         assertNotNull(output);
         assertNull(output.value());
         assertTrue(output.errors().size() > 0);

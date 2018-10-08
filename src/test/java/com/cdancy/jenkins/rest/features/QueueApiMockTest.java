@@ -164,7 +164,7 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         server.enqueue(new MockResponse().setResponseCode(404));
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         int queueItemId = 143;
-        RequestStatus result = jenkinsApi.queueApi().cancel(queueItemId);
+        RequestStatus<Boolean> result = jenkinsApi.queueApi().cancel(queueItemId);
         try {
             assertNotNull(result);
             assertTrue(result.value());
@@ -181,7 +181,7 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         server.enqueue(new MockResponse().setResponseCode(500));
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         int queueItemId = 143;
-        RequestStatus result = jenkinsApi.queueApi().cancel(queueItemId);
+        RequestStatus<Boolean> result = jenkinsApi.queueApi().cancel(queueItemId);
         try {
             assertNotNull(result);
             assertFalse(result.value());

@@ -21,14 +21,12 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
-import com.cdancy.jenkins.rest.domain.job.Action;
 import com.cdancy.jenkins.rest.domain.job.Cause;
 import com.cdancy.jenkins.rest.domain.job.Parameter;
 import org.testng.annotations.Test;
@@ -38,7 +36,6 @@ import com.cdancy.jenkins.rest.domain.job.BuildInfo;
 import com.cdancy.jenkins.rest.domain.job.JobInfo;
 import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
-import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 
 import com.google.common.collect.Lists;
@@ -130,7 +127,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            RequestStatus success = api.create(null, "DevTest", configXML);
+            RequestStatus<Boolean> success = api.create(null, "DevTest", configXML);
             assertNotNull(success);
             assertTrue(success.value());
             assertTrue(success.errors().isEmpty());
@@ -149,7 +146,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            RequestStatus success = api.create("test-folder", "JobInFolder", configXML);
+            RequestStatus<Boolean> success = api.create("test-folder", "JobInFolder", configXML);
             assertNotNull(success);
             assertTrue(success.value());
             assertTrue(success.errors().isEmpty());
@@ -168,7 +165,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            RequestStatus success = api.create("/test-folder/test-folder-1/", "JobInFolder", configXML);
+            RequestStatus<Boolean> success = api.create("/test-folder/test-folder-1/", "JobInFolder", configXML);
             assertNotNull(success);
             assertTrue(success.value());
             assertTrue(success.errors().isEmpty());
@@ -188,7 +185,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            RequestStatus success = api.create(null, "DevTest", configXML);
+            RequestStatus<Boolean> success = api.create(null, "DevTest", configXML);
             assertNotNull(success);
             assertFalse(success.value());
             assertFalse(success.errors().isEmpty());
@@ -341,7 +338,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            RequestStatus success = api.delete(null,"DevTest");
+            RequestStatus<Boolean> success = api.delete(null,"DevTest");
             assertNotNull(success);
             assertTrue(success.value() == true);
             assertTrue(success.errors().isEmpty());
@@ -359,7 +356,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            RequestStatus success = api.delete(null,"DevTest");
+            RequestStatus<Boolean> success = api.delete(null,"DevTest");
             assertNotNull(success);
             assertFalse(success.value());
             assertFalse(success.errors().isEmpty());
@@ -442,7 +439,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            IntegerResponse output = api.build(null,"DevTest");
+            RequestStatus<Integer> output = api.build(null,"DevTest");
             assertNotNull(output);
             assertTrue(output.value() == 1);
             assertTrue(output.errors().size() == 0);
@@ -461,7 +458,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            IntegerResponse output = api.build(null,"DevTest");
+            RequestStatus<Integer> output = api.build(null,"DevTest");
             assertNotNull(output);
             assertNull(output.value());
             assertTrue(output.errors().size() == 1);
@@ -482,7 +479,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            IntegerResponse output = api.build(null, "DevTest");
+            RequestStatus<Integer> output = api.build(null, "DevTest");
             assertNotNull(output);
             assertNull(output.value());
             assertTrue(output.errors().size() == 1);
@@ -506,7 +503,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         try {
             Map<String, List<String>> params = new HashMap<>();
             params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-            IntegerResponse output = api.buildWithParameters(null, "DevTest", params);
+            RequestStatus<Integer> output = api.buildWithParameters(null, "DevTest", params);
             assertNotNull(output);
             assertTrue(output.value() == 1);
             assertTrue(output.errors().size() == 0);
@@ -526,7 +523,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         try {
             Map<String, List<String>> params = new HashMap<>();
             params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-            IntegerResponse output = api.buildWithParameters(null, "DevTest", params);
+            RequestStatus<Integer> output = api.buildWithParameters(null, "DevTest", params);
             assertNotNull(output);
             assertNull(output.value());
             assertTrue(output.errors().size() == 1);
@@ -755,7 +752,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
-    public void testGetProgressiveText() throws Exception {
+    public void testGetLastBuildProgressiveText() throws Exception {
         MockWebServer server = mockWebServer();
 
         String body = payloadFromResource("/progressive-text.txt");
@@ -763,7 +760,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            ProgressiveText output = api.progressiveText(null,"DevTest", 0);
+            ProgressiveText output = api.lastBuildProgressiveText(null,"DevTest", 0);
             assertNotNull(output);
             assertTrue(output.size() == 123);
             assertFalse(output.hasMoreData());
@@ -774,14 +771,14 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
-    public void testGetProgressiveTextJobNotExist() throws Exception {
+    public void testGetLastBuildProgressiveTextJobNotExist() throws Exception {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            ProgressiveText output = api.progressiveText(null,"DevTest", 0);
+            ProgressiveText output = api.lastBuildProgressiveText(null,"DevTest", 0);
             assertNull(output);
             assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/logText/progressiveText?start=0");
         } finally {
@@ -790,7 +787,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
-    public void testGetBuildNumberProgressiveText() throws Exception {
+    public void testProgressiveText() throws Exception {
         MockWebServer server = mockWebServer();
 
         String body = payloadFromResource("/build-number-progressive-text.txt");
@@ -798,7 +795,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            ProgressiveText output = api.buildNumberProgressiveText(null,"DevTest", 1, 0);
+            ProgressiveText output = api.progressiveText(null,"DevTest", 1, 0);
             assertNotNull(output);
             assertTrue(output.size() == 123);
             assertFalse(output.hasMoreData());
@@ -809,32 +806,16 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
-    public void testGetBuildNumberProgressiveTextJobNotExist() throws Exception {
+    public void testProgressiveTextJobNotExist() throws Exception {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
         JenkinsApi jenkinsApi = api(server.getUrl("/"));
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            ProgressiveText output = api.buildNumberProgressiveText(null,"DevTest", 1, 0);
+            ProgressiveText output = api.progressiveText(null,"DevTest", 1, 0);
             assertNull(output);
             assertSentAcceptText(server, "GET", "/job/DevTest/1/logText/progressiveText?start=0");
-        } finally {
-            jenkinsApi.close();
-            server.shutdown();
-        }
-    }
-
-    public void testGetBuildNumberProgressiveTextJobExistBuildNumberNotExist() throws Exception {
-        MockWebServer server = mockWebServer();
-
-        server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
-        JobsApi api = jenkinsApi.jobsApi();
-        try {
-            ProgressiveText output = api.buildNumberProgressiveText(null,"DevTest", 0, 0);
-            assertNull(output);
-            assertSentAcceptText(server, "GET", "/job/DevTest/0/logText/progressiveText?start=0");
         } finally {
             jenkinsApi.close();
             server.shutdown();

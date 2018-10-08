@@ -30,7 +30,7 @@ import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
-import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
+import com.cdancy.jenkins.rest.parsers.RequestStatusBooleanParser;
 
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.javax.annotation.Nullable;
@@ -54,9 +54,9 @@ public interface PluginManagerApi {
     @Named("pluginManager:install-necessary-plugins")
     @Path("/installNecessaryPlugins")
     @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
-    @ResponseParser(RequestStatusParser.class)
+    @ResponseParser(RequestStatusBooleanParser.class)
     @Produces(MediaType.APPLICATION_XML)
     @Payload("<jenkins><install plugin=\"{pluginID}\"/></jenkins>")
     @POST
-    RequestStatus installNecessaryPlugins(@PayloadParam(value = "pluginID") String pluginID);
+    RequestStatus<Boolean> installNecessaryPlugins(@PayloadParam(value = "pluginID") String pluginID);
 }

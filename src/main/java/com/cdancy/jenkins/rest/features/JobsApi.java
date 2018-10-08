@@ -42,7 +42,6 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
 import com.cdancy.jenkins.rest.binders.BindMapToForm;
-import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.job.BuildInfo;
 import com.cdancy.jenkins.rest.domain.job.JobInfo;
@@ -52,7 +51,7 @@ import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
 import com.cdancy.jenkins.rest.parsers.BuildNumberToInteger;
 import com.cdancy.jenkins.rest.parsers.LocationToQueueId;
 import com.cdancy.jenkins.rest.parsers.OutputToProgressiveText;
-import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
+import com.cdancy.jenkins.rest.parsers.RequestStatusBooleanParser;
 import com.cdancy.jenkins.rest.parsers.OptionalFolderPathParser;
 
 @RequestFilters(JenkinsAuthenticationFilter.class)
@@ -79,12 +78,12 @@ public interface JobsApi {
     @Named("jobs:create")
     @Path("{optionalFolderPath}createItem")
     @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
-    @ResponseParser(RequestStatusParser.class)
+    @ResponseParser(RequestStatusBooleanParser.class)
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.WILDCARD)
     @Payload("{configXML}")
     @POST
-    RequestStatus create(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+    RequestStatus<Boolean> create(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                          @QueryParam("name") String jobName,
                          @PayloadParam(value = "configXML") String configXML);
 
@@ -128,9 +127,9 @@ public interface JobsApi {
     @Path("{optionalFolderPath}job/{name}/doDelete")
     @Consumes(MediaType.TEXT_HTML)
     @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
-    @ResponseParser(RequestStatusParser.class)
+    @ResponseParser(RequestStatusBooleanParser.class)
     @POST
-    RequestStatus delete(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+    RequestStatus<Boolean> delete(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                          @PathParam("name") String jobName);
 
     @Named("jobs:enable")
@@ -155,7 +154,7 @@ public interface JobsApi {
     @ResponseParser(LocationToQueueId.class)
     @Consumes("application/unknown")
     @POST
-    IntegerResponse build(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+    RequestStatus<Integer> build(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                   @PathParam("name") String jobName);
 
     @Named("jobs:build-with-params")
@@ -164,7 +163,7 @@ public interface JobsApi {
     @ResponseParser(LocationToQueueId.class)
     @Consumes("application/unknown")
     @POST
-    IntegerResponse buildWithParameters(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+    RequestStatus<Integer> buildWithParameters(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                                 @PathParam("name") String jobName,
                                 @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
 
@@ -204,23 +203,24 @@ public interface JobsApi {
                                     @PathParam("name") String jobName);
 
     @Named("jobs:progressive-text")
-    @Path("{optionalFolderPath}job/{name}/lastBuild/logText/progressiveText")
+    @Path("{optionalFolderPath}job/{name}/{number}/logText/progressiveText")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @ResponseParser(OutputToProgressiveText.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
     ProgressiveText progressiveText(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                                     @PathParam("name") String jobName,
+                                    @PathParam("number") int buildNumber,
                                     @QueryParam("start") int start);
 
-    @Named("jobs:build-number-progressive-text")
-    @Path("{optionalFolderPath}job/{name}/{number}/logText/progressiveText")
+    @Named("jobs:last-build-progressive-text")
+    @Path("{optionalFolderPath}job/{name}/lastBuild/logText/progressiveText")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @ResponseParser(OutputToProgressiveText.class)
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
-    ProgressiveText buildNumberProgressiveText(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
-                                               @PathParam("name") String jobName,
-                                               @PathParam("number") int buildNumber,
-                                               @QueryParam("start") int start);
+    ProgressiveText lastBuildProgressiveText(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                                             @PathParam("name") String jobName,
+                                             @QueryParam("start") int start);
+
 }

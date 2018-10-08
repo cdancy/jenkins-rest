@@ -23,34 +23,34 @@ import java.util.regex.Pattern;
 
 import javax.inject.Singleton;
 
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import org.jclouds.http.HttpResponse;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import com.cdancy.jenkins.rest.domain.common.Error;
-import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 
 /**
  * Created by dancc on 3/11/16.
  */
 @Singleton
-public class LocationToQueueId implements Function<HttpResponse, IntegerResponse> {
+public class LocationToQueueId implements Function<HttpResponse, RequestStatus<Integer>> {
 
    private static final Pattern pattern = Pattern.compile("^.*/queue/item/(\\d+)/$");
 
-   public IntegerResponse apply(HttpResponse response) {
+   public RequestStatus<Integer> apply(HttpResponse response) {
 
       String url = response.getFirstHeaderOrNull("Location");
       if (url != null) {
          Matcher matcher = pattern.matcher(url);
          if (matcher.find() && matcher.groupCount() == 1) {
-            return IntegerResponse.create(Integer.valueOf(matcher.group(1)), null);
+            return RequestStatus.create(Integer.valueOf(matcher.group(1)), null);
          }
       }
       final Error error = Error.create(null,
          "No queue item Location header could be found despite getting a valid HTTP response.", 
          NumberFormatException.class.getCanonicalName());
-      return IntegerResponse.create(null, Lists.newArrayList(error));
+      return RequestStatus.create(null, Lists.newArrayList(error));
    }
 }

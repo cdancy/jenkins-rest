@@ -26,10 +26,10 @@ import org.jclouds.http.HttpResponse;
  * Turn a valid response, but one that has no body, into a RequestStatus.
  */
 @Singleton
-public class RequestStatusParser implements Function<HttpResponse, RequestStatus> {
+public class RequestStatusBooleanParser implements Function<HttpResponse, RequestStatus<Boolean>> {
 
     @Override
-    public RequestStatus apply(final HttpResponse input) {
+    public RequestStatus<Boolean> apply(final HttpResponse input) {
         final int statusCode = input.getStatusCode();
         if (statusCode >= 200 && statusCode < 400) {
             return RequestStatus.create(true, null);

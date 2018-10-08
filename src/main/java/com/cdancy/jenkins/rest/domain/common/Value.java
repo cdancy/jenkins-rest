@@ -19,8 +19,8 @@ package com.cdancy.jenkins.rest.domain.common;
 
 import org.jclouds.javax.annotation.Nullable;
 
-public interface Value<T> {
+public interface Value<V> {
 
     @Nullable
-    public abstract T value();
+    public abstract V value();
 }

@@ -88,7 +88,7 @@ public class PluginManagerApiMockTest extends BaseJenkinsMockTest {
         final JenkinsApi jenkinsApi = api(server.getUrl("/"));
         final PluginManagerApi api = jenkinsApi.pluginManagerApi();
         try {
-            final RequestStatus status = api.installNecessaryPlugins("artifactory@2.2.1");
+            final RequestStatus<Boolean> status = api.installNecessaryPlugins("artifactory@2.2.1");
             assertNotNull(status);
             assertTrue(status.value());
             assertTrue(status.errors().isEmpty());
@@ -106,7 +106,7 @@ public class PluginManagerApiMockTest extends BaseJenkinsMockTest {
         final JenkinsApi jenkinsApi = api(server.getUrl("/"));
         final PluginManagerApi api = jenkinsApi.pluginManagerApi();
         try {
-            final RequestStatus status = api.installNecessaryPlugins("artifactory@2.2.1");
+            final RequestStatus<Boolean> status = api.installNecessaryPlugins("artifactory@2.2.1");
             assertNotNull(status);
             assertFalse(status.value());
             assertFalse(status.errors().isEmpty());

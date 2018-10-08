@@ -26,18 +26,13 @@ import com.cdancy.jenkins.rest.JenkinsUtils;
 import com.google.auto.value.AutoValue;
 
 /**
- * Generic response to be returned when an endpoint returns 
- * no content (i.e. 204 response code).
- * 
- * <p>When the response code is valid the `value` parameter will 
- * be set to true while a non-valid response has the `value` set to
- * false along with any potential `error` objects returned from Jenkins.
+ * Generic response encapsulating a single value, or state, from server.
  */
 @AutoValue
-public abstract class RequestStatus implements Value<Boolean>, ErrorsHolder {
+public abstract class RequestStatus<V> implements Value<V>, ErrorsHolder {
     
     @SerializedNames({ "value", "errors" })
-    public static RequestStatus create(@Nullable final Boolean value, 
+    public static <V> RequestStatus<V> create(@Nullable final V value,
             final List<Error> errors) {
         
         return new AutoValue_RequestStatus(value, 

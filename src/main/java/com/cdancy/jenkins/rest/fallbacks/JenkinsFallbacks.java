@@ -22,7 +22,6 @@ import static com.google.common.base.Throwables.propagate;
 
 import static org.jclouds.http.HttpUtils.returnValueOnCodeOrNull;
 
-import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.common.Error;
 import com.cdancy.jenkins.rest.domain.crumb.Crumb;
@@ -68,9 +67,9 @@ public final class JenkinsFallbacks {
         public Object createOrPropagate(final Throwable throwable) throws Exception {
             if (checkNotNull(throwable, "throwable") != null) {
                 try {
-                    return IntegerResponse.create(null, getErrors(throwable));
+                    return RequestStatus.create(null, getErrors(throwable));
                 } catch (JsonSyntaxException e) {
-                    return IntegerResponse.create(null, getErrors(e));
+                    return RequestStatus.create(null, getErrors(e));
                 }
             }
             throw propagate(throwable);
