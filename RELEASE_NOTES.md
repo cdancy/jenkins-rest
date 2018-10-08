@@ -1,4 +1,6 @@
 ### Version 0.0.15 (TBA)
+* Bump `gradle` to `4.10.2`
+* Bump `shadow` plugin to `2.0.4`
 
 ### Version 0.0.14 (August 17, 2018)
 * `JenkinsClient` now implements `Closeable` to better work with jdk8+ try-with-resources.
