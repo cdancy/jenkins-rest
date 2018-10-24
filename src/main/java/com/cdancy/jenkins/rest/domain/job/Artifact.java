@@ -17,6 +17,7 @@
 
 package com.cdancy.jenkins.rest.domain.job;
 
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 import com.google.auto.value.AutoValue;
@@ -24,6 +25,7 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class Artifact {
 
+   @Nullable
    public abstract String displayPath();
 
    public abstract String fileName();
