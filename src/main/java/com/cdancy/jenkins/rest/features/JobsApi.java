@@ -31,15 +31,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.cdancy.jenkins.rest.domain.job.Job;
 import org.jclouds.Fallbacks;
 import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.rest.annotations.BinderParam;
-import org.jclouds.rest.annotations.Fallback;
-import org.jclouds.rest.annotations.ParamParser;
-import org.jclouds.rest.annotations.Payload;
-import org.jclouds.rest.annotations.PayloadParam;
-import org.jclouds.rest.annotations.RequestFilters;
-import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.annotations.*;
 
 import com.cdancy.jenkins.rest.binders.BindMapToForm;
 import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
@@ -58,6 +53,14 @@ import com.cdancy.jenkins.rest.parsers.OptionalFolderPathParser;
 @RequestFilters(JenkinsAuthenticationFilter.class)
 @Path("/")
 public interface JobsApi {
+
+    @Named("jobs:jobs")
+    @Path("{optionalFolderPath}/api/json")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @SelectJson("jobs")
+    @GET
+    List<Job> jobs(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath);
 
     @Named("jobs:job-info")
     @Path("{optionalFolderPath}job/{name}/api/json")
@@ -156,7 +159,7 @@ public interface JobsApi {
     @Consumes("application/unknown")
     @POST
     IntegerResponse build(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
-                  @PathParam("name") String jobName);
+                          @PathParam("name") String jobName);
 
     @Named("jobs:build-with-params")
     @Path("{optionalFolderPath}job/{name}/buildWithParameters")
@@ -165,8 +168,8 @@ public interface JobsApi {
     @Consumes("application/unknown")
     @POST
     IntegerResponse buildWithParameters(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
-                                @PathParam("name") String jobName,
-                                @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
+                                        @PathParam("name") String jobName,
+                                        @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
 
     @Named("jobs:last-build-number")
     @Path("{optionalFolderPath}job/{name}/lastBuild/buildNumber")
@@ -220,7 +223,7 @@ public interface JobsApi {
     @Consumes(MediaType.TEXT_PLAIN)
     @GET
     ProgressiveText progressiveLogText(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
-                                               @PathParam("name") String jobName,
-                                               @PathParam("number") int buildNumber,
-                                               @QueryParam("start") int start);
+                                       @PathParam("name") String jobName,
+                                       @PathParam("number") int buildNumber,
+                                       @QueryParam("start") int start);
 }

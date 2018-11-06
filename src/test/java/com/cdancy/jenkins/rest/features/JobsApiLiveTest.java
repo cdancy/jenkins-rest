@@ -25,8 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.cdancy.jenkins.rest.domain.job.Cause;
-import com.cdancy.jenkins.rest.domain.job.Parameter;
+import com.cdancy.jenkins.rest.domain.job.*;
 import com.cdancy.jenkins.rest.domain.plugins.Plugin;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
@@ -35,9 +34,6 @@ import org.testng.annotations.Test;
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
 import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
-import com.cdancy.jenkins.rest.domain.job.BuildInfo;
-import com.cdancy.jenkins.rest.domain.job.JobInfo;
-import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 
 import com.google.common.collect.Lists;
 
@@ -55,6 +51,13 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         String config = payloadFromResource("/freestyle-project-no-params.xml");
         RequestStatus success = api().create(null, "DevTest", config);
         assertTrue(success.value());
+    }
+
+    @Test
+    public void testGetJobs() {
+        List<Job> output = api().jobs(null);
+        assertNotNull(output);
+        assertTrue(output.size() >= 0);
     }
 
     @Test(dependsOnMethods = "testCreateJob")
@@ -248,14 +251,14 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
      * If not present, attempt to install it.
      */
     @Test
-    public void testInstallFolderPlugin() throws Exception{
+    public void testInstallFolderPlugin() throws Exception {
         long endTime = 0;
         long maxWaitTime = 5 * 60 * 1000;
-        if(!isFolderPluginInstalled()) {
+        if (!isFolderPluginInstalled()) {
             RequestStatus status = api.pluginManagerApi().installNecessaryPlugins(FOLDER_PLUGIN_NAME + "@" + FOLDER_PLUGIN_VERSION);
             assertTrue(status.value());
-            while(endTime <= maxWaitTime) {
-                if(!isFolderPluginInstalled()) {
+            while (endTime <= maxWaitTime) {
+                if (!isFolderPluginInstalled()) {
                     Thread.sleep(10000);
                     endTime += 10000;
                 } else {
@@ -285,7 +288,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     @Test(dependsOnMethods = "testCreateFoldersInJenkins")
     public void testCreateJobWithIncorrectFolderPath() {
         String config = payloadFromResource("/folder-config.xml");
-        RequestStatus success = api().create("/test-folder//test-folder-1/", "Job",config);
+        RequestStatus success = api().create("/test-folder//test-folder-1/", "Job", config);
         assertFalse(success.value());
     }
 
@@ -371,7 +374,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test(dependsOnMethods = "testGetProgressiveText")
     public void testGetBuildParametersofJob() {
-        List<Parameter> parameters = api().buildInfo("test-folder/test-folder-1", "JobInFolder",1).actions().get(0).parameters();
+        List<Parameter> parameters = api().buildInfo("test-folder/test-folder-1", "JobInFolder", 1).actions().get(0).parameters();
         assertNotNull(parameters);
         assertTrue(parameters.get(0).name().equals("SomeKey"));
         assertTrue(parameters.get(0).value().equals("SomeVeryNewValue"));
@@ -379,7 +382,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test(dependsOnMethods = "testGetProgressiveText")
     public void testGetBuildCausesOfJob() {
-        List<Cause> causes = api().buildInfo("test-folder/test-folder-1", "JobInFolder",1).actions().get(1).causes();
+        List<Cause> causes = api().buildInfo("test-folder/test-folder-1", "JobInFolder", 1).actions().get(1).causes();
         assertNotNull(causes);
         assertTrue(causes.size() > 0);
         assertNotNull(causes.get(0).shortDescription());
@@ -513,8 +516,8 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     private boolean isFolderPluginInstalled() {
         boolean installed = false;
         Plugins plugins = api.pluginManagerApi().plugins(3, null);
-        for(Plugin plugin:plugins.plugins()) {
-            if(plugin.shortName().equals(FOLDER_PLUGIN_NAME)) {
+        for (Plugin plugin : plugins.plugins()) {
+            if (plugin.shortName().equals(FOLDER_PLUGIN_NAME)) {
                 installed = true;
                 break;
             }

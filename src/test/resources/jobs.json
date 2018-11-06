@@ -1,0 +1,81 @@
+{
+  "_class": "hudson.model.Hudson",
+  "assignedLabels": [
+    {}
+  ],
+  "mode": "NORMAL",
+  "nodeDescription": "the master Jenkins node",
+  "nodeName": "",
+  "numExecutors": 2,
+  "description": null,
+  "jobs": [
+    {
+      "_class": "hudson.model.FreeStyleProject",
+      "name": "cicloud_git",
+      "url": "http://10.1.248.14:8080/jenkins/job/cicloud_git/",
+      "color": "blue"
+    },
+    {
+      "_class": "hudson.model.FreeStyleProject",
+      "name": "DTS",
+      "url": "http://10.1.248.14:8080/jenkins/job/DTS/",
+      "color": "blue"
+    },
+    {
+      "_class": "hudson.model.FreeStyleProject",
+      "name": "easy_plm",
+      "url": "http://10.1.248.14:8080/jenkins/job/easy_plm/",
+      "color": "blue"
+    },
+    {
+      "_class": "hudson.model.FreeStyleProject",
+      "name": "summary",
+      "url": "http://10.1.248.14:8080/jenkins/job/summary/",
+      "color": "blue"
+    },
+    {
+      "_class": "hudson.model.FreeStyleProject",
+      "name": "VMP",
+      "url": "http://10.1.248.14:8080/jenkins/job/VMP/",
+      "color": "blue"
+    },
+    {
+      "_class": "hudson.model.FreeStyleProject",
+      "name": "WeCI",
+      "url": "http://10.1.248.14:8080/jenkins/job/WeCI/",
+      "color": "disabled"
+    },
+    {
+      "_class": "hudson.model.FreeStyleProject",
+      "name": "WeCIWeb",
+      "url": "http://10.1.248.14:8080/jenkins/job/WeCIWeb/",
+      "color": "disabled"
+    },
+    {
+      "_class": "hudson.model.FreeStyleProject",
+      "name": "WeCIWeb_copy",
+      "url": "http://10.1.248.14:8080/jenkins/job/WeCIWeb_copy/",
+      "color": "disabled"
+    }
+  ],
+  "overallLoad": {},
+  "primaryView": {
+    "_class": "hudson.model.AllView",
+    "name": "All",
+    "url": "http://10.1.248.14:8080/jenkins/"
+  },
+  "quietingDown": false,
+  "slaveAgentPort": -1,
+  "unlabeledLoad": {
+    "_class": "jenkins.model.UnlabeledLoadStatistics"
+  },
+  "useCrumbs": false,
+  "useSecurity": true,
+  "views": [
+    {
+      "_class": "hudson.model.AllView",
+      "name": "All",
+      "url": "http://10.1.248.14:8080/jenkins/"
+    }
+  ]
+}
