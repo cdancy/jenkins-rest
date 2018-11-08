@@ -28,20 +28,21 @@ public abstract class Error {
     @Nullable
     public abstract String context();
 
+    @Nullable
     public abstract String message();
 
     public abstract String exceptionName();
-    
+
     Error() {
     }
 
     @SerializedNames({ "context", "message", "exceptionName" })
-    public static Error create(final String context, 
-            final String message, 
+    public static Error create(final String context,
+            final String message,
             final String exceptionName) {
-        
-        return new AutoValue_Error(context, 
-                message, 
+
+        return new AutoValue_Error(context,
+                message,
                 exceptionName);
     }
 }

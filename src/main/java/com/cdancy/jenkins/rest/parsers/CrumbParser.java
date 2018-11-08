@@ -20,6 +20,7 @@ package com.cdancy.jenkins.rest.parsers;
 import com.cdancy.jenkins.rest.domain.crumb.Crumb;
 
 import com.google.common.base.Function;
+
 import java.io.IOException;
 
 import javax.inject.Singleton;
@@ -43,6 +44,8 @@ public class CrumbParser implements Function<HttpResponse, Crumb> {
             } catch (final IOException e) {
                 throw new RuntimeException(input.getStatusLine(), e);
             }
+        } else if (statusCode == 404) {
+            return null;
         } else {
             throw new RuntimeException(input.getStatusLine());
         }

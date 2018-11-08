@@ -80,10 +80,12 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
                 crumbValueInit = JenkinsAuthenticationFilter.crumbPair;
                 if (crumbValueInit == null) {
                     final Crumb crumb = jenkinsApi.crumbIssuerApi().crumb();
-                    final Boolean isRNFE = crumb.errors().isEmpty()
+                    if (null != crumb) {
+                        final Boolean isRNFE = crumb.errors().isEmpty()
                             ? true
                             : crumb.errors().get(0).exceptionName().endsWith(ResourceNotFoundException.class.getSimpleName());
-                    JenkinsAuthenticationFilter.crumbPair = crumbValueInit = new Pair(crumb, isRNFE);
+                        JenkinsAuthenticationFilter.crumbPair = crumbValueInit = new Pair(crumb, isRNFE);
+                    }
                 }
             }
         }
