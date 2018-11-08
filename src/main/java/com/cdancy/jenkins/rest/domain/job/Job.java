@@ -18,6 +18,7 @@
 package com.cdancy.jenkins.rest.domain.job;
 
 import com.google.auto.value.AutoValue;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 @AutoValue
@@ -27,6 +28,7 @@ public abstract class Job {
 
     public abstract String url();
 
+    @Nullable
     public abstract String color();
 
     Job() {
