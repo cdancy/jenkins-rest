@@ -169,7 +169,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertTrue(output.errors().size() == 0);
     }
 
-    @Test(dependsOnMethods = "testUpdateConfig")
+    @Test(dependsOnMethods = "testBuildJobWithParameters")
     public void testBuildJobWithNullParametersMap() {
         IntegerResponse output = api().buildWithParameters(null, "DevTest", null);
         assertNotNull(output);
