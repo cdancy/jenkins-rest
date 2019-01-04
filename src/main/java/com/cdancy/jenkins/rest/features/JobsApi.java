@@ -166,7 +166,7 @@ public interface JobsApi {
     @POST
     IntegerResponse buildWithParameters(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                                 @PathParam("name") String jobName,
-                                @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
+                                @Nullable @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
 
     @Named("jobs:last-build-number")
     @Path("{optionalFolderPath}job/{name}/lastBuild/buildNumber")

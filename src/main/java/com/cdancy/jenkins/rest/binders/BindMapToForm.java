@@ -34,6 +34,10 @@ public class BindMapToForm implements Binder {
    @Override
    public <R extends HttpRequest> R bindToRequest(final R request, final Object properties) {
 
+       if (properties == null) {
+           return (R) request.toBuilder().build();
+       }
+
       checkArgument(properties instanceof Map, "binder is only valid for Map");
       Map<String, List<String>> props = (Map<String, List<String>>) properties;
       checkArgument(props.size() > 0, "properties Map cannot be empty");
