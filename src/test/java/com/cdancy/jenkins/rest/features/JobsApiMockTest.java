@@ -536,6 +536,25 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
+    public void testBuildJobWithEmptyParamsMap() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(
+            new MockResponse().setHeader("Location", "http://127.0.1.1:8080/queue/item/1/").setResponseCode(201));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            IntegerResponse output = api.buildWithParameters(null, "DevTest", new HashMap<>());
+            assertNotNull(output);
+            assertTrue(output.value() == 1);
+            assertTrue(output.errors().size() == 0);
+            assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
     public void testBuildJobWithParamsNonExistentJob() throws Exception {
         MockWebServer server = mockWebServer();
 
