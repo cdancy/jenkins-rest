@@ -178,6 +178,14 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test(dependsOnMethods = "testBuildJobWithNullParametersMap")
+    public void testBuildJobWithEmptyParametersMap() {
+        IntegerResponse output = api().buildWithParameters(null, "DevTest", new HashMap<>());
+        assertNotNull(output);
+        assertTrue(output.value() > 0);
+        assertTrue(output.errors().size() == 0);
+    }
+
+    @Test(dependsOnMethods = "testBuildJobWithEmptyParametersMap")
     public void testDisableJob() {
         boolean success = api().disable(null, "DevTest");
         assertTrue(success);
