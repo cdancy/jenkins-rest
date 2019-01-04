@@ -1,4 +1,6 @@
-### Version 0.0.15 (TBA)
+### Version 0.0.16 (TBA)
+
+### Version 0.0.15 (January 4, 2018)
 * FIX: `buildWithParameters` now supports a null parameter map for parameterized builds that do not override any params. - [Pull Request 43](https://github.com/cdancy/jenkins-rest/pull/43)
 * Bump `gradle` to `4.10.2`
 * Bump `shadow` plugin to `2.0.4`
