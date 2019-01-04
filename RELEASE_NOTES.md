@@ -1,9 +1,11 @@
-### Version 0.0.16 (TBA)
+### Version 0.0.17 (TBA)
 
-### Version 0.0.15 (January 4, 2018)
+### Version 0.0.16 (January 4, 2018)
 * FIX: `buildWithParameters` now supports a null parameter map for parameterized builds that do not override any params. - [Pull Request 43](https://github.com/cdancy/jenkins-rest/pull/43)
 * Bump `gradle` to `4.10.2`
 * Bump `shadow` plugin to `2.0.4`
+
+### Version 0.0.15 (N/A)
 
 ### Version 0.0.14 (August 17, 2018)
 * `JenkinsClient` now implements `Closeable` to better work with jdk8+ try-with-resources.
