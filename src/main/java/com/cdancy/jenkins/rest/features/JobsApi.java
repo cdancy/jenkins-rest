@@ -194,4 +194,15 @@ public interface JobsApi {
     ProgressiveText progressiveText(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                                     @PathParam("name") String jobName,
                                     @QueryParam("start") int start);
+
+    @Named("jobs:specific-progressive-text")
+    @Path("{optionalFolderPath}job/{name}/{buildNumber}/logText/progressiveText")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @ResponseParser(OutputToProgressiveText.class)
+    @Consumes(MediaType.TEXT_PLAIN)
+    @GET
+    ProgressiveText progressiveText(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+        @PathParam("name") String jobName,
+        @PathParam("buildNumber") Integer buildNumber,
+        @QueryParam("start") int start);
 }
