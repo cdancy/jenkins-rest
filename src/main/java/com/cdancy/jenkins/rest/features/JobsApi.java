@@ -194,4 +194,13 @@ public interface JobsApi {
     ProgressiveText progressiveText(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                                     @PathParam("name") String jobName,
                                     @QueryParam("start") int start);
+
+    @Named("jobs:rename")
+    @Path("{optionalFolderPath}job/{name}/doRename")
+    @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
+    @Consumes(MediaType.TEXT_HTML)
+    @POST
+    boolean rename(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                   @PathParam("name") String jobName,
+                   @QueryParam("newName") String newName);
 }
