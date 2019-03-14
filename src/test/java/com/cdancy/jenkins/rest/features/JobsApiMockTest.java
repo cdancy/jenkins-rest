@@ -759,4 +759,36 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             server.shutdown();
         }
     }
+
+    public void testRenameJob() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            boolean success = api.rename(null,"DevTest","NewDevTest");
+            assertTrue(success);
+            assertSentAccept(server, "POST", "/job/DevTest/doRename?newName=NewDevTest", MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testRenameJobNotExist() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            boolean success = api.rename(null,"DevTest","NewDevTest");
+            assertFalse(success);
+            assertSentAccept(server, "POST", "/job/DevTest/doRename?newName=NewDevTest", MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 }
