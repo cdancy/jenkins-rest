@@ -1,4 +1,4 @@
-### Version 0.0.17 (TBA)
+### Version 0.0.17 (March 18, 2019)
 * ADDED: `JobsApi` gained endpoint `rename`. - [Pull Request 52](https://github.com/cdancy/jenkins-rest/pull/52)
 * Bump `gradle` to `4.10.3`
 * Bump `jclouds` to `2.1.2`
