@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    ext.jcloudsVersion = '2.1.1'
+    ext.jcloudsVersion = '2.1.2'
 
     compile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}")
     compile ('com.google.auto.service:auto-service:1.0-rc3')
