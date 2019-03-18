@@ -210,8 +210,20 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test(dependsOnMethods = "testEnableJobAlreadyEnabled")
+    public void testRenameJob(){
+        boolean success = api().rename(null,"DevTest","NewDevTest");
+        assertTrue(success);
+    }
+
+    @Test(dependsOnMethods = "testRenameJob")
+    public void testRenameJobNotExist(){
+        boolean success = api().rename(null,"JobNotExist","NewDevTest");
+        assertFalse(success);
+    }
+
+    @Test(dependsOnMethods = "testRenameJobNotExist")
     public void testDeleteJob() {
-        RequestStatus success = api().delete(null, "DevTest");
+        RequestStatus success = api().delete(null, "NewDevTest");
         assertNotNull(success);
         assertTrue(success.value());
     }
@@ -401,8 +413,14 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test(dependsOnMethods = "testGetBuildInfoOfJobInFolder")
+    public void testRenameJonInFloder(){
+        boolean success = api().rename("test-folder/test-folder-1", "JobInFolder", "NewJobInFolder");
+        assertTrue(success);
+    }
+
+    @Test(dependsOnMethods = "testRenameJonInFloder")
     public void testDeleteJobInFolder() {
-        RequestStatus success = api().delete("test-folder/test-folder-1", "JobInFolder");
+        RequestStatus success = api().delete("test-folder/test-folder-1", "NewJobInFolder");
         assertTrue(success.value());
     }
 
