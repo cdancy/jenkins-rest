@@ -1,5 +1,6 @@
 ### Version 0.0.17 (TBA)
 * ADDED: `JobsApi` gained endpoint `rename`. - [Pull Request 52](https://github.com/cdancy/jenkins-rest/pull/52)
+* Bump `gradle` to `4.10.3`
 
 ### Version 0.0.16 (January 4, 2018)
 * FIX: `buildWithParameters` now supports a null parameter map for parameterized builds that do not override any params. - [Pull Request 43](https://github.com/cdancy/jenkins-rest/pull/43)
