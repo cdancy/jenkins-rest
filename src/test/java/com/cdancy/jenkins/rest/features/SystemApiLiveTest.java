@@ -43,11 +43,24 @@ public class SystemApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test(dependsOnMethods = "testQuietDown")
+    public void testAlreadyQuietDown() {
+        RequestStatus success = api().quietDown();
+        assertNotNull(success);
+        assertTrue(success.value());
+    }
+
+    @Test(dependsOnMethods = "testAlreadyQuietDown")
     public void testCancelQuietDown() {
         RequestStatus success = api().cancelQuietDown();
         assertNotNull(success);
         assertTrue(success.value());
+    }
 
+    @Test(dependsOnMethods = "testCancelQuietDown")
+    public void testAlreadyCanceledQuietDown() {
+        RequestStatus success = api().cancelQuietDown();
+        assertNotNull(success);
+        assertTrue(success.value());
     }
 
     private SystemApi api() {
