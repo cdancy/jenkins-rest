@@ -20,9 +20,12 @@ package com.cdancy.jenkins.rest.features;
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.HEAD;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
+import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.annotations.Fallback;
@@ -42,4 +45,21 @@ public interface SystemApi {
    @ResponseParser(SystemInfoFromJenkinsHeaders.class)
    @HEAD
    SystemInfo systemInfo();
+
+   @Named("system:quiet-down")
+   @Path("quietDown")
+   @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
+   @ResponseParser(RequestStatusParser.class)
+   @Consumes(MediaType.TEXT_HTML)
+   @POST
+   RequestStatus quietDown();
+
+   @Named("system:cancel-quiet-down")
+   @Path("cancelQuietDown")
+   @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
+   @ResponseParser(RequestStatusParser.class)
+   @Consumes(MediaType.TEXT_HTML)
+   @POST
+   RequestStatus cancelQuietDown();
+
 }

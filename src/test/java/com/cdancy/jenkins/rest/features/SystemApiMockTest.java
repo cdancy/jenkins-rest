@@ -20,6 +20,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.assertFalse;
 
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
@@ -29,6 +30,8 @@ import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
+
+import javax.ws.rs.core.MediaType;
 
 /**
  * Mock tests for the {@link com.cdancy.jenkins.rest.features.SystemApi} class.
@@ -70,6 +73,76 @@ public class SystemApiMockTest extends BaseJenkinsMockTest {
             assertNotNull(version);
             assertFalse(version.errors().isEmpty());
             assertSent(server, "HEAD", "/");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testQuietDown() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        SystemApi api = jenkinsApi.systemApi();
+        try {
+            RequestStatus success = api.quietDown();
+            assertNotNull(success);
+            assertTrue(success.value());
+            assertSentAccept(server, "POST", "/quietDown", MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testQuietDownOnAuthException() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(401));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        SystemApi api = jenkinsApi.systemApi();
+        try {
+            RequestStatus status = api.quietDown();
+            assertFalse(status.value());
+            assertFalse(status.errors().isEmpty());
+            assertTrue(status.errors().get(0).exceptionName().endsWith("AuthorizationException"));
+            assertSentAccept(server, "POST", "/quietDown", MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testCancelQuietDown() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        SystemApi api = jenkinsApi.systemApi();
+        try {
+            RequestStatus success = api.cancelQuietDown();
+            assertNotNull(success);
+            assertTrue(success.value());
+            assertSentAccept(server, "POST", "/cancelQuietDown", MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testCancelQuietDownOnAuthException() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(401));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        SystemApi api = jenkinsApi.systemApi();
+        try {
+            RequestStatus status = api.cancelQuietDown();
+            assertFalse(status.value());
+            assertFalse(status.errors().isEmpty());
+            assertTrue(status.errors().get(0).exceptionName().endsWith("AuthorizationException"));
+            assertSentAccept(server, "POST", "/cancelQuietDown", MediaType.TEXT_HTML);
         } finally {
             jenkinsApi.close();
             server.shutdown();

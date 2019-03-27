@@ -19,6 +19,7 @@ package com.cdancy.jenkins.rest.features;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
@@ -32,6 +33,21 @@ public class SystemApiLiveTest extends BaseJenkinsApiLiveTest {
         final SystemInfo version = api().systemInfo();
         assertNotNull(version);
         assertTrue(version.jenkinsVersion() != null);
+    }
+
+    @Test
+    public void testQuietDown() {
+        RequestStatus success = api().quietDown();
+        assertNotNull(success);
+        assertTrue(success.value());
+    }
+
+    @Test(dependsOnMethods = "testQuietDown")
+    public void testCancelQuietDown() {
+        RequestStatus success = api().cancelQuietDown();
+        assertNotNull(success);
+        assertTrue(success.value());
+
     }
 
     private SystemApi api() {
