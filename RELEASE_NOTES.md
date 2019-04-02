@@ -1,4 +1,4 @@
-### Version 0.0.18 (TBA)
+### Version 0.0.18 (April 2, 2019)
 * ADDED: `SystemApi` gained endpoints `quietDown` and `cancelQuietDown`. - [Pull Request 54](https://github.com/cdancy/jenkins-rest/pull/54)
 
 ### Version 0.0.17 (March 18, 2019)
