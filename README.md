@@ -40,7 +40,7 @@ Can be found in jcenter like so:
 
 ## Property based setup
 
-Client's do NOT need to supply the endPoint or credentials as a part of instantiating the JenkinsClient object. 
+Client instances do NOT need to supply the endPoint or credentials as a part of instantiating the JenkinsClient object. 
 Instead one can supply them through system properties, environment variables, or a combination 
 of the two. System properties will be searched first and if not found, will attempt to 
 query the environment.
