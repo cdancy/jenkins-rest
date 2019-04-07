@@ -6,7 +6,7 @@
 
 # jenkins-rest
 
-Java client, built on top of jclouds, for working with Jenkins REST API.
+Java client is built on the top of jclouds for working with Jenkins REST API.
 
 ## Setup
 
@@ -36,13 +36,13 @@ Can be found in jcenter like so:
 ## Documentation
 
 * javadocs can be found via [github pages here](http://cdancy.github.io/jenkins-rest/docs/javadoc/)
-* the [wiki](https://github.com/cdancy/jenkins-rest/wiki)
+* the [jenkins-rest wiki](https://github.com/cdancy/jenkins-rest/wiki)
 
 ## Property based setup
 
-Client's do NOT need supply the endPoint or credentials as part of instantiating the JenkinsClient object. 
+Client's do NOT need to supply the endPoint or credentials as a part of instantiating the JenkinsClient object. 
 Instead one can supply them through system properties, environment variables, or a combination 
-of the 2. System properties will be searched first and if not found we will attempt to 
+of the two. System properties will be searched first and if not found, will attempt to 
 query the environment.
 
 Setting the `endpoint` can be done with any of the following (searched in order):
