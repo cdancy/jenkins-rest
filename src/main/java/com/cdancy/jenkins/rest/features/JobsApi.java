@@ -31,6 +31,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.google.gson.JsonObject;
 import org.jclouds.Fallbacks;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.BinderParam;
@@ -203,4 +204,14 @@ public interface JobsApi {
     boolean rename(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                    @PathParam("name") String jobName,
                    @QueryParam("newName") String newName);
+
+    @Named("jobs:workflow")
+    @Path("{optionalFolderPath}job/{name}/{number}/wfapi/describe")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    JsonObject workflow(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+        @PathParam("name") String jobName,
+        @PathParam("number") int buildNumber);
+
 }
