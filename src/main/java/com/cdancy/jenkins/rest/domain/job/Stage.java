@@ -30,13 +30,17 @@ public abstract class Stage {
 
    public abstract long startTimeMillis();
 
-   public abstract long durationTimeMillis();
+   public abstract long endTimeMillis();
+
+   public abstract long pauseDurationMillis();
+
+   public abstract long durationMillis();
 
    Stage() {
    }
 
-   @SerializedNames({ "id", "name", "status", "startTimeMillis", "durationTimeMillis" })
-   public static Stage create(String id, String name, String status, long startTimeMillis, long durationTimeMillis) {
-      return new AutoValue_Stage(id, name, status, startTimeMillis, durationTimeMillis);
+   @SerializedNames({ "id", "name", "status", "startTimeMillis", "endTimeMillis", "pauseDurationMillis", "durationMillis" })
+   public static Stage create(String id, String name, String status, long startTimeMillis, long endTimeMillis, long pauseDurationMillis, long durationMillis) {
+      return new AutoValue_Stage(id, name, status, startTimeMillis, endTimeMillis, pauseDurationMillis, durationMillis);
    }
 }
