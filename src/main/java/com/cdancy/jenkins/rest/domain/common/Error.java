@@ -28,6 +28,7 @@ public abstract class Error {
     @Nullable
     public abstract String context();
 
+    @Nullable
     public abstract String message();
 
     public abstract String exceptionName();
