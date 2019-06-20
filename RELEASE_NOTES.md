@@ -1,3 +1,5 @@
+### Versoin 0.0.20 (TBA)
+
 ### Version 0.0.19 (June 20, 2019)
 * ADDED: 'message' property attached to `Error` object can now be null.
 
