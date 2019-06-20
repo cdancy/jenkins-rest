@@ -153,7 +153,7 @@ public final class JenkinsFallbacks {
         final List<Error> errors = Lists.newArrayList();
 
         String context = null;
-        String message = null;
+        String message = output.getMessage();
         final String [] messageParts = output.getMessage().split("->");
         switch (messageParts.length) {
             case 1: message = messageParts[0].trim(); break;
