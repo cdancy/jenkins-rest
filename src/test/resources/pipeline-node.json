@@ -1,0 +1,50 @@
+{
+  "_links": {
+    "self": {
+      "href": "/jenkins/job/Test%20Workflow/16/execution/node/5/wfapi/describe"
+    }
+  },
+  "id": "5",
+  "name": "Build",
+  "status": "SUCCESS",
+  "startTimeMillis": 1413461275770,
+  "durationMillis": 5228,
+  "stageFlowNodes": [
+    {
+      "_links": {
+        "self": {
+          "href": "/jenkins/job/Test%20Workflow/16/execution/node/6/wfapi/describe"
+        },
+        "log": {
+          "href": "/jenkins/job/Test%20Workflow/16/execution/node/6/wfapi/log"
+        }
+      },
+      "id": "6",
+      "name": "Git",
+      "status": "SUCCESS",
+      "startTimeMillis": 1413461275783,
+      "durationMillis": 9,
+      "parentNodes": [
+        "5"
+      ]
+    },
+    {
+      "_links": {
+        "self": {
+          "href": "/jenkins/job/Test%20Workflow/16/execution/node/7/wfapi/describe"
+        },
+        "log": {
+          "href": "/jenkins/job/Test%20Workflow/16/execution/node/7/wfapi/log"
+        }
+      },
+      "id": "7",
+      "name": "Shell Script",
+      "status": "SUCCESS",
+      "startTimeMillis": 1413461275792,
+      "durationMillis": 5206,
+      "parentNodes": [
+        "6"
+      ]
+    }
+  ]
+}

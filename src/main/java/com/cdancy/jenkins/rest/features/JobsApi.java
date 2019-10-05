@@ -31,6 +31,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.cdancy.jenkins.rest.domain.job.*;
+import com.google.gson.JsonObject;
 import org.jclouds.Fallbacks;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.BinderParam;
@@ -44,9 +46,6 @@ import org.jclouds.rest.annotations.ResponseParser;
 import com.cdancy.jenkins.rest.binders.BindMapToForm;
 import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
-import com.cdancy.jenkins.rest.domain.job.BuildInfo;
-import com.cdancy.jenkins.rest.domain.job.JobInfo;
-import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
 import com.cdancy.jenkins.rest.parsers.BuildNumberToInteger;
@@ -203,4 +202,23 @@ public interface JobsApi {
     boolean rename(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                    @PathParam("name") String jobName,
                    @QueryParam("newName") String newName);
+
+    @Named("jobs:workflow")
+    @Path("{optionalFolderPath}job/{name}/{number}/wfapi/describe")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    Workflow workflow(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+        @PathParam("name") String jobName,
+        @PathParam("number") int buildNumber);
+
+    @Named("jobs:pipeline-node")
+    @Path("{optionalFolderPath}job/{name}/{number}/execution/node/{nodeId}/wfapi/describe")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    PipelineNode pipelineNode(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+        @PathParam("name") String jobName,
+        @PathParam("number") int buildNumber, @PathParam("nodeId") int nodeId);
+
 }

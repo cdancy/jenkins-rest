@@ -28,15 +28,10 @@ import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
-import com.cdancy.jenkins.rest.domain.job.Action;
-import com.cdancy.jenkins.rest.domain.job.Cause;
-import com.cdancy.jenkins.rest.domain.job.Parameter;
+import com.cdancy.jenkins.rest.domain.job.*;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
-import com.cdancy.jenkins.rest.domain.job.BuildInfo;
-import com.cdancy.jenkins.rest.domain.job.JobInfo;
-import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
@@ -791,4 +786,71 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             server.shutdown();
         }
     }
+
+    public void testWorkflow() throws Exception {
+        MockWebServer server = mockWebServer();
+        String body = payloadFromResource("/workflow.json");
+
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            Workflow success = api.workflow(null,"DevTest",16);
+            assertNotNull(success);
+            assertSent(server, "GET", "/job/DevTest/16/wfapi/describe");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testWorkflowNotExist() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            Workflow success = api.workflow(null,"DevTest",16);
+            assertNull(success);
+            assertSent(server, "GET", "/job/DevTest/16/wfapi/describe");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testPipelineNode() throws Exception {
+        MockWebServer server = mockWebServer();
+        String body = payloadFromResource("/pipeline-node.json");
+
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            PipelineNode success = api.pipelineNode(null,"DevTest",16, 17);
+            assertNotNull(success);
+            assertSent(server, "GET", "/job/DevTest/16/execution/node/17/wfapi/describe");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testPipelineNodeNotExist() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            PipelineNode success = api.pipelineNode(null,"DevTest",16, 17);
+            assertNull(success);
+            assertSent(server, "GET", "/job/DevTest/16/execution/node/17/wfapi/describe");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
 }
