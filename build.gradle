@@ -30,9 +30,9 @@ dependencies {
     ext.jcloudsVersion = '2.1.2'
 
     compile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}")
-    compile ('com.google.auto.service:auto-service:1.0-rc3')
-    compile ('com.google.auto.value:auto-value-annotations:1.6.2')
-    compileOnly ('com.google.auto.value:auto-value:1.6.2')
+    compile ('com.google.auto.service:auto-service:1.0-rc6')
+    compile ('com.google.auto.value:auto-value-annotations:1.6.6')
+    compileOnly ('com.google.auto.value:auto-value:1.6.6')
 
     testCompile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}:tests")
     testCompile ("org.apache.jclouds.driver:jclouds-slf4j:${jcloudsVersion}")
