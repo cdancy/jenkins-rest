@@ -1,4 +1,4 @@
-### Versoin 0.0.20 (TBA)
+### Versoin 0.0.20 (October 8, 2019)
 * ADDED: `PipelineApi`. - [Pull Request 64](https://github.com/cdancy/jenkins-rest/pull/64)
 * ADDED: Bump various dependency versions.
 
