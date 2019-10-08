@@ -1,4 +1,6 @@
 ### Versoin 0.0.20 (TBA)
+* ADDED: `PipelineApi`. - [Pull Request 64](https://github.com/cdancy/jenkins-rest/pull/64)
+* ADDED: Bump various dependency versions.
 
 ### Version 0.0.19 (June 20, 2019)
 * ADDED: 'message' property attached to `Error` object can now be null.
