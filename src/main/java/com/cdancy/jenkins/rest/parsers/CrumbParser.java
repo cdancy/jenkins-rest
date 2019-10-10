@@ -57,6 +57,6 @@ public class CrumbParser implements Function<HttpResponse, Crumb> {
         return input.getHeaders().get(HttpHeaders.SET_COOKIE).stream()
             .filter(c -> c.startsWith("JSESSIONID"))
             .findFirst()
-            .orElse(null);
+            .orElse("");
     }
 }
