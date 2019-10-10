@@ -23,6 +23,7 @@ import com.google.common.base.Function;
 import java.io.IOException;
 
 import javax.inject.Singleton;
+import javax.ws.rs.core.HttpHeaders;
 
 import org.jclouds.http.HttpResponse;
 import org.jclouds.util.Strings2;
@@ -38,13 +39,24 @@ public class CrumbParser implements Function<HttpResponse, Crumb> {
         final int statusCode = input.getStatusCode();
         if (statusCode >= 200 && statusCode < 400) {
             try {
-                final String response = Strings2.toStringAndClose(input.getPayload().openStream());
-                return Crumb.create(response.split(":")[1], null);
+                return Crumb.create(crumbValue(input), sessionIdCookie(input));
             } catch (final IOException e) {
                 throw new RuntimeException(input.getStatusLine(), e);
             }
         } else {
             throw new RuntimeException(input.getStatusLine());
         }
+    }
+
+    private static String crumbValue(HttpResponse input) throws IOException {
+        return Strings2.toStringAndClose(input.getPayload().openStream())
+                .split(":")[1];
+    }
+
+    private static String sessionIdCookie(HttpResponse input) {
+        return input.getHeaders().get(HttpHeaders.SET_COOKIE).stream()
+            .filter(c -> c.startsWith("JSESSIONID"))
+            .findFirst()
+            .orElse(null);
     }
 }

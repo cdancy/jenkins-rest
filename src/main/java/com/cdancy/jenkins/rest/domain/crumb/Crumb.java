@@ -24,18 +24,34 @@ import org.jclouds.json.SerializedNames;
 
 import com.cdancy.jenkins.rest.domain.common.Error;
 import com.cdancy.jenkins.rest.domain.common.ErrorsHolder;
-import com.cdancy.jenkins.rest.domain.common.Value;
 import com.cdancy.jenkins.rest.JenkinsUtils;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class Crumb implements Value<String>, ErrorsHolder {
+public abstract class Crumb implements ErrorsHolder {
+
+    @Nullable
+    public abstract String value();
+
+    @Nullable
+    public abstract String sessionIdCookie();
 
     @SerializedNames({ "value", "errors" })
-    public static Crumb create(@Nullable final String value,
+    public static Crumb create(final String value,
             final List<Error> errors) {
 
-        return new AutoValue_Crumb(value,
-                JenkinsUtils.nullToEmpty(errors));
+        return create(value, null, errors);
+    }
+
+    @SerializedNames({ "value", "sessionIdCookie" })
+    public static Crumb create(final String value, final String sessionIdCookie) {
+        return create(value, sessionIdCookie, null);
+    }
+
+    private static Crumb create(final String value, final String sessionIdCookie,
+            final List<Error> errors) {
+
+        return new AutoValue_Crumb(JenkinsUtils.nullToEmpty(errors), value,
+                sessionIdCookie);
     }
 }
