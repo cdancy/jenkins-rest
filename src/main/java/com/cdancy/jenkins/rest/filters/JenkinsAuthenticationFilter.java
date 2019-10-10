@@ -17,6 +17,7 @@
 
 package com.cdancy.jenkins.rest.filters;
 
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -61,7 +62,8 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
             final Pair<Crumb, Boolean> localCrumb = getCrumb();
             if (localCrumb.getKey().value() != null) {
                 builder.addHeader(CRUMB_HEADER, localCrumb.getKey().value());
-                builder.addHeader(HttpHeaders.COOKIE, localCrumb.getKey().sessionIdCookie());
+                Optional.ofNullable(localCrumb.getKey().sessionIdCookie())
+                        .ifPresent(sessionId -> builder.addHeader(sessionId));
             } else {
                 if (localCrumb.getValue() == false) {
                     throw new RuntimeException("Unexpected exception being thrown: error=" + localCrumb.getKey().errors().get(0));
