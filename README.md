@@ -83,7 +83,35 @@ Running mock tests can be done like so:
 Running integration tests can be done like so (requires existing jenkins instance):
 
 	./gradlew clean build integTest 
-	
+
+### Integration tests settings
+
+#### Jenkins instance requirements
+
+- a running instance accessible on http://127.0.0.1:8080 (can be changed in the gradle.properties file)
+- Jenkins security
+  - an `admin` user (credentials used by the tests can be changed in the gradle.properties file) with `ADMIN` role (required as the tests install plugins)
+  - [CSRF protection enabled](https://wiki.jenkins.io/display/JENKINS/CSRF+Protection). Not mandatory but [recommended by the Jenkins documentation](https://jenkins.io/doc/book/system-administration/security/#protect-users-of-jenkins-from-other-threats). The lib supports Jenkins instances with our without this protection (see #14)
+- Plugins
+  - [CloudBees Credentials](https://plugins.jenkins.io/cloudbees-credentials): otherwise an http 500 error occurs when accessing
+to http://127.0.0.1:8080/job/test-folder/job/test-folder-1/ `java.lang.NoClassDefFoundError: com/cloudbees/hudson/plugins/folder/properties/FolderCredentialsProvider`
+  - [OWASP Markup Formatter](https://plugins.jenkins.io/antisamy-markup-formatter) configured to use `Safe HTML`
+
+This project provides instructions to setup a [pre-configured Docker container](src/main/docker/README.md)
+
+#### Integration tests configuration
+
+- jenkins url and authentication method used by the tests are defined in the `gradle.properties` file
+- by default, tests use the `credentials` authentication but this can be changed to use the `token` authentication
+
+
+#### Running integration tests from within your IDE
+
+- the `integTest` gradle tasks set various System Properties
+- if you don't want to use gradle as tests runner in your IDE, configure the tests with the same kind of System Properties
+
+
+
 # Additional Resources
 
 * [Jenkins REST API](http://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API)
