@@ -41,7 +41,7 @@ import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 
 import com.google.common.collect.Lists;
 
-@Test(groups = "live", testName = "SystemApiLiveTest", singleThreaded = true)
+@Test(groups = "live", testName = "JobsApiLiveTest", singleThreaded = true)
 public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     private IntegerResponse queueId;
