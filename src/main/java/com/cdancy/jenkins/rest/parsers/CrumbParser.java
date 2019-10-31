@@ -17,6 +17,8 @@
 
 package com.cdancy.jenkins.rest.parsers;
 
+import static com.cdancy.jenkins.rest.JenkinsConstants.JENKINS_COOKIES_JSESSIONID;
+
 import com.cdancy.jenkins.rest.domain.crumb.Crumb;
 
 import com.google.common.base.Function;
@@ -55,7 +57,7 @@ public class CrumbParser implements Function<HttpResponse, Crumb> {
 
     private static String sessionIdCookie(HttpResponse input) {
         return input.getHeaders().get(HttpHeaders.SET_COOKIE).stream()
-            .filter(c -> c.startsWith("JSESSIONID"))
+            .filter(c -> c.startsWith(JENKINS_COOKIES_JSESSIONID))
             .findFirst()
             .orElse("");
     }
