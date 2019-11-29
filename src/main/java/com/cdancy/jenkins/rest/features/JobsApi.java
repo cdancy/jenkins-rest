@@ -202,7 +202,7 @@ public interface JobsApi {
     @GET
     ProgressiveText progressiveText(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                                     @PathParam("name") String jobName,
-                                    @PathParam("number") String buildNumber,
+                                    @PathParam("number") int buildNumber,
                                     @QueryParam("start") int start);
 
     @Named("jobs:rename")
