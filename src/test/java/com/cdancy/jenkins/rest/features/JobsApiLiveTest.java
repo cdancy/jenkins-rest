@@ -364,6 +364,14 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertNotNull(causes.get(0).userName());
     }
 
+    @Test(dependsOnMethods = "testGetProgressiveText")
+    public void testGetProgressiveTextOfBuildNumber() {
+        ProgressiveText output = api().progressiveText("test-folder/test-folder-1", "JobInFolder", 1,0);
+        assertNotNull(output);
+        assertTrue(output.size() > 0);
+        assertFalse(output.hasMoreData());
+    }
+
     public void testCreateJobForEmptyAndNullParams() {
         String config = payloadFromResource("/freestyle-project-empty-and-null-params.xml");
         RequestStatus success = api().create(null, "JobForEmptyAndNullParams", config);
