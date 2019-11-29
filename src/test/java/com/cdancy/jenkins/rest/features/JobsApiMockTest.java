@@ -751,7 +751,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             assertNotNull(output);
             assertTrue(output.size() == 123);
             assertFalse(output.hasMoreData());
-            assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/logText/progressiveText?start=0");
+            assertSentAcceptText(server, "GET", "/job/DevTest/1/logText/progressiveText?start=0");
         } finally {
             jenkinsApi.close();
             server.shutdown();
