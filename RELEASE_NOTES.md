@@ -1,3 +1,5 @@
+### Version 0.0.22 (TBA)
+
 ### Version 0.0.21 (December 2, 2019)
 * ADDED: `JobsApi.progressiveText` with additional `buildNumber` param. - [Pull Request 74](https://github.com/cdancy/jenkins-rest/pull/74)
 
