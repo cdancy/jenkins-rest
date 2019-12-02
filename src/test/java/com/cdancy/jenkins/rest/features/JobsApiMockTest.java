@@ -739,6 +739,25 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
+    public void testGetProgressiveTextOfBuildNumber() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String body = payloadFromResource("/progressive-text.txt");
+        server.enqueue(new MockResponse().setHeader("X-Text-Size", "123").setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            ProgressiveText output = api.progressiveText(null,"DevTest", 1,0);
+            assertNotNull(output);
+            assertTrue(output.size() == 123);
+            assertFalse(output.hasMoreData());
+            assertSentAcceptText(server, "GET", "/job/DevTest/1/logText/progressiveText?start=0");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
     public void testGetProgressiveTextJobNotExist() throws Exception {
         MockWebServer server = mockWebServer();
 
