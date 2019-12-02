@@ -47,10 +47,10 @@ public class TestUtilities extends JenkinsUtils {
     public static final String TEST_TOKEN_ENVIRONMENT_VARIABLE = TEST_TOKEN_SYSTEM_PROPERTY.replaceAll("\\.", "_").toUpperCase();
 
     private static final char[] CHARS = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-    
+
     /**
      * Generate a random String with letters only.
-     * 
+     *
      * @return random String.
      */
     public static String randomStringLettersOnly() {
@@ -65,7 +65,7 @@ public class TestUtilities extends JenkinsUtils {
 
     /**
      * Generate a random String with numbers and letters.
-     * 
+     *
      * @return random String.
      */
     public static String randomString() {
