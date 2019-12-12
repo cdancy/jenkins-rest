@@ -21,9 +21,12 @@ import org.jclouds.json.SerializedNames;
 
 import com.google.auto.value.AutoValue;
 
+import javax.annotation.Nullable;
+
 @AutoValue
 public abstract class Artifact {
 
+   @Nullable
    public abstract String displayPath();
 
    public abstract String fileName();
