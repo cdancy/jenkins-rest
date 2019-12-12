@@ -10,11 +10,18 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
+services:
+  - docker
+
+before_install:
+  - docker build -t jenkins-rest/jenkins src/main/docker
+  - docker run -d --rm -p 8080:8080 --name jenkins-rest jenkins-rest/jenkins
+
 install: true
     
 script:
-  - ./gradlew -s -Dorg.gradle.daemon=false clean build mockTest publishToMavenLocal
+  - ./gradlew -s -Dorg.gradle.daemon=false clean build mockTest publishToMavenLocal integTest
 
 after_script:
+  - docker stop jenkins-rest
   - bash <(curl -s https://codecov.io/bash)
-  
