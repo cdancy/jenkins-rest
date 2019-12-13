@@ -1,5 +1,4 @@
-# api calls 403 error with jenkins 2.176.2+/2.186+ because of security changes: https://jenkins.io/security/advisory/2019-07-17/#SECURITY-626
-ARG jenkins_tag=2.176.1-alpine
+ARG jenkins_tag=2.190.3-alpine
 
 FROM jenkins/jenkins:$jenkins_tag
 
