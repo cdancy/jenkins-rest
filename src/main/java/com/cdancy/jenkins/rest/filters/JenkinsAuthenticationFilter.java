@@ -63,7 +63,7 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
             if (localCrumb.getKey().value() != null) {
                 builder.addHeader(CRUMB_HEADER, localCrumb.getKey().value());
                 Optional.ofNullable(localCrumb.getKey().sessionIdCookie())
-                        .ifPresent(sessionId -> builder.addHeader(sessionId));
+                        .ifPresent(sessionId -> builder.addHeader(HttpHeaders.COOKIE, sessionId));
             } else {
                 if (localCrumb.getValue() == false) {
                     throw new RuntimeException("Unexpected exception being thrown: error=" + localCrumb.getKey().errors().get(0));
