@@ -1,4 +1,6 @@
 ### Version 0.0.22 (TBA)
+* ADDED: Artifact `displayPath` is not mandatory anymore. - [Pull Request 77](https://github.com/cdancy/jenkins-rest/pull/77)
+* ADDED: Fix crumb issue with Jenkins. - [Pull Request 70](https://github.com/cdancy/jenkins-rest/pull/70)
 
 ### Version 0.0.21 (December 2, 2019)
 * ADDED: `JobsApi.progressiveText` with additional `buildNumber` param. - [Pull Request 74](https://github.com/cdancy/jenkins-rest/pull/74)
