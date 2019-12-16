@@ -17,6 +17,7 @@
 
 package com.cdancy.jenkins.rest.filters;
 
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -39,7 +40,7 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
     private final JenkinsApi jenkinsApi;
 
     // key = Crumb, value = true if exception is ResourceNotFoundException false otherwise
-    private static volatile Pair<Crumb, Boolean> crumbPair = null; 
+    private static volatile Pair<Crumb, Boolean> crumbPair = null;
     private static final String CRUMB_HEADER = "Jenkins-Crumb";
 
     @Inject
@@ -61,6 +62,8 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
             final Pair<Crumb, Boolean> localCrumb = getCrumb();
             if (localCrumb.getKey().value() != null) {
                 builder.addHeader(CRUMB_HEADER, localCrumb.getKey().value());
+                Optional.ofNullable(localCrumb.getKey().sessionIdCookie())
+                        .ifPresent(sessionId -> builder.addHeader(HttpHeaders.COOKIE, sessionId));
             } else {
                 if (localCrumb.getValue() == false) {
                     throw new RuntimeException("Unexpected exception being thrown: error=" + localCrumb.getKey().errors().get(0));
@@ -87,7 +90,7 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
         }
         return crumbValueInit;
     }
- 
+
     // simple impl/copy of javafx.util.Pair
     private class Pair<A, B> {
         private final A a;
