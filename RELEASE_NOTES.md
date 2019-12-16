@@ -1,4 +1,4 @@
-### Version 0.0.22 (TBA)
+### Version 0.0.22 (December 16, 2019)
 * ADDED: Artifact `displayPath` is not mandatory anymore. - [Pull Request 77](https://github.com/cdancy/jenkins-rest/pull/77)
 * ADDED: Fix crumb issue with Jenkins. - [Pull Request 70](https://github.com/cdancy/jenkins-rest/pull/70)
 
