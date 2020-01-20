@@ -32,7 +32,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.cdancy.jenkins.rest.domain.job.*;
-import com.google.gson.JsonObject;
+import com.cdancy.jenkins.rest.parsers.*;
 import org.jclouds.Fallbacks;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.rest.annotations.BinderParam;
@@ -48,15 +48,17 @@ import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
-import com.cdancy.jenkins.rest.parsers.BuildNumberToInteger;
-import com.cdancy.jenkins.rest.parsers.LocationToQueueId;
-import com.cdancy.jenkins.rest.parsers.OutputToProgressiveText;
-import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
-import com.cdancy.jenkins.rest.parsers.OptionalFolderPathParser;
 
 @RequestFilters(JenkinsAuthenticationFilter.class)
 @Path("/")
 public interface JobsApi {
+
+    @Named("jobs:get-jobs")
+    @Path("{folderPath}api/json")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    JobList jobList(@PathParam("folderPath") @ParamParser(FolderPathParser.class) String folderPath);
 
     @Named("jobs:job-info")
     @Path("{optionalFolderPath}job/{name}/api/json")

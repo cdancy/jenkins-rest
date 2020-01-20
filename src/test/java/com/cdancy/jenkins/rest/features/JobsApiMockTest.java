@@ -16,12 +16,6 @@
  */
 package com.cdancy.jenkins.rest.features;
 
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,11 +35,52 @@ import com.google.common.collect.Lists;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
+import static org.testng.Assert.*;
+
 /**
  * Mock tests for the {@link com.cdancy.jenkins.rest.features.JobsApi} class.
  */
 @Test(groups = "unit", testName = "JobsApiMockTest")
 public class JobsApiMockTest extends BaseJenkinsMockTest {
+
+    public void testGetInnerFolderJobList() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String body = payloadFromResource("/jobsInJenkinsFolder.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            JobList output = api.jobList("Folder1/Folder 2");
+            assertNotNull(output);
+            assertNotNull(output.jobs());
+            assertEquals(output.jobs().size(), 1);
+            assertEquals(output.jobs().get(0), Job.create("hudson.model.FreeStyleProject", "Test Project", "http://localhost:8080/job/username"));
+            assertSent(server, "GET", "/job/Folder1/job/Folder%202/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetRootFolderJobList() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String body = payloadFromResource("/jobsInRootFolder.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            JobList output = api.jobList("");
+            assertNotNull(output);
+            assertNotNull(output.jobs());
+            assertEquals(output.jobs().size(), 6);
+            assertSent(server, "GET", "/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 
     public void testGetJobInfo() throws Exception {
         MockWebServer server = mockWebServer();

@@ -1,0 +1,10 @@
+{
+  "_class" : "com.cloudbees.hudson.plugins.folder.Folder",
+  "jobs" : [
+    {
+      "_class" : "hudson.model.FreeStyleProject",
+      "name" : "Test Project",
+      "url": "http://localhost:8080/job/username"
+    }
+  ]
+}
