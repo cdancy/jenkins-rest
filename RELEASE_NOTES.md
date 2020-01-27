@@ -1,4 +1,5 @@
-### Version 0.0.23 (TBA)
+### Version 0.0.23 (January 27, 2020)
+* ADDED: `JobsApi.jobList` endpoint. - [Pull Request 81](https://github.com/cdancy/jenkins-rest/pull/81)
 
 ### Version 0.0.22 (December 16, 2019)
 * ADDED: Artifact `displayPath` is not mandatory anymore. - [Pull Request 77](https://github.com/cdancy/jenkins-rest/pull/77)
