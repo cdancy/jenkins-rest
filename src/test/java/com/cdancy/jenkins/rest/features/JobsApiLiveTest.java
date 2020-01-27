@@ -16,17 +16,11 @@
  */
 package com.cdancy.jenkins.rest.features;
 
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.cdancy.jenkins.rest.domain.job.Cause;
-import com.cdancy.jenkins.rest.domain.job.Parameter;
+import com.cdancy.jenkins.rest.domain.job.*;
 import com.cdancy.jenkins.rest.domain.plugins.Plugin;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
@@ -35,11 +29,10 @@ import org.testng.annotations.Test;
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
 import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
-import com.cdancy.jenkins.rest.domain.job.BuildInfo;
-import com.cdancy.jenkins.rest.domain.job.JobInfo;
-import com.cdancy.jenkins.rest.domain.job.ProgressiveText;
 
 import com.google.common.collect.Lists;
+
+import static org.testng.Assert.*;
 
 @Test(groups = "live", testName = "JobsApiLiveTest", singleThreaded = true)
 public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
@@ -55,6 +48,14 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         String config = payloadFromResource("/freestyle-project-no-params.xml");
         RequestStatus success = api().create(null, "DevTest", config);
         assertTrue(success.value());
+    }
+
+    @Test(dependsOnMethods = "testCreateJob")
+    public void testGetJobListFromRoot() {
+        JobList output = api().jobList("");
+        assertNotNull(output);
+        assertFalse(output.jobs().isEmpty());
+        assertEquals(output.jobs().size(), 2);
     }
 
     @Test(dependsOnMethods = "testCreateJob")
@@ -272,6 +273,15 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         String config = payloadFromResource("/folder-config.xml");
         RequestStatus success = api().create("/test-folder//test-folder-1/", "Job",config);
         assertFalse(success.value());
+    }
+
+    @Test(dependsOnMethods = "testCreateJobInFolder")
+    public void testGetJobListInFolder() {
+        JobList output = api().jobList("test-folder/test-folder-1");
+        assertNotNull(output);
+        assertFalse(output.jobs().isEmpty());
+        assertEquals(output.jobs().size(), 1);
+        assertEquals(output.jobs().get(0), Job.create("hudson.model.FreeStyleProject", "JobInFolder", "http://127.0.0.1:8080/job/test-folder/job/test-folder-1/job/JobInFolder/"));
     }
 
     @Test(dependsOnMethods = "testCreateJobInFolder")

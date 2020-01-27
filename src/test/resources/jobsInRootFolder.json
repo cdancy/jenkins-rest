@@ -1,0 +1,36 @@
+{
+  "_class" : "hudson.model.Hudson",
+  "jobs" : [
+    {
+      "_class" : "hudson.maven.MavenModuleSet",
+      "name" : "Test Tool",
+      "url": "http://localhost:32769/job/fish-test/"
+    },
+    {
+      "_class" : "org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject",
+      "name" : "Test MultiBranch Project",
+      "url": "http://localhost:32769/job/fish-multibranch/"
+    },
+    {
+      "_class" : "com.cloudbees.hudson.plugins.folder.Folder",
+      "name" : "Test Folder",
+      "url": "http://localhost:32769/job/fish-folder/"
+    },
+    {
+      "_class" : "com.cloudbees.tiger.plugins.palace.templates.DockerSlaveTemplate",
+      "name" : "Test Docker Slave",
+      "url":"http://localhost:32769/job/fish-agent/"
+    },
+    {
+      "_class" : "hudson.model.FreeStyleProject",
+      "name" : "Test Free Style",
+      "url": "http://localhost:32769/job/fish-project/",
+      "color": "red"
+    },
+    {
+      "_class" : "org.jenkinsci.plugins.workflow.job.WorkflowJob",
+      "name" : "Test Workflow Job",
+      "url": "http://localhost:32769/job/fish-workflow/"
+    }
+  ]
+}
