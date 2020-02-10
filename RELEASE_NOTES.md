@@ -1,4 +1,6 @@
-### Version 0.0.24 (TBA)
+### Version 0.0.25 (TBA)
+
+### Version 0.0.24 (February 10, 2020)
 * BUGFIX: Fix Nullable import - use jclouds version. - [Pull Request 84](https://github.com/cdancy/jenkins-rest/pull/84)
 
 ### Version 0.0.23 (January 27, 2020)
