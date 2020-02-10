@@ -1,4 +1,5 @@
 ### Version 0.0.24 (TBA)
+* BUGFIX: Fix Nullable import - use jclouds version. - [Pull Request 84](https://github.com/cdancy/jenkins-rest/pull/84)
 
 ### Version 0.0.23 (January 27, 2020)
 * ADDED: `JobsApi.jobList` endpoint. - [Pull Request 81](https://github.com/cdancy/jenkins-rest/pull/81)
