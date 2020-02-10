@@ -17,11 +17,10 @@
 
 package com.cdancy.jenkins.rest.domain.job;
 
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 import com.google.auto.value.AutoValue;
-
-import javax.annotation.Nullable;
 
 @AutoValue
 public abstract class Artifact {
