@@ -20,17 +20,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
+import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.job.*;
 import com.cdancy.jenkins.rest.domain.plugins.Plugin;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
-import org.testng.annotations.Test;
-
-import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
-import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
-import com.cdancy.jenkins.rest.domain.common.RequestStatus;
-
 import com.google.common.collect.Lists;
+import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
 
@@ -281,7 +279,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertNotNull(output);
         assertFalse(output.jobs().isEmpty());
         assertEquals(output.jobs().size(), 1);
-        assertEquals(output.jobs().get(0), Job.create("hudson.model.FreeStyleProject", "JobInFolder", "http://127.0.0.1:8080/job/test-folder/job/test-folder-1/job/JobInFolder/"));
+        assertEquals(output.jobs().get(0), Job.create("hudson.model.FreeStyleProject", "JobInFolder", "http://127.0.0.1:8080/job/test-folder/job/test-folder-1/job/JobInFolder/", "notbuilt"));
     }
 
     @Test(dependsOnMethods = "testCreateJobInFolder")

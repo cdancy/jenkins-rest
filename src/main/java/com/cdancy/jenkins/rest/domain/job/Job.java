@@ -14,11 +14,14 @@ public abstract class Job {
 
     public abstract String url();
 
+    @Nullable
+    public abstract String color();
+
     Job() {
     }
 
-    @SerializedNames({"_class", "name", "url"})
-    public static Job create(final String clazz, final String name, final String url) {
-        return new AutoValue_Job(clazz, name, url);
+    @SerializedNames({"_class", "name", "url", "color"})
+    public static Job create(final String clazz, final String name, final String url, final String color) {
+        return new AutoValue_Job(clazz, name, url, color);
     }
 }

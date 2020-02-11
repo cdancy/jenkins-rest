@@ -19,21 +19,17 @@ package com.cdancy.jenkins.rest.features;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.ws.rs.core.MediaType;
 
-import com.cdancy.jenkins.rest.domain.job.*;
-import org.testng.annotations.Test;
-
-import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
+import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
-
+import com.cdancy.jenkins.rest.domain.job.*;
 import com.google.common.collect.Lists;
-
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
+import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
 
@@ -55,7 +51,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             assertNotNull(output);
             assertNotNull(output.jobs());
             assertEquals(output.jobs().size(), 1);
-            assertEquals(output.jobs().get(0), Job.create("hudson.model.FreeStyleProject", "Test Project", "http://localhost:8080/job/username"));
+            assertEquals(output.jobs().get(0), Job.create("hudson.model.FreeStyleProject", "Test Project", "http://localhost:8080/job/username", null));
             assertSent(server, "GET", "/job/Folder1/job/Folder%202/api/json");
         } finally {
             jenkinsApi.close();
