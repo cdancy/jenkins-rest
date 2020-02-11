@@ -1,3 +1,5 @@
+### Version 0.0.26 (TBA)
+
 ### Version 0.0.25 (February 11, 2020)
 * ADDED: Add _color_ to Job. - [Pull Request 86](https://github.com/cdancy/jenkins-rest/pull/86)
 
