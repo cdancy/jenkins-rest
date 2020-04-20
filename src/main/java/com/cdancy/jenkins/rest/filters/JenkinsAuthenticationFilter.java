@@ -40,7 +40,7 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
     private final JenkinsApi jenkinsApi;
 
     // key = Crumb, value = true if exception is ResourceNotFoundException false otherwise
-    private static volatile Pair<Crumb, Boolean> crumbPair = null;
+    private volatile Pair<Crumb, Boolean> crumbPair = null;
     private static final String CRUMB_HEADER = "Jenkins-Crumb";
 
     @Inject
@@ -75,16 +75,16 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
     }
 
     private Pair<Crumb, Boolean> getCrumb() {
-        Pair<Crumb, Boolean> crumbValueInit = JenkinsAuthenticationFilter.crumbPair;
+        Pair<Crumb, Boolean> crumbValueInit = this.crumbPair;
         if (crumbValueInit == null) {
             synchronized(this) {
-                crumbValueInit = JenkinsAuthenticationFilter.crumbPair;
+                crumbValueInit = this.crumbPair;
                 if (crumbValueInit == null) {
                     final Crumb crumb = jenkinsApi.crumbIssuerApi().crumb();
                     final Boolean isRNFE = crumb.errors().isEmpty()
                             ? true
                             : crumb.errors().get(0).exceptionName().endsWith(ResourceNotFoundException.class.getSimpleName());
-                    JenkinsAuthenticationFilter.crumbPair = crumbValueInit = new Pair(crumb, isRNFE);
+                    this.crumbPair = crumbValueInit = new Pair(crumb, isRNFE);
                 }
             }
         }
