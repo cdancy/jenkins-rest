@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    ext.jcloudsVersion = '2.1.2'
+    ext.jcloudsVersion = '2.2.0'
     ext.guiceVersion = '4.2.2'
 
     compile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}")
