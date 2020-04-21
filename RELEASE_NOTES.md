@@ -1,4 +1,7 @@
-### Version 0.0.26 (TBA)
+### Version 0.0.28 (TBA)
+
+### Version 0.0.27 (April 21, 2020)
+* BUGFIX: Fix for crumb which was being held in a static field. - [Pull Request 88](https://github.com/cdancy/jenkins-rest/pull/88)
 
 ### Version 0.0.25 (February 11, 2020)
 * ADDED: Add _color_ to Job. - [Pull Request 86](https://github.com/cdancy/jenkins-rest/pull/86)
