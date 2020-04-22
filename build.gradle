@@ -39,7 +39,7 @@ dependencies {
     
     testCompile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}:tests")
     testCompile ("org.apache.jclouds.driver:jclouds-slf4j:${jcloudsVersion}")
-    testCompile ('org.testng:testng:6.11')
+    testCompile ('org.testng:testng:7.2.0')
     testCompile ('org.assertj:assertj-core:3.8.0')
     testCompile ('com.squareup.okhttp:mockwebserver:2.7.5')
     testCompile ('ch.qos.logback:logback-core:1.2.3')
