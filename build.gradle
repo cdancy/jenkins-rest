@@ -34,7 +34,7 @@ dependencies {
     compile ("com.google.inject:guice:${guiceVersion}")
     compile ("com.google.inject.extensions:guice-assistedinject:${guiceVersion}")
     compile ('com.google.auto.service:auto-service:1.0-rc6')
-    compile ('com.google.auto.value:auto-value-annotations:1.7.1')
+    compile ('com.google.auto.value:auto-value-annotations:1.7.2')
     compileOnly ('com.google.auto.value:auto-value:1.7.1')
     
     testCompile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}:tests")
