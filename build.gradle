@@ -27,16 +27,18 @@ repositories {
 }
 
 dependencies {
-    ext.autoValueVersion = '1.7.2'
     ext.jcloudsVersion = '2.2.1'
+    ext.autoValueVersion = '1.7.2'
+    ext.autoServiceVersion = '1.0-rc7'
     ext.guiceVersion = '4.2.3'
 
     compile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}")
     compile ("com.google.inject:guice:${guiceVersion}")
     compile ("com.google.inject.extensions:guice-assistedinject:${guiceVersion}")
-    compile ('com.google.auto.service:auto-service:1.0-rc7')
+    compile ("com.google.auto.service:auto-service-annotations:${autoServiceVersion}")
+    annotationProcessor ("com.google.auto.service:auto-service:${autoServiceVersion}")
     compile ("com.google.auto.value:auto-value-annotations:${autoValueVersion}")
-    compileOnly ("com.google.auto.value:auto-value:${autoValueVersion}")
+    annotationProcessor ("com.google.auto.value:auto-value:${autoValueVersion}")
     
     testCompile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}:tests")
     testCompile ("org.apache.jclouds.driver:jclouds-slf4j:${jcloudsVersion}")
