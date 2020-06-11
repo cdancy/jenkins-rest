@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
     ext.jcloudsVersion = '2.2.1'
-    ext.autoValueVersion = '1.7.2'
+    ext.autoValueVersion = '1.7.3'
     ext.autoServiceVersion = '1.0-rc7'
     ext.guiceVersion = '4.2.3'
 
