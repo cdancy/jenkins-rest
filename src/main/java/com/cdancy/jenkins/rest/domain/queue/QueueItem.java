@@ -47,6 +47,12 @@ public abstract class QueueItem {
    @Nullable
    public abstract String why();
 
+    // https://javadoc.jenkins.io/hudson/model/Queue.NotWaitingItem.html
+    /**
+     * When did this job exit the Queue.waitingList phase?
+     * For a Queue.NotWaitingItem
+     * @return The time expressed in milliseconds after January 1, 1970, 0:00:00 GMT.
+     */
    public abstract long buildableStartMilliseconds();
 
    public abstract boolean cancelled();
@@ -54,14 +60,23 @@ public abstract class QueueItem {
    @Nullable
    public abstract Executable executable();
 
+    // https://javadoc.jenkins.io/hudson/model/Queue.WaitingItem.html
+    /**
+     * This item can be run after this time.
+     * For a Queue.WaitingItem
+     * @return The time expressed in milliseconds after January 1, 1970, 0:00:00 GMT.
+     */
+   @Nullable
+   public abstract Long timestamp();
+
    QueueItem() {
    }
 
    @SerializedNames({ "blocked", "buildable", "id", "inQueueSince", "params", "stuck", "task", "url", "why",
-         "buildableStartMilliseconds", "cancelled", "executable" })
+         "buildableStartMilliseconds", "cancelled", "executable", "timestamp"})
    public static QueueItem create(boolean blocked, boolean buildable, int id, long inQueueSince, String params,
          boolean stuck, Task task, String url, String why, long buildableStartMilliseconds,
-	 boolean cancelled, Executable executable) {
+	 boolean cancelled, Executable executable, Long timestamp) {
       Map<String, String> parameters = Maps.newHashMap();
       if (params != null) {
          params = params.trim();
@@ -73,6 +88,6 @@ public abstract class QueueItem {
          }
       }
       return new AutoValue_QueueItem(blocked, buildable, id, inQueueSince, parameters, stuck, task, url, why,
-            buildableStartMilliseconds, cancelled, executable);
+            buildableStartMilliseconds, cancelled, executable, timestamp);
    }
 }

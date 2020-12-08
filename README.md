@@ -23,6 +23,10 @@ assertTrue(systemInfo.jenkinsVersion().equals("1.642.4"));
       
 ## Latest release
 
+###0.0.29 (JueRei)
+  * allow access to QueueItem.timestamp for items waiting in queue scheduled for later execution
+
+###0.0.28
 Can be found in jcenter like so:
 ```
 <dependency>
