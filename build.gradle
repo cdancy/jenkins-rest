@@ -18,8 +18,8 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply from: "$rootDir/gradle/additional-artifacts.gradle"
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/documentation.gradle"
-apply from: "$rootDir/gradle/publishing.gradle"
-apply from: "$rootDir/gradle/release.gradle"
+//apply from: "$rootDir/gradle/publishing.gradle"
+//apply from: "$rootDir/gradle/release.gradle"
 
 repositories {
     jcenter()
@@ -39,7 +39,7 @@ dependencies {
     annotationProcessor ("com.google.auto.service:auto-service:${autoServiceVersion}")
     compile ("com.google.auto.value:auto-value-annotations:${autoValueVersion}")
     annotationProcessor ("com.google.auto.value:auto-value:${autoValueVersion}")
-    
+
     testCompile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}:tests")
     testCompile ("org.apache.jclouds.driver:jclouds-slf4j:${jcloudsVersion}")
     testCompile ('org.testng:testng:7.3.0')
@@ -64,6 +64,31 @@ jar {
     }
 }
 
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier "sources"
+    setManifest(jar.getManifest())
+}
+
+artifacts {
+    archives sourceJar
+}
+
+
+publishing {
+    publications {
+        myPublication(MavenPublication) {
+            from components.java
+            artifact sourceJar
+//      artifact source: sourceJar, classifier: 'src', extension: 'zip'
+            pom.withXml {
+                asNode().appendNode('description', 'Kotlin Util Library')
+            }
+        }
+    }
+}
+
+
 tasks.withType(JavaCompile) {
     options.compilerArgs += ["-Xlint:-options"]
 }
@@ -83,7 +108,7 @@ task integTest(type: Test, dependsOn: mockTest) {
         def integProjectDir = project.file("${buildDir}/integ-projects")
         if (!integProjectDir.exists()) {
             if (!integProjectDir.mkdirs()) {
-                throw new RuntimeException("Failed to create integ-project directory @ ${integProjectDir.path}")
+                //throw new RuntimeException("Failed to create integ-project directory @ ${integProjectDir.path}")
             }
         }
     }
