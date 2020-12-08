@@ -21,17 +21,30 @@ public class OptionalFolderPathParser implements Function<Object,String> {
         }
 
         final StringBuilder path = new StringBuilder(String.class.cast(optionalFolderPath));
+        if (path.length() == 0) {
+            return EMPTY_STRING;
+        }
+
         if(path.charAt(0) == FOLDER_NAME_SEPARATOR){
             path.deleteCharAt(0);
         }
+        if (path.length() == 0) {
+            return EMPTY_STRING;
+        }
+
         if(path.charAt(path.length() - 1) == FOLDER_NAME_SEPARATOR) {
             path.deleteCharAt(path.length() - 1);
         }
+        if (path.length() == 0) {
+            return EMPTY_STRING;
+        }
+
         final String[] folders = path.toString().split(Character.toString(FOLDER_NAME_SEPARATOR));
         path.setLength(0);
         for(final String folder : folders) {
             path.append(FOLDER_NAME_PREFIX).append(folder).append(FOLDER_NAME_SEPARATOR);
         }
+
         return path.toString();
     }
 }

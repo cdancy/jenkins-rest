@@ -25,6 +25,8 @@ assertTrue(systemInfo.jenkinsVersion().equals("1.642.4"));
 
 ###0.0.29 (JueRei)
   * allow access to QueueItem.timestamp for items waiting in queue scheduled for later execution
+  * avoid NPE in `OptionalFolderPathParser` and `FolderPathParser`
+    * this allows "" and "/" as folderPath (e.g. `jobsApi.jobList("/")`) 
 
 ###0.0.28
 Can be found in jcenter like so:
