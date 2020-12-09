@@ -24,9 +24,9 @@ assertTrue(systemInfo.jenkinsVersion().equals("1.642.4"));
 ## Latest release
 
 ### 0.0.29 (JueRei)
-  * allow access to QueueItem.timestamp for items waiting in queue scheduled for later execution
+  * give access to QueueItem.timestamp for items waiting in queue scheduled for later execution
   * avoid index out of bounds exceptions in `OptionalFolderPathParser` and `FolderPathParser`
-    * this allows "" and "/" as folderPath (e.g. `jobsApi.jobList("/")`) to fetch toplevel jobs 
+    * this permits "" and "/" as folderPath (e.g. `jobsApi.jobList("/")`) to fetch toplevel jobs 
 
 ### 0.0.28
 Can be found in jcenter like so:
