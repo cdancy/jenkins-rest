@@ -82,7 +82,7 @@ publishing {
             artifact sourceJar
 //      artifact source: sourceJar, classifier: 'src', extension: 'zip'
             pom.withXml {
-                asNode().appendNode('description', 'Kotlin Util Library')
+                asNode().appendNode('description', 'Jenkins rest interface')
             }
         }
     }
