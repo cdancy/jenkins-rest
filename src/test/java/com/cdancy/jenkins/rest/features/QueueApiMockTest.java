@@ -192,4 +192,23 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
             server.shutdown();
         }
     }
+
+    public void testQueueItemNullTaskName() throws Exception {
+        MockWebServer server = mockWebServer();
+        String body = payloadFromResource("/queueItemNullTaskName.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        int queueItemId = 143;
+        QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
+        try {
+            assertFalse(queueItem.cancelled());
+            assertEquals(queueItem.why(), "Build #9 is already in progress (ETA:15 sec)");
+            assertNull(queueItem.executable());
+            assertSent(server, "GET", "/queue/item/" + queueItemId + "/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
 }
