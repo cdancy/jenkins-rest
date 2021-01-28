@@ -1,4 +1,5 @@
-### Version 0.0.28 (TBA)
+### Version 0.0.28 (January 1, 2021)
+* BUGFIX: Fix null queue item task name. - [Pull Request 138](https://github.com/cdancy/jenkins-rest/pull/138)
 
 ### Version 0.0.27 (April 21, 2020)
 * BUGFIX: Fix for crumb which was being held in a static field. - [Pull Request 88](https://github.com/cdancy/jenkins-rest/pull/88)
