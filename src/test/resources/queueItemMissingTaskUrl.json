@@ -1,0 +1,17 @@
+{
+    "_class": "hudson.model.Queue$BuildableItem",
+    "actions": [],
+    "blocked": false,
+    "buildable": true,
+    "id": 3549,
+    "inQueueSince": 1613541614644,
+    "params": "",
+    "stuck": true,
+    "task": {
+        "_class": "org.jenkinsci.plugins.workflow.support.steps.ExecutorStepExecution$PlaceholderTask"
+    },
+    "url": "queue/item/3549/",
+    "why": "Just a random message here",
+    "buildableStartMilliseconds": 1613541614649,
+    "pending": false
+}
