@@ -28,6 +28,7 @@ public abstract class Task {
    @Nullable
    public abstract String name();
 
+   @Nullable
    public abstract String url();
 
    Task() {
