@@ -1,3 +1,5 @@
+### Version 0.0.30 (TBA)
+
 ### Version 0.0.29 (February 2, 2021)
 * BUGFIX: Fix possible null `url` item int `Task`. - [Pull Request 144](https://github.com/cdancy/jenkins-rest/pull/144)
 
