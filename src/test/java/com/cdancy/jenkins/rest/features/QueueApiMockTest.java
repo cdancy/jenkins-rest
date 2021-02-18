@@ -211,4 +211,22 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
+    public void testQueueItemMissingTaskUrl() throws Exception {
+        MockWebServer server = mockWebServer();
+        String body = payloadFromResource("/queueItemMissingTaskUrl.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        int queueItemId = 143;
+        QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
+        try {
+            assertFalse(queueItem.cancelled());
+            assertEquals(queueItem.why(), "Just a random message here");
+            assertNull(queueItem.executable());
+            assertSent(server, "GET", "/queue/item/" + queueItemId + "/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
 }
