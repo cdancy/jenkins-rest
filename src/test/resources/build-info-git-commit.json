@@ -1,0 +1,85 @@
+{
+  "actions" : [
+    {
+      "parameters" : [
+        {
+          "name" : "bear",
+          "value" : true
+        },
+        {
+          "name" : "fish",
+          "value" : "salmon"
+        }
+      ]
+    },
+    {
+      "causes" : [
+        {
+          "shortDescription" : "Started by user anonymous",
+          "userId" : null,
+          "userName" : "anonymous"
+        }
+      ]
+    }
+  ],
+  "artifacts" : [
+    {
+      "displayPath" : "fish.txt",
+      "fileName" : "fish.txt",
+      "relativePath" : "fish.txt"
+    }
+  ],
+  "building" : false,
+  "description" : null,
+  "displayName" : "#10",
+  "duration" : 60750,
+  "estimatedDuration" : 60258,
+  "executor" : null,
+  "fullDisplayName" : "fish #10",
+  "id" : "10",
+  "keepLog" : false,
+  "number" : 10,
+  "queueId" : 73,
+  "result" : "SUCCESS",
+  "timestamp" : 1461091892486,
+  "url" : "http://localhost:32769/job/fish/10/",
+  "builtOn" : "",
+  "changeSets" : [
+    {
+      "_class" : "hudson.plugins.git.GitChangeSetList",
+      "items" : [
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "affectedPaths" : [
+            "some/path/in/the/repository"
+          ],
+          "commitId" : "d27afa0805201322d846d7defc29b82c88d9b5ce",
+          "timestamp" : 1461091892486,
+          "author" : {
+            "absoluteUrl": "http://localhost:8080/user/username",
+            "fullName": "username"
+          },
+          "authorEmail" : "username@localhost",
+          "comment" : "Commit comment\n",
+          "date" : "2016-04-19 18:51:32 GMT",
+          "id" : "d27afa0805201322d846d7defc29b82c88d9b5ce",
+          "msg" : "Commit comment",
+          "paths" : [
+            {
+              "editType" : "add",
+              "file" : "some/path/in/the/repository"
+            }
+          ]
+        }
+      ],
+      "kind" : "git"
+    }
+    
+  ],
+  "culprits" : [
+    {
+        "absoluteUrl": "http://localhost:8080/user/username",
+        "fullName": "username"
+    }
+  ]
+}

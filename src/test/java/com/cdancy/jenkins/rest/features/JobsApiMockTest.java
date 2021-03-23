@@ -625,6 +625,29 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
+    public void testGetGitCommitInfo() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String body = payloadFromResource("/build-info-git-commit.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            List<ChangeSet> changeSets = api.buildInfo(null,"fish", 10).changeSets().get(0).items();
+            assertNotNull(changeSets);
+            assertTrue(changeSets.get(0).affectedPaths().get(0).equals("some/path/in/the/repository"));
+            assertTrue(changeSets.get(0).commitId().equals("d27afa0805201322d846d7defc29b82c88d9b5ce"));
+            assertTrue(changeSets.get(0).timestamp() == 1461091892486l);
+            assertTrue(changeSets.get(0).author().absoluteUrl().equals("http://localhost:8080/user/username"));
+            assertTrue(changeSets.get(0).author().fullName().equals("username"));
+            assertTrue(changeSets.get(0).authorEmail().equals("username@localhost"));
+            assertTrue(changeSets.get(0).comment().equals("Commit comment\n"));
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
     public void testGetParamsWhenNoBuildParams() throws Exception {
         MockWebServer server = mockWebServer();
 
