@@ -21,6 +21,7 @@ import java.io.Closeable;
 
 import org.jclouds.rest.annotations.Delegate;
 
+import com.cdancy.jenkins.rest.features.ConfigurationAsCodeApi;
 import com.cdancy.jenkins.rest.features.CrumbIssuerApi;
 import com.cdancy.jenkins.rest.features.JobsApi;
 import com.cdancy.jenkins.rest.features.PluginManagerApi;
@@ -47,4 +48,7 @@ public interface JenkinsApi extends Closeable {
 
     @Delegate
     SystemApi systemApi();
+
+    @Delegate
+    ConfigurationAsCodeApi configurationAsCodeApi();
 }
