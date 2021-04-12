@@ -1,19 +1,9 @@
-buildscript {
-    repositories {
-        jcenter()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.20.0'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
-    }
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'com.jfrog.artifactory' version '4.18.3'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
-
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.artifactory'
-apply plugin: 'com.github.johnrengelman.shadow'
 
 apply from: "$rootDir/gradle/additional-artifacts.gradle"
 apply from: "$rootDir/gradle/dependencies.gradle"
@@ -32,21 +22,21 @@ dependencies {
     ext.autoServiceVersion = '1.0-rc7'
     ext.guiceVersion = '4.2.3'
 
-    compile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}")
-    compile ("com.google.inject:guice:${guiceVersion}")
-    compile ("com.google.inject.extensions:guice-assistedinject:${guiceVersion}")
-    compile ("com.google.auto.service:auto-service-annotations:${autoServiceVersion}")
+    implementation ("org.apache.jclouds:jclouds-core:${jcloudsVersion}")
+    implementation ("com.google.inject:guice:${guiceVersion}")
+    implementation ("com.google.inject.extensions:guice-assistedinject:${guiceVersion}")
+    implementation ("com.google.auto.service:auto-service-annotations:${autoServiceVersion}")
     annotationProcessor ("com.google.auto.service:auto-service:${autoServiceVersion}")
-    compile ("com.google.auto.value:auto-value-annotations:${autoValueVersion}")
+    implementation ("com.google.auto.value:auto-value-annotations:${autoValueVersion}")
     annotationProcessor ("com.google.auto.value:auto-value:${autoValueVersion}")
     
-    testCompile ("org.apache.jclouds:jclouds-core:${jcloudsVersion}:tests")
-    testCompile ("org.apache.jclouds.driver:jclouds-slf4j:${jcloudsVersion}")
-    testCompile ('org.testng:testng:7.4.0')
-    testCompile ('org.assertj:assertj-core:3.19.0')
-    testCompile ('com.squareup.okhttp:mockwebserver:2.7.5')
-    testCompile ('ch.qos.logback:logback-core:1.2.3')
-    testCompile ('ch.qos.logback:logback-classic:1.2.3')
+    testImplementation ("org.apache.jclouds:jclouds-core:${jcloudsVersion}:tests")
+    testImplementation ("org.apache.jclouds.driver:jclouds-slf4j:${jcloudsVersion}")
+    testImplementation ('org.testng:testng:7.4.0')
+    testImplementation ('org.assertj:assertj-core:3.19.0')
+    testImplementation ('com.squareup.okhttp:mockwebserver:2.7.5')
+    testImplementation ('ch.qos.logback:logback-core:1.2.3')
+    testImplementation ('ch.qos.logback:logback-classic:1.2.3')
 }
 
 ext.compatibilityVersion = '1.8'
@@ -56,7 +46,7 @@ targetCompatibility = compatibilityVersion
 jar {
     manifest {
         attributes 'Implementation-Title': 'Jenkins REST client',
-                   'Implementation-Version': version,
+                   'Implementation-Version': archiveVersion,
                    'Built-By': System.getProperty('user.name'),
                    'Built-Date': new Date(),
                    'Built-JDK': System.getProperty('java.version'),

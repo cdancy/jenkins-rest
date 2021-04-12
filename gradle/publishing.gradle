@@ -18,7 +18,6 @@ publishing {
             artifact sourcesJar
             artifact testsJar
             artifact docsJar
-            artifact shadowJar
 
             pom.withXml {
                 def root = asNode()
