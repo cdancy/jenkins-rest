@@ -46,6 +46,7 @@ public abstract class JobInfo {
 
    public abstract List<BuildInfo> builds();
 
+   @Nullable
    public abstract String color();
 
    @Nullable
