@@ -1,0 +1,15 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "10:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: com.google.inject.extensions:guice-assistedinject
+    versions:
+    - 5.0.0
+  - dependency-name: com.google.inject:guice
+    versions:
+    - 5.0.0
