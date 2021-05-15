@@ -96,6 +96,7 @@ Running integration tests can be done like so (requires existing jenkins instanc
   - [CloudBees Credentials](https://plugins.jenkins.io/cloudbees-credentials): otherwise an http 500 error occurs when accessing
 to http://127.0.0.1:8080/job/test-folder/job/test-folder-1/ `java.lang.NoClassDefFoundError: com/cloudbees/hudson/plugins/folder/properties/FolderCredentialsProvider`
   - [OWASP Markup Formatter](https://plugins.jenkins.io/antisamy-markup-formatter) configured to use `Safe HTML`
+  - [Configuration As Code](https://plugins.jenkins.io/configuration-as-code) plugin installed
 
 This project provides instructions to setup a [pre-configured Docker container](src/main/docker/README.md)
 

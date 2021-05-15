@@ -1,0 +1,2 @@
+jenkins:
+    systemMessage: "Jenkins REST API Configuration as code test"
