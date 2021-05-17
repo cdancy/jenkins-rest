@@ -3,8 +3,6 @@ package com.cdancy.jenkins.rest.domain.job;
 import com.google.auto.value.AutoValue;
 import org.jclouds.json.SerializedNames;
 
-import java.util.List;
-
 @AutoValue
 public abstract class PipelineNodeLog {
 
