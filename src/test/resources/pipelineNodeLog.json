@@ -1,0 +1,8 @@
+{
+  "nodeId": "6",
+  "nodeStatus": "FAILED",
+  "length": 295,
+  "hasMore": false,
+  "text": " > git rev-parse --is-inside-work-tree\nFetching changes from the remote Git repository\n > git config remote.origin.url https://github.com/tfennelly/simple-maven-project-with-test.git\nFetching upstream changes from https://github.com/tfennelly/simple-maven-project-with-test.git\n > git --version\n",
+  "consoleUrl": "/jenkins/job/Build%20Github%20Repo/14/execution/node/6/log"
+}

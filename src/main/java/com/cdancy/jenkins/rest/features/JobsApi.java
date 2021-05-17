@@ -216,6 +216,16 @@ public interface JobsApi {
                    @PathParam("name") String jobName,
                    @QueryParam("newName") String newName);
 
+    // below four apis are for "pipeline-stage-view-plugin",
+    // see https://github.com/jenkinsci/pipeline-stage-view-plugin/tree/master/rest-api
+    @Named("jobs:run-history")
+    @Path("{optionalFolderPath}job/{name}/wfapi/runs")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    List<Workflow> runHistory(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                              @PathParam("name") String jobName);
+
     @Named("jobs:workflow")
     @Path("{optionalFolderPath}job/{name}/{number}/wfapi/describe")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
@@ -233,5 +243,14 @@ public interface JobsApi {
     PipelineNode pipelineNode(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
         @PathParam("name") String jobName,
         @PathParam("number") int buildNumber, @PathParam("nodeId") int nodeId);
+
+    @Named("jobs:pipeline-node-log")
+    @Path("{optionalFolderPath}job/{name}/{number}/execution/node/{nodeId}/wfapi/log")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    PipelineNodeLog pipelineNodeLog(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                              @PathParam("name") String jobName,
+                              @PathParam("number") int buildNumber, @PathParam("nodeId") int nodeId);
 
 }
