@@ -47,10 +47,9 @@ task pushTag {
 
 task tag {
     dependsOn pushTag
-    mustRunAfter bintrayUpload
 }
 
 task release {
     description = 'Publishes artifacts to Bintray and tags repository with current project version.'
-    dependsOn assemble, publishGhPages, bintrayUpload, tag
+    dependsOn assemble, publishGhPages, tag
 }
