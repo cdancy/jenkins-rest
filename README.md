@@ -89,6 +89,7 @@ Running integration tests can be done like so (requires existing jenkins instanc
 #### Jenkins instance requirements
 
 - a running instance accessible on http://127.0.0.1:8080 (can be changed in the gradle.properties file)
+- no pre-existing jobs
 - Jenkins security
   - an `admin` user (credentials used by the tests can be changed in the gradle.properties file) with `ADMIN` role (required as the tests install plugins)
   - [CSRF protection enabled](https://wiki.jenkins.io/display/JENKINS/CSRF+Protection). Not mandatory but [recommended by the Jenkins documentation](https://jenkins.io/doc/book/system-administration/security/#protect-users-of-jenkins-from-other-threats). The lib supports Jenkins instances with our without this protection (see #14)
