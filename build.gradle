@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
@@ -11,8 +12,15 @@ apply from: "$rootDir/gradle/publishing.gradle"
 apply from: "$rootDir/gradle/release.gradle"
 
 repositories {
-    jcenter()
     mavenCentral()
+
+    // Temporary for GrGit
+    // Grgit is no longer maintained
+    // Need to remove grgit and replace with native git commands or Eclipse jgit
+    maven {
+        name = 'ajoberstar-backup'
+        url = 'https://ajoberstar.org/bintray-backup/'
+    }
 }
 
 dependencies {
