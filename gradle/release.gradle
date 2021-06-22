@@ -1,15 +1,24 @@
 buildscript {
+    repositories {
+        mavenCentral()
+    }
     dependencies {
-        classpath "org.ajoberstar:gradle-git:$depVersions.gradleGit"
+        classpath "org.eclipse.jgit:org.eclipse.jgit:5.12.0.202106070339-r"
     }
 }
 
-System.setProperty('org.ajoberstar.grgit.auth.username', project.githubUsername)
-System.setProperty('org.ajoberstar.grgit.auth.password', project.githubPassword)
+import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.api.DeleteTagCommand
+import org.eclipse.jgit.api.TagCommand
+import org.eclipse.jgit.api.PushCommand
+import org.eclipse.jgit.lib.Repository
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
 
-import org.ajoberstar.grgit.Grgit
-
-ext.repo = Grgit.open(rootDir)
+File repoDir = new File("${projectDir}")
+FileRepositoryBuilder builder = new FileRepositoryBuilder()
+Repository repo = builder.findGitDir(repoDir).build()
+Git git = new Git(repo)
 
 task createTag {
     description = 'Creates repository tag with current project version.'
@@ -19,13 +28,12 @@ task createTag {
         logger.quiet "Creating tag '$tagName'."
 
         // Remove potentially existing tag
-        repo.tag.remove(names: [tagName])
+        DeleteTagCommand delTag = git.tagDelete()
+        delTag.setTags(tagName).call()
 
         // Create tag
-        repo.tag.add {
-            name = tagName
-            message = "Version ${project.version}"
-        }
+        TagCommand tag = git.tag()
+        tag.setName(tagName).setMessage("Version ${project.version}").call()
     }
 }
 
@@ -35,9 +43,10 @@ task pushTag {
 
     doLast {
         logger.quiet "Pushing tag '$createTag.tagName' to remote."
-        repo.push {
-            refsOrSpecs = [createTag.tagName]
-        }
+        PushCommand push = git.push()
+        push.add(createTag.tagName)
+        push.setCredentialsProvider(new UsernamePasswordCredentialsProvider(project.githubUsername, project.githubPassword))
+        push.call()
     }
 }
 
