@@ -13,14 +13,6 @@ apply from: "$rootDir/gradle/release.gradle"
 
 repositories {
     mavenCentral()
-
-    // Temporary for GrGit
-    // Grgit is no longer maintained
-    // Need to remove grgit and replace with native git commands or Eclipse jgit
-    maven {
-        name = 'ajoberstar-backup'
-        url = 'https://ajoberstar.org/bintray-backup/'
-    }
 }
 
 dependencies {
