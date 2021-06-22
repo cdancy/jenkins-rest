@@ -11,7 +11,6 @@ apply from: "$rootDir/gradle/publishing.gradle"
 apply from: "$rootDir/gradle/release.gradle"
 
 repositories {
-    gradlePluginPortal()
     mavenCentral()
 }
 
