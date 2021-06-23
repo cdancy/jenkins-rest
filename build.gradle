@@ -1,8 +1,8 @@
 plugins {
     id 'java'
-    id 'maven-publish'
-    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
+
 }
 
 apply from: "$rootDir/gradle/additional-artifacts.gradle"
