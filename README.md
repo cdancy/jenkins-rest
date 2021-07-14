@@ -23,15 +23,16 @@ assertTrue(systemInfo.jenkinsVersion().equals("1.642.4"));
       
 ## Latest release
 
-Can be found in jcenter like so:
+Add this to your repositories:
 ```xml
-<repositories>
-    <repository>
-        <id>central</id>
-        <name>bintray</name>
-        <url>https://jcenter.bintray.com</url>
-    </repository>
-</repositories>
+<repository>
+  <id>central</id>
+  <name>bintray</name>
+  <url>https://jcenter.bintray.com</url>
+</repository>
+```
+Add this to your dependencies:
+```xml
 <dependency>
   <groupId>com.cdancy</groupId>
   <artifactId>jenkins-rest</artifactId>
