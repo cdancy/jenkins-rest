@@ -24,7 +24,7 @@ assertTrue(systemInfo.jenkinsVersion().equals("1.642.4"));
 ## Latest release
 
 Can be found in jcenter like so:
-```
+```xml
 <repositories>
     <repository>
         <id>central</id>
