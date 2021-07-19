@@ -36,7 +36,7 @@ dependencies {
     testImplementation ('org.assertj:assertj-core:3.19.0')
     testImplementation ('com.squareup.okhttp:mockwebserver:2.7.5')
     testImplementation ('ch.qos.logback:logback-core:1.2.3')
-    testImplementation ('ch.qos.logback:logback-classic:1.2.3')
+    testImplementation ('ch.qos.logback:logback-classic:1.2.4')
 }
 
 ext.compatibilityVersion = '1.8'
