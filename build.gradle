@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'com.jfrog.artifactory' version '4.23.0'
+    id 'com.jfrog.artifactory' version '4.24.14'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
