@@ -36,6 +36,8 @@ dependencies {
     testImplementation ('com.squareup.okhttp:mockwebserver:2.7.5')
     testImplementation ('ch.qos.logback:logback-core:1.2.3')
     testImplementation ('ch.qos.logback:logback-classic:1.2.3')
+    testImplementation ('jakarta.annotation:jakarta.annotation-api:1.3.5')
+    testImplementation ('jakarta.xml.bind:jakarta.xml.bind-api:2.3.3')
 }
 
 ext.compatibilityVersion = '1.8'
