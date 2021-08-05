@@ -40,6 +40,10 @@ publishing {
                 cdancy.appendNode('id', 'cdancy')
                 cdancy.appendNode('name', 'Christopher Dancy')
                 cdancy.appendNode('email', 'christoforever@gmail.com')
+                def martinda = developers.appendNode('developer')
+                martinda.appendNode('id', 'martinda')
+                martinda.appendNode('name', "Martin d'Anjou")
+                martinda.appendNode('email', 'martin.danjou14@gmail.com')
             }
         }
     }
