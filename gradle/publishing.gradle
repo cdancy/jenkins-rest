@@ -22,13 +22,13 @@ publishing {
                 def root = asNode()
                 root.appendNode('name', 'Jenkins Rest')
                 root.appendNode('description', 'Java client for working with Jenkins REST API.')
-                root.appendNode('url', 'https://github.com/jrestclients/jenkins-rest')
+                root.appendNode('url', 'https://github.com/cdancy/jenkins-rest')
                 root.appendNode('inceptionYear', '2016')
 
                 def scm = root.appendNode('scm')
-                scm.appendNode('url', 'https://github.com/jrestclients/jenkins-rest')
-                scm.appendNode('connection', 'scm:https://martinda@github.com/jrestclients/jenkins-rest.git')
-                scm.appendNode('developerConnection', 'scm:git://github.com/jrestclients/jenkins-rest.git')
+                scm.appendNode('url', 'https://github.com/cdancy/jenkins-rest')
+                scm.appendNode('connection', 'scm:https://cdancy@github.com/cdancy/jenkins-rest.git')
+                scm.appendNode('developerConnection', 'scm:git://github.com/cdancy/jenkins-rest.git')
 
                 def license = root.appendNode('licenses').appendNode('license')
                 license.appendNode('name', 'The Apache Software License, Version 2.0')
