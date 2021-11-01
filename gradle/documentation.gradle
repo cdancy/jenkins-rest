@@ -1,6 +1,7 @@
 buildscript {
     repositories {
-        jcenter()
+        gradlePluginPortal()
+        mavenCentral()
     }
 
     dependencies {
@@ -31,4 +32,3 @@ String resolveProperty(String propKey) {
     if(propValue) { return propValue }
     hasProperty(propKey) ? getProperty(propKey) : null
 }
-
