@@ -1,15 +1,14 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl.set(uri("$sonatypeURL/service/local/"))
+            snapshotRepositoryUrl.set(uri("$sonatypeURL/content/repositories/snapshots/"))
+        }
     }
 }
-
-apply plugin: 'maven-publish'
-apply plugin: com.jfrog.bintray.gradle.BintrayPlugin
 
 publishing {
     publications {
@@ -23,13 +22,13 @@ publishing {
                 def root = asNode()
                 root.appendNode('name', 'Jenkins Rest')
                 root.appendNode('description', 'Java client for working with Jenkins REST API.')
-                root.appendNode('url', 'https://github.com/cdancy/jenkins-rest')
+                root.appendNode('url', 'https://github.com/jrestclients/jenkins-rest')
                 root.appendNode('inceptionYear', '2016')
 
                 def scm = root.appendNode('scm')
-                scm.appendNode('url', 'https://github.com/cdancy/jenkins-rest')
-                scm.appendNode('connection', 'scm:https://cdancy@github.com/cdancy/jenkins-rest.git')
-                scm.appendNode('developerConnection', 'scm:git://github.com/cdancy/jenkins-rest.git')
+                scm.appendNode('url', 'https://github.com/jrestclients/jenkins-rest')
+                scm.appendNode('connection', 'scm:https://martinda@github.com/jrestclients/jenkins-rest.git')
+                scm.appendNode('developerConnection', 'scm:git://github.com/jrestclients/jenkins-rest.git')
 
                 def license = root.appendNode('licenses').appendNode('license')
                 license.appendNode('name', 'The Apache Software License, Version 2.0')
@@ -41,61 +40,15 @@ publishing {
                 cdancy.appendNode('id', 'cdancy')
                 cdancy.appendNode('name', 'Christopher Dancy')
                 cdancy.appendNode('email', 'christoforever@gmail.com')
+                def martinda = developers.appendNode('developer')
+                martinda.appendNode('id', 'martinda')
+                martinda.appendNode('name', "Martin d'Anjou")
+                martinda.appendNode('email', 'martin.danjou14@gmail.com')
             }
         }
     }
 }
 
-artifactory {
-    contextUrl = artifactoryURL
-    publish {
-        repository {
-            repoKey = version.endsWith('-SNAPSHOT') ? snapshotRepository : releaseRepository
-            username = artifactoryUser
-            password = artifactoryPassword
-            mavenCompatible = true
-        }
-        defaults {
-            publications ('mavenJava')
-        }
-    }
-}
-
-bintray {
-
-    user = resolveProperty('bintrayUsername')
-    key = resolveProperty('bintrayKey')
-    publications = ['mavenJava']
-    publish = true
-
-    pkg {
-        repo = 'java-libraries'
-        name = 'jenkins-rest'
-        desc = 'Java client for working with Jenkins REST API.'
-        websiteUrl = "https://github.com/cdancy/${project.name}"
-        issueTrackerUrl = "https://github.com/cdancy/${project.name}/issues"
-        vcsUrl = "https://github.com/cdancy/${project.name}.git"
-        licenses = ['Apache-2.0']
-        labels = ['java', 'jenkins', 'client', 'rest']
-        publicDownloadNumbers = true
-        githubRepo = "cdancy/${project.name}"
-        githubReleaseNotesFile = 'RELEASE_NOTES.md'
-
-        version {
-            released  = new Date()
-            vcsTag = "v${project.version}"
-            attributes = ['jenkins-rest': ["${project.group}:${project.name}:${project.version}"]]
-
-            gpg {
-                sign = true
-                passphrase = resolveProperty('gpgPassphrase')
-            }
-        }
-    }
-}
-
-String resolveProperty(String propKey) {
-    String propValue = System.getenv()[propKey]
-    if(propValue) { return propValue }
-    hasProperty(propKey) ? getProperty(propKey) : null
+signing {
+    sign publishing.publications.mavenJava
 }

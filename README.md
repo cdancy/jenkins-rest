@@ -26,7 +26,7 @@ assertTrue(systemInfo.jenkinsVersion().equals("1.642.4"));
 Can be found in jcenter like so:
 ```
 <dependency>
-  <groupId>com.cdancy</groupId>
+  <groupId>io.github.cdancy</groupId>
   <artifactId>jenkins-rest</artifactId>
   <version>X.Y.Z</version>
   <classifier>sources|tests|javadoc|all</classifier> (Optional)
