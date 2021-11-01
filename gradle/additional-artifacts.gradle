@@ -15,7 +15,7 @@ shadowJar {
     relocate 'javax.inject', "${newBasePackage}.shaded.javax.inject"
     relocate 'javax.annotation', "${newBasePackage}.shaded.javax.annotation"
     relocate 'javax.ws.rs', "${newBasePackage}.shaded.javax.ws.rs"
-    relocate 'javax.xml.bind', "${newBasePackage}.shaded.javax.xml.bind
+    relocate 'javax.xml.bind', "${newBasePackage}.shaded.javax.xml.bind"
 }
 
 task sourcesJar(type: Jar) {
