@@ -23,7 +23,7 @@ assertTrue(systemInfo.jenkinsVersion().equals("1.642.4"));
       
 ## Latest release
 
-Can be found in jcenter like so:
+Can be found in maven like so:
 ```
 <dependency>
   <groupId>io.github.cdancy</groupId>
