@@ -24,11 +24,11 @@ task sourcesJar(type: Jar) {
 }
 
 task docsJar(type: Jar, dependsOn: javadoc) {
-    classifier 'docs'
+    classifier 'javadoc'
     from javadoc.destinationDir
 }
 
 task testsJar(type: Jar) {
-    classifier = 'tests'
+    classifier 'tests'
     from sourceSets.test.output
 }

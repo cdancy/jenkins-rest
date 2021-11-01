@@ -1,14 +1,3 @@
-buildscript {
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath "org.ajoberstar:gradle-git:$depVersions.gradleGit"
-    }
-}
-
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
@@ -62,50 +51,4 @@ publishing {
 
 signing {
     sign publishing.publications.mavenJava
-}
-
-
-System.setProperty('org.ajoberstar.grgit.auth.username', project.githubUsername)
-System.setProperty('org.ajoberstar.grgit.auth.password', project.githubPassword)
-
-ext.repo = org.ajoberstar.grgit.Grgit.open(rootDir)
-
-task createTag {
-    description = 'Creates repository tag with current project version.'
-    ext.tagName = "v${project.version}"
-
-    doLast {
-        logger.quiet "Creating tag '$tagName'."
-
-        // Remove potentially existing tag
-        repo.tag.remove(names: [tagName])
-
-        // Create tag
-        repo.tag.add {
-            name = tagName
-            message = "Version ${project.version}"
-        }
-    }
-}
-
-task pushTag {
-    description = 'Pushes tag to remote repository.'
-    dependsOn createTag
-
-    doLast {
-        logger.quiet "Pushing tag '$createTag.tagName' to remote."
-        repo.push {
-            refsOrSpecs = [createTag.tagName]
-        }
-    }
-}
-
-task tag {
-    dependsOn pushTag
-    mustRunAfter "publishToSonatype", "closeAndReleaseSonatypeStagingRepository"
-}
-
-task release {
-    description = 'Publishes artifacts to Bintray and tags repository with current project version.'
-    dependsOn assemble, publishGhPages, "publishToSonatype", "closeAndReleaseSonatypeStagingRepository", tag
 }
