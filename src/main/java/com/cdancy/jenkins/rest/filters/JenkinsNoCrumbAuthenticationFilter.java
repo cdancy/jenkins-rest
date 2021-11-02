@@ -43,7 +43,7 @@ public class JenkinsNoCrumbAuthenticationFilter implements HttpRequestFilter {
         if (creds.authType() == AuthenticationType.Anonymous) {
             return request;
         } else {
-            final String authHeader = creds.authType() + " " + creds.authValue();
+            final String authHeader = creds.authType().getAuthScheme() + " " + creds.authValue();
             return request.toBuilder().addHeader(HttpHeaders.AUTHORIZATION, authHeader).build();
         }
     }

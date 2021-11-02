@@ -60,6 +60,8 @@ tasks.withType(JavaCompile) {
 }
 
 task mockTest(type: Test) {
+    group = "Verification"
+    description = "Mock tests"
     useTestNG()
     include '**/**MockTest*'
     maxParallelForks = 2
@@ -70,6 +72,8 @@ task mockTest(type: Test) {
 }
 
 task integTest(type: Test, dependsOn: mockTest) {
+    group = "Verification"
+    description = "Integration tests - Jenkins must be running. See the README."
     doFirst {
         def integProjectDir = project.file("${buildDir}/integ-projects")
         if (!integProjectDir.exists()) {
@@ -86,13 +90,13 @@ task integTest(type: Test, dependsOn: mockTest) {
         events 'started', 'passed', 'failed'
     }
     def authentication = [:]
-    def possibleAuth = project.findProperty('testJenkinsRestCredentials')
+    def possibleAuth = project.findProperty('testJenkinsRestApiToken')
     if (possibleAuth) {
-        authentication['test.jenkins.rest.credentials'] = possibleAuth
+        authentication['test.jenkins.rest.api.token'] = possibleAuth
     } else {
-        possibleAuth = project.findProperty('testJenkinsRestToken')
+        possibleAuth = project.findProperty('testJenkinsRestCredentials')
         if (possibleAuth) {
-            authentication['test.jenkins.rest.token'] = possibleAuth
+            authentication['test.jenkins.rest.credentials'] = possibleAuth
         } else {
             logger.quiet 'No authentication parameters found. Assuming anonymous...'
         }

@@ -28,8 +28,8 @@ public class JenkinsConstants {
     public static final String CREDENTIALS_SYSTEM_PROPERTY = "jenkins.rest.credentials";
     public static final String CREDENTIALS_ENVIRONMENT_VARIABLE = CREDENTIALS_SYSTEM_PROPERTY.replaceAll("\\.", "_").toUpperCase();
 
-    public static final String TOKEN_SYSTEM_PROPERTY = "jenkins.rest.token";
-    public static final String TOKEN_ENVIRONMENT_VARIABLE = TOKEN_SYSTEM_PROPERTY.replaceAll("\\.", "_").toUpperCase();
+    public static final String API_TOKEN_SYSTEM_PROPERTY = "jenkins.rest.api.token";
+    public static final String API_TOKEN_ENVIRONMENT_VARIABLE = API_TOKEN_SYSTEM_PROPERTY.replaceAll("\\.", "_").toUpperCase();
 
     public static final String DEFAULT_ENDPOINT = "http://127.0.0.1:7990";
 

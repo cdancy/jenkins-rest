@@ -36,10 +36,11 @@ public class JenkinsAuthentication extends Credentials {
      * Create instance of JenkinsAuthentication
      * 
      * @param authValue value to use for authentication type HTTP header.
-     * @param authType authentication type (e.g. Basic, Bearer, Anonymous).
+     * @param authType authentication type (e.g. UsernamePassword, ApiToken, Anonymous).
      */
     private JenkinsAuthentication(final String authValue, final AuthenticationType authType) {
-        super(null, authType == AuthenticationType.Basic && authValue.contains(":")
+        //super(authValue != null ? (authValue.contains(":") ? authValue.split(":")[0] : null) : null, (authType == AuthenticationType.UsernamePassword || authType == AuthenticationType.ApiToken) && authValue.contains(":")
+        super(null, (authType == AuthenticationType.UsernamePassword || authType == AuthenticationType.ApiToken) && authValue.contains(":")
                 ? base64().encode(authValue.getBytes())
                 : authValue);
         this.authType = authType;    
@@ -64,26 +65,26 @@ public class JenkinsAuthentication extends Credentials {
         private AuthenticationType authType;
 
         /**
-         * Set 'Basic' credentials.
+         * Set 'UsernamePassword' credentials.
          * 
-         * @param basicCredentials value to use for 'Basic' credentials.
+         * @param usernamePassword value to use for 'UsernamePassword' credentials.
          * @return this Builder.
          */
-        public Builder credentials(final String basicCredentials) {
-            this.authValue = Objects.requireNonNull(basicCredentials);
-            this.authType = AuthenticationType.Basic;
+        public Builder credentials(final String usernamePassword) {
+            this.authValue = Objects.requireNonNull(usernamePassword);
+            this.authType = AuthenticationType.UsernamePassword;
             return this;
         }
 
         /**
-         * Set 'Bearer' credentials.
-         * 
-         * @param tokenCredentials value to use for 'Bearer' credentials.
+         * Set 'ApiToken' credentials.
+         *
+         * @param apiTokenCredentials value to use for 'ApiToken' credentials.
          * @return this Builder.
          */
-        public Builder token(final String tokenCredentials) {
-            this.authValue = Objects.requireNonNull(tokenCredentials);
-            this.authType = AuthenticationType.Bearer;
+        public Builder apiToken(final String apiTokenCredentials) {
+            this.authValue = Objects.requireNonNull(apiTokenCredentials);
+            this.authType = AuthenticationType.ApiToken;
             return this;
         }
 

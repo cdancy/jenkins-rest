@@ -14,32 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.cdancy.jenkins.rest.domain.user;
 
-package com.cdancy.jenkins.rest.auth;
+import com.google.auto.value.AutoValue;
+import org.jclouds.json.SerializedNames;
 
-/**
- * Supported Authentication Types for Jenkins.
- */
-public enum AuthenticationType {
+@AutoValue
+public abstract class ApiToken {
 
-    UsernamePassword("UsernamePassword", "Basic"),
-    ApiToken("ApiToken", "Basic"),
-    Anonymous("Anonymous", "");
+    public abstract String status();
 
-    private final String authName;
-    private final String authScheme;
+    public abstract ApiTokenData data();
 
-    private AuthenticationType(final String authName, final String authScheme) {
-        this.authName = authName;
-        this.authScheme = authScheme;
+    ApiToken() {
     }
 
-    public String getAuthScheme() {
-        return authScheme;
-    }
-
-    @Override
-    public String toString() {
-        return authName;
+    @SerializedNames({"status", "data"})
+    public static ApiToken create(final String status, final ApiTokenData data) {
+        return new AutoValue_ApiToken(status, data);
     }
 }

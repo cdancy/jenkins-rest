@@ -26,8 +26,8 @@ import static com.cdancy.jenkins.rest.JenkinsConstants.ENDPOINT_ENVIRONMENT_VARI
 import static com.cdancy.jenkins.rest.JenkinsConstants.ENDPOINT_SYSTEM_PROPERTY;
 import static com.cdancy.jenkins.rest.JenkinsConstants.JCLOUDS_PROPERTY_ID;
 import static com.cdancy.jenkins.rest.JenkinsConstants.JCLOUDS_VARIABLE_ID;
-import static com.cdancy.jenkins.rest.JenkinsConstants.TOKEN_ENVIRONMENT_VARIABLE;
-import static com.cdancy.jenkins.rest.JenkinsConstants.TOKEN_SYSTEM_PROPERTY;
+import static com.cdancy.jenkins.rest.JenkinsConstants.API_TOKEN_ENVIRONMENT_VARIABLE;
+import static com.cdancy.jenkins.rest.JenkinsConstants.API_TOKEN_SYSTEM_PROPERTY;
 
 import com.google.common.base.Throwables;
 
@@ -159,28 +159,29 @@ public class JenkinsUtils {
     }
 
     /**
-     * Find credentials (Basic, Bearer, or Anonymous) from system/environment.
+     * Find credentials (ApiToken, UsernamePassword, or Anonymous) from system/environment.
      *
      * @return BitbucketCredentials
      */
     public static JenkinsAuthentication inferAuthentication() {
 
-        // 1.) Check for "Basic" auth credentials.
         final JenkinsAuthentication.Builder inferAuth = JenkinsAuthentication.builder();
+        // 1.) Check for API Token as this requires no crumb hence is faster
         String authValue = JenkinsUtils
+                .retriveExternalValue(API_TOKEN_SYSTEM_PROPERTY,
+                        API_TOKEN_ENVIRONMENT_VARIABLE);
+        if (authValue != null) {
+            inferAuth.apiToken(authValue);
+            return inferAuth.build();
+        }
+
+        // 2.) Check for UsernamePassword auth credentials.
+        authValue = JenkinsUtils
                 .retriveExternalValue(CREDENTIALS_SYSTEM_PROPERTY,
                         CREDENTIALS_ENVIRONMENT_VARIABLE);
         if (authValue != null) {
             inferAuth.credentials(authValue);
-        } else {
-
-            // 2.) Check for "Bearer" auth token.
-            authValue = JenkinsUtils
-                    .retriveExternalValue(TOKEN_SYSTEM_PROPERTY,
-                            TOKEN_ENVIRONMENT_VARIABLE);
-            if (authValue != null) {
-                inferAuth.token(authValue);
-            }
+            return inferAuth.build();
         }
 
         // 3.) If neither #1 or #2 find anything "Anonymous" access is assumed.
