@@ -53,5 +53,5 @@ task tag {
 
 task release {
     description = 'Publishes artifacts to Bintray and tags repository with current project version.'
-    dependsOn assemble, publishGhPages, "publishToSonatype", "closeAndReleaseSonatypeStagingRepository", tag
+    dependsOn assemble, "publishToSonatype", "closeAndReleaseSonatypeStagingRepository", tag
 }
