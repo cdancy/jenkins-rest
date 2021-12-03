@@ -159,6 +159,15 @@ public interface JobsApi {
     IntegerResponse build(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                   @PathParam("name") String jobName);
 
+    @Named("jobs:stop-build")
+    @Path("{optionalFolderPath}job/{name}/{number}/stop")
+    @ResponseParser(RequestStatusParser.class)
+    @Consumes(MediaType.WILDCARD)
+    @POST
+    RequestStatus stopBuild(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                            @PathParam("name") String jobName,
+                            @PathParam("number") int buildNumber);
+
     @Named("jobs:build-with-params")
     @Path("{optionalFolderPath}job/{name}/buildWithParameters")
     @Fallback(JenkinsFallbacks.IntegerResponseOnError.class)
