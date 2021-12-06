@@ -48,7 +48,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertTrue(success.value());
     }
 
-    @Test(dependsOnMethods = "testCreateJob")
+    @Test(dependsOnMethods = {"testCreateJob", "testCreateJobForEmptyAndNullParams"})
     public void testGetJobListFromRoot() {
         JobList output = api().jobList("");
         assertNotNull(output);
@@ -380,6 +380,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertFalse(output.hasMoreData());
     }
 
+    @Test
     public void testCreateJobForEmptyAndNullParams() {
         String config = payloadFromResource("/freestyle-project-empty-and-null-params.xml");
         RequestStatus success = api().create(null, "JobForEmptyAndNullParams", config);
@@ -409,7 +410,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertTrue(parameters.get(1).value().isEmpty());
     }
 
-    @Test(dependsOnMethods = "testGetBuildParametersOfJobForEmptyAndNullParams")
+    @Test(dependsOnMethods = { "testGetBuildParametersOfJobForEmptyAndNullParams", "testGetJobListFromRoot"})
     public void testDeleteJobForEmptyAndNullParams() {
         RequestStatus success = api().delete(null, "JobForEmptyAndNullParams");
         assertTrue(success.value());
