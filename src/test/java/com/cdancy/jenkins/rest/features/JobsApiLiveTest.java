@@ -279,7 +279,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertNotNull(output);
         assertFalse(output.jobs().isEmpty());
         assertEquals(output.jobs().size(), 1);
-        assertEquals(output.jobs().get(0), Job.create("hudson.model.FreeStyleProject", "JobInFolder", "http://127.0.0.1:8080/job/test-folder/job/test-folder-1/job/JobInFolder/", "notbuilt"));
+        assertEquals(output.jobs().get(0), Job.create("hudson.model.FreeStyleProject", "JobInFolder", System.getProperty("test.jenkins.endpoint")+"/job/test-folder/job/test-folder-1/job/JobInFolder/", "notbuilt"));
     }
 
     @Test(dependsOnMethods = "testCreateJobInFolder")
