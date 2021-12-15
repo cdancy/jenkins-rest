@@ -36,7 +36,7 @@ dependencies {
     testImplementation ('org.testng:testng:7.4.0')
     testImplementation ('org.assertj:assertj-core:3.21.0')
     testImplementation ('com.squareup.okhttp:mockwebserver:2.7.5')
-    testImplementation ('ch.qos.logback:logback-core:1.2.7')
+    testImplementation ('ch.qos.logback:logback-core:1.2.8')
     testImplementation ('ch.qos.logback:logback-classic:1.2.7')
 }
 
