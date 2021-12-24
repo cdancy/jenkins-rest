@@ -28,6 +28,7 @@ import com.cdancy.jenkins.rest.features.PluginManagerApi;
 import com.cdancy.jenkins.rest.features.QueueApi;
 import com.cdancy.jenkins.rest.features.StatisticsApi;
 import com.cdancy.jenkins.rest.features.SystemApi;
+import com.cdancy.jenkins.rest.features.UserApi;
 
 public interface JenkinsApi extends Closeable {
 
@@ -51,4 +52,7 @@ public interface JenkinsApi extends Closeable {
 
     @Delegate
     ConfigurationAsCodeApi configurationAsCodeApi();
+
+    @Delegate
+    UserApi userApi();
 }

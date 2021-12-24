@@ -23,7 +23,7 @@ package com.cdancy.jenkins.rest.auth;
 public enum AuthenticationType {
 
     UsernamePassword("UsernamePassword", "Basic"),
-    ApiToken("ApiToken", "Basic"),
+    UsernameApiToken("UsernameApiToken", "Basic"),
     Anonymous("Anonymous", "");
 
     private final String authName;

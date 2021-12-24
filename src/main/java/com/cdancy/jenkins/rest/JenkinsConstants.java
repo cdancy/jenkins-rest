@@ -41,6 +41,8 @@ public class JenkinsConstants {
 
     public static final String OPTIONAL_FOLDER_PATH_PARAM = "optionalFolderPath";
 
+    public static final String USER_IN_USER_API = "user";
+
     public static final String JENKINS_COOKIES_JSESSIONID = "JSESSIONID";
 
     protected JenkinsConstants() {

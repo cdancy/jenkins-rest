@@ -1,0 +1,37 @@
+{
+  "_class" : "hudson.model.User",
+  "absoluteUrl" : "http://localhost:8080/user/admin",
+  "description" : null,
+  "fullName" : "Administrator",
+  "id" : "admin",
+  "property" : [
+    {
+      "_class" : "jenkins.security.ApiTokenProperty"
+    },
+    {
+      "_class" : "com.cloudbees.plugins.credentials.UserCredentialsProvider$UserCredentialsProperty"
+    },
+    {
+      "_class" : "hudson.model.MyViewsProperty"
+    },
+    {
+      "_class" : "hudson.model.PaneStatusProperties"
+    },
+    {
+      "_class" : "jenkins.security.seed.UserSeedProperty"
+    },
+    {
+      "_class" : "hudson.search.UserSearchProperty",
+      "insensitiveSearch" : true
+    },
+    {
+      "_class" : "hudson.model.TimeZoneProperty"
+    },
+    {
+      "_class" : "hudson.security.HudsonPrivateSecurityRealm$Details"
+    },
+    {
+      "_class" : "jenkins.security.LastGrantedAuthoritiesProperty"
+    }
+  ]
+}

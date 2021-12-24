@@ -161,7 +161,7 @@ public class JenkinsUtils {
     /**
      * Find credentials (ApiToken, UsernamePassword, or Anonymous) from system/environment.
      *
-     * @return BitbucketCredentials
+     * @return JenkinsAuthentication
      */
     public static JenkinsAuthentication inferAuthentication() {
 

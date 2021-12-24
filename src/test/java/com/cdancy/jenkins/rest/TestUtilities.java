@@ -40,10 +40,10 @@ import org.jclouds.util.Strings2;
  */
 public class TestUtilities extends JenkinsUtils {
 
-    public static final String TEST_CREDENTIALS_SYSTEM_PROPERTY = "test.jenkins.rest.credentials";
+    public static final String TEST_CREDENTIALS_SYSTEM_PROPERTY = "test.jenkins.usernamePassword";
     public static final String TEST_CREDENTIALS_ENVIRONMENT_VARIABLE = TEST_CREDENTIALS_SYSTEM_PROPERTY.replaceAll("\\.", "_").toUpperCase();
 
-    public static final String TEST_API_TOKEN_SYSTEM_PROPERTY = "test.jenkins.rest.api.token";
+    public static final String TEST_API_TOKEN_SYSTEM_PROPERTY = "test.jenkins.usernameApiToken";
     public static final String TEST_API_TOKEN_ENVIRONMENT_VARIABLE = TEST_API_TOKEN_SYSTEM_PROPERTY.replaceAll("\\.", "_").toUpperCase();
 
     private static final char[] CHARS = "abcdefghijklmnopqrstuvwxyz".toCharArray();
