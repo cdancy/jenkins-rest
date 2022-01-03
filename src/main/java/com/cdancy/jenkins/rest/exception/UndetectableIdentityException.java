@@ -29,20 +29,20 @@ package com.cdancy.jenkins.rest.exception;
  * When this fails, this exception is thrown.
  *
  */
-public class UndetectableCredentialTypeException extends RuntimeException {
+public class UndetectableIdentityException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    public UndetectableCredentialTypeException() { super(); }
+    public UndetectableIdentityException() { super(); }
 
-    public UndetectableCredentialTypeException(final String arg0, final Throwable arg1) {
+    public UndetectableIdentityException(final String arg0, final Throwable arg1) {
             super(arg0, arg1);
     }
 
-    public UndetectableCredentialTypeException(final String arg0) {
+    public UndetectableIdentityException(final String arg0) {
             super(arg0);
     }
 
-    public UndetectableCredentialTypeException(final Throwable arg0) {
+    public UndetectableIdentityException(final Throwable arg0) {
         super(arg0);
     }
 }

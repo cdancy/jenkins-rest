@@ -20,7 +20,7 @@ package com.cdancy.jenkins.rest;
 import static com.google.common.io.BaseEncoding.base64;
 
 import com.cdancy.jenkins.rest.auth.AuthenticationType;
-import com.cdancy.jenkins.rest.exception.UndetectableCredentialTypeException;
+import com.cdancy.jenkins.rest.exception.UndetectableIdentityException;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
@@ -121,7 +121,7 @@ public class JenkinsAuthentication extends Credentials {
                 decoded = credentialString;
             }
             if (!decoded.contains(":")) {
-                throw new UndetectableCredentialTypeException("Unable to detect the type of credential being used from '" + credentialString + "'. Supported types are a user:password, or a user:apiToken, or their base64 encoded value.");
+                throw new UndetectableIdentityException("Unable to detect the identity being used in '" + credentialString + "'. Supported types are a user:password, or a user:apiToken, or their base64 encoded value.");
             }
             if (decoded.equals(":")) {
                 return "";

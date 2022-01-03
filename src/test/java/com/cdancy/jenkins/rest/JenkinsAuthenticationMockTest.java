@@ -21,7 +21,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.cdancy.jenkins.rest.JenkinsAuthentication;
 import com.cdancy.jenkins.rest.auth.AuthenticationType;
-import com.cdancy.jenkins.rest.exception.UndetectableCredentialTypeException;
+import com.cdancy.jenkins.rest.exception.UndetectableIdentityException;
 
 import org.jclouds.http.HttpRequest;
 
@@ -38,7 +38,7 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 public class JenkinsAuthenticationMockTest {
 
     @Test
-    public void testAnonymousAuthentication() throws Exception {
+    public void testAnonymousAuthentication() {
         JenkinsAuthentication ja = JenkinsAuthentication.builder().build();
         assertEquals(ja.identity, "anonymous");
         assertEquals(ja.authType(), AuthenticationType.Anonymous);
@@ -47,7 +47,7 @@ public class JenkinsAuthenticationMockTest {
     }
 
     @Test
-    public void testUsernamePasswordAuthentication() throws Exception {
+    public void testUsernamePasswordAuthentication() {
         JenkinsAuthentication ja = JenkinsAuthentication.builder()
             .credentials("user:password")
             .build();
@@ -58,7 +58,7 @@ public class JenkinsAuthenticationMockTest {
     }
 
     @Test
-    public void testUsernameApiTokenAuthentication() throws Exception {
+    public void testUsernameApiTokenAuthentication() {
         JenkinsAuthentication ja = JenkinsAuthentication.builder()
             .apiToken("user:token")
             .build();
@@ -69,7 +69,7 @@ public class JenkinsAuthenticationMockTest {
     }
 
     @Test
-    public void testEncodedUsernamePasswordAuthentication() throws Exception {
+    public void testEncodedUsernamePasswordAuthentication() {
         String encoded = base64().encode("user:password".getBytes());
         JenkinsAuthentication ja = JenkinsAuthentication.builder()
             .credentials(encoded)
@@ -81,7 +81,7 @@ public class JenkinsAuthenticationMockTest {
     }
 
     @Test
-    public void testEncodedUsernameApiTokenAuthentication() throws Exception {
+    public void testEncodedUsernameApiTokenAuthentication() {
         String encoded = base64().encode("user:token".getBytes());
         JenkinsAuthentication ja = JenkinsAuthentication.builder()
             .apiToken(encoded)
@@ -112,5 +112,18 @@ public class JenkinsAuthenticationMockTest {
         assertEquals(ja.authType(), AuthenticationType.UsernameApiToken);
         assertEquals(ja.authValue(), base64().encode(":".getBytes()));
         assertEquals(ja.credential, ja.authValue());
+    }
+
+    @Test
+    public void testUndetectableCredential() {
+        String invalid = base64().encode("no_colon_here".getBytes());
+        try {
+            JenkinsAuthentication ja = JenkinsAuthentication.builder()
+                .apiToken(invalid)
+                .build();
+        } catch (UndetectableIdentityException ex) {
+          assertEquals(ex.getMessage(),
+                "Unable to detect the identity being used in '" + invalid + "'. Supported types are a user:password, or a user:apiToken, or their base64 encoded value.");
+        }
     }
 }
