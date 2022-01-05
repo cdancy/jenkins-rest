@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.UUID;
 
+import com.cdancy.jenkins.rest.domain.job.BuildInfo;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 import com.cdancy.jenkins.rest.features.QueueApi;
 import org.jclouds.Constants;
@@ -93,6 +94,16 @@ public class BaseJenkinsApiLiveTest extends BaseApiLiveTest<JenkinsApi> {
             max = max - 1;
         }
         return queueItem;
+    }
+
+    protected BuildInfo getCompletedBuild(String jobName, QueueItem queueItem) throws InterruptedException {
+        int max = 10;
+        BuildInfo buildInfo = api.jobsApi().buildInfo(null, jobName, queueItem.executable().number());
+        while (buildInfo.result() == null) {
+            Thread.sleep(2000);
+            buildInfo = api.jobsApi().buildInfo(null, jobName, queueItem.executable().number());
+        }
+        return buildInfo;
     }
 
 }

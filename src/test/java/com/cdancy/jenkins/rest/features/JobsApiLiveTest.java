@@ -41,13 +41,124 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     private static final String FOLDER_PLUGIN_NAME = "cloudbees-folder";
     private static final String FOLDER_PLUGIN_VERSION = "latest";
 
+    private static final String FREESTYLE_JOB_NAME = "FreeStyleSleep";
+    private static final String PIPELINE_JOB_NAME = "PipelineSleep";
+/*
     @Test
     public void testCreateJob() {
         String config = payloadFromResource("/freestyle-project-no-params.xml");
         RequestStatus success = api().create(null, "DevTest", config);
         assertTrue(success.value());
     }
+*/
+    @Test
+    public void testStopBuild() throws InterruptedException {
+        System.out.println("\n\n----------------------------------- testStopBuild");
+        String config = payloadFromResource("/freestyle-project-sleep-10-task.xml");
+        RequestStatus createStatus = api().create(null, FREESTYLE_JOB_NAME, config);
+        assertTrue(createStatus.value());
+        IntegerResponse qId = api().build(null, FREESTYLE_JOB_NAME);
+        assertNotNull(qId);
+        assertTrue(qId.value() > 0);
+        QueueItem queueItem = getRunningQueueItem(qId.value());
+        assertNotNull(queueItem);
+        assertNotNull(queueItem.executable());
+        assertNotNull(queueItem.executable().number());
+        RequestStatus stopStatus = api().stop(null, FREESTYLE_JOB_NAME, queueItem.executable().number());
+        assertTrue(stopStatus.value());
+        BuildInfo buildInfo = getCompletedBuild(FREESTYLE_JOB_NAME, queueItem);
+        assertEquals(buildInfo.result(), "ABORTED");
+    }
 
+    @Test(dependsOnMethods = "testStopBuild")
+    public void testTermBuild() throws InterruptedException {
+        System.out.println("\n\n----------------------------------- testTermBuild");
+        IntegerResponse qId = api().build(null, FREESTYLE_JOB_NAME);
+        assertNotNull(qId);
+        assertTrue(qId.value() > 0);
+        QueueItem queueItem = getRunningQueueItem(qId.value());
+        assertNotNull(queueItem);
+        assertNotNull(queueItem.executable());
+        assertNotNull(queueItem.executable().number());
+        RequestStatus termStatus = api().term(null, FREESTYLE_JOB_NAME, queueItem.executable().number());
+        assertTrue(termStatus.value());
+        BuildInfo buildInfo = getCompletedBuild(FREESTYLE_JOB_NAME, queueItem);
+        assertEquals(buildInfo.result(), "ABORTED");
+    }
+
+    @Test(dependsOnMethods = "testTermBuild")
+    public void testKillBuild() throws InterruptedException {
+        System.out.println("\n\n----------------------------------- testKillBuild");
+        IntegerResponse qId = api().build(null, FREESTYLE_JOB_NAME);
+        assertNotNull(qId);
+        assertTrue(qId.value() > 0);
+        QueueItem queueItem = getRunningQueueItem(qId.value());
+        assertNotNull(queueItem);
+        assertNotNull(queueItem.executable());
+        assertNotNull(queueItem.executable().number());
+        RequestStatus killStatus = api().kill(null, FREESTYLE_JOB_NAME, queueItem.executable().number());
+        assertTrue(killStatus.value());
+        BuildInfo buildInfo = getCompletedBuild(FREESTYLE_JOB_NAME, queueItem);
+        assertEquals(buildInfo.result(), "ABORTED");
+        RequestStatus success = api().delete(null, FREESTYLE_JOB_NAME);
+        assertNotNull(success);
+        assertTrue(success.value());
+    }
+
+    @Test(dependsOnMethods = "testKillBuild")
+    public void testStopPipelineBuild() throws InterruptedException {
+        System.out.println("\n\n----------------------------------- testStopPipeline");
+        String config = payloadFromResource("/pipeline.xml");
+        RequestStatus createStatus = api().create(null, PIPELINE_JOB_NAME, config);
+        assertTrue(createStatus.value());
+        IntegerResponse qId = api().build(null, PIPELINE_JOB_NAME);
+        assertNotNull(qId);
+        assertTrue(qId.value() > 0);
+        QueueItem queueItem = getRunningQueueItem(qId.value());
+        assertNotNull(queueItem);
+        assertNotNull(queueItem.executable());
+        assertNotNull(queueItem.executable().number());
+        RequestStatus stopStatus = api().stop(null, PIPELINE_JOB_NAME, queueItem.executable().number());
+        assertTrue(stopStatus.value());
+        BuildInfo buildInfo = getCompletedBuild(PIPELINE_JOB_NAME, queueItem);
+        assertEquals(buildInfo.result(), "ABORTED");
+    }
+
+    @Test(dependsOnMethods = "testStopPipelineBuild")
+    public void testTermPipelineBuild() throws InterruptedException {
+        System.out.println("\n\n----------------------------------- testTermPipeline");
+        IntegerResponse qId = api().build(null, PIPELINE_JOB_NAME);
+        assertNotNull(qId);
+        assertTrue(qId.value() > 0);
+        QueueItem queueItem = getRunningQueueItem(qId.value());
+        assertNotNull(queueItem);
+        assertNotNull(queueItem.executable());
+        assertNotNull(queueItem.executable().number());
+        RequestStatus termStatus = api().term(null, PIPELINE_JOB_NAME, queueItem.executable().number());
+        assertTrue(termStatus.value());
+        BuildInfo buildInfo = getCompletedBuild(PIPELINE_JOB_NAME, queueItem);
+        assertEquals(buildInfo.result(), "ABORTED");
+    }
+
+    @Test(dependsOnMethods = "testTermPipelineBuild")
+    public void testKillPipelineBuild() throws InterruptedException {
+        System.out.println("\n\n----------------------------------- testKillPipeline");
+        IntegerResponse qId = api().build(null, PIPELINE_JOB_NAME);
+        assertNotNull(qId);
+        assertTrue(qId.value() > 0);
+        QueueItem queueItem = getRunningQueueItem(qId.value());
+        assertNotNull(queueItem);
+        assertNotNull(queueItem.executable());
+        assertNotNull(queueItem.executable().number());
+        RequestStatus killStatus = api().kill(null, PIPELINE_JOB_NAME, queueItem.executable().number());
+        assertTrue(killStatus.value());
+        BuildInfo buildInfo = getCompletedBuild(PIPELINE_JOB_NAME, queueItem);
+        assertEquals(buildInfo.result(), "ABORTED");
+        RequestStatus success = api().delete(null, PIPELINE_JOB_NAME);
+        assertNotNull(success);
+        assertTrue(success.value());
+    }
+/*
     @Test(dependsOnMethods = {"testCreateJob", "testCreateJobForEmptyAndNullParams"})
     public void testGetJobListFromRoot() {
         JobList output = api().jobList("");
@@ -227,10 +338,10 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertTrue(success.value());
     }
 
-    /*
-     * check for the presence of folder-plugin
-     * If not present, attempt to install it.
-     */
+    //
+    // check for the presence of folder-plugin
+    // If not present, attempt to install it.
+    //
     @Test
     public void testInstallFolderPlugin() throws Exception{
         long endTime = 0;
@@ -509,7 +620,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertNotNull(output.errors().get(0).message());
         assertTrue(output.errors().get(0).exceptionName().equals("org.jclouds.rest.ResourceNotFoundException"));
     }
-
+*/
     private boolean isFolderPluginInstalled() {
         boolean installed = false;
         Plugins plugins = api.pluginManagerApi().plugins(3, null);

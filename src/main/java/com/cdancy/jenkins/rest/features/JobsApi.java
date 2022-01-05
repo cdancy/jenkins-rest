@@ -164,7 +164,25 @@ public interface JobsApi {
     @ResponseParser(RequestStatusParser.class)
     @Consumes(MediaType.WILDCARD)
     @POST
-    RequestStatus stopBuild(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+    RequestStatus stop(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                            @PathParam("name") String jobName,
+                            @PathParam("number") int buildNumber);
+
+    @Named("jobs:term-build")
+    @Path("{optionalFolderPath}job/{name}/{number}/term")
+    @ResponseParser(RequestStatusParser.class)
+    @Consumes(MediaType.WILDCARD)
+    @POST
+    RequestStatus term(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                            @PathParam("name") String jobName,
+                            @PathParam("number") int buildNumber);
+
+    @Named("jobs:kill-build")
+    @Path("{optionalFolderPath}job/{name}/{number}/kill")
+    @ResponseParser(RequestStatusParser.class)
+    @Consumes(MediaType.WILDCARD)
+    @POST
+    RequestStatus kill(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                             @PathParam("name") String jobName,
                             @PathParam("number") int buildNumber);
 
