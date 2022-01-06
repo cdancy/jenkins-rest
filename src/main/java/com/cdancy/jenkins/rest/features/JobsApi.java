@@ -161,8 +161,9 @@ public interface JobsApi {
 
     @Named("jobs:stop-build")
     @Path("{optionalFolderPath}job/{name}/{number}/stop")
+    @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
     @ResponseParser(RequestStatusParser.class)
-    @Consumes(MediaType.WILDCARD)
+    @Consumes(MediaType.APPLICATION_JSON)
     @POST
     RequestStatus stop(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                             @PathParam("name") String jobName,
@@ -170,8 +171,9 @@ public interface JobsApi {
 
     @Named("jobs:term-build")
     @Path("{optionalFolderPath}job/{name}/{number}/term")
+    @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
     @ResponseParser(RequestStatusParser.class)
-    @Consumes(MediaType.WILDCARD)
+    @Consumes(MediaType.APPLICATION_JSON)
     @POST
     RequestStatus term(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                             @PathParam("name") String jobName,
@@ -179,8 +181,9 @@ public interface JobsApi {
 
     @Named("jobs:kill-build")
     @Path("{optionalFolderPath}job/{name}/{number}/kill")
+    @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
     @ResponseParser(RequestStatusParser.class)
-    @Consumes(MediaType.WILDCARD)
+    @Consumes(MediaType.APPLICATION_JSON)
     @POST
     RequestStatus kill(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                             @PathParam("name") String jobName,

@@ -14,7 +14,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>echo begin
-sleep 1000
+sleep 10
 echo end</command>
     </hudson.tasks.Shell>
   </builders>
