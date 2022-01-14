@@ -159,6 +159,36 @@ public interface JobsApi {
     IntegerResponse build(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                   @PathParam("name") String jobName);
 
+    @Named("jobs:stop-build")
+    @Path("{optionalFolderPath}job/{name}/{number}/stop")
+    @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
+    @ResponseParser(RequestStatusParser.class)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @POST
+    RequestStatus stop(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                            @PathParam("name") String jobName,
+                            @PathParam("number") int buildNumber);
+
+    @Named("jobs:term-build")
+    @Path("{optionalFolderPath}job/{name}/{number}/term")
+    @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
+    @ResponseParser(RequestStatusParser.class)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @POST
+    RequestStatus term(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                            @PathParam("name") String jobName,
+                            @PathParam("number") int buildNumber);
+
+    @Named("jobs:kill-build")
+    @Path("{optionalFolderPath}job/{name}/{number}/kill")
+    @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
+    @ResponseParser(RequestStatusParser.class)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @POST
+    RequestStatus kill(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                            @PathParam("name") String jobName,
+                            @PathParam("number") int buildNumber);
+
     @Named("jobs:build-with-params")
     @Path("{optionalFolderPath}job/{name}/buildWithParameters")
     @Fallback(JenkinsFallbacks.IntegerResponseOnError.class)

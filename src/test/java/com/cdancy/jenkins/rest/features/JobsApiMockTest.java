@@ -992,4 +992,108 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
+    public void testStopBuild() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus status = api.stop(null, "fish", 99);
+            assertNotNull(status);
+            assertTrue(status.value());
+            assertTrue(status.errors().isEmpty());
+            assertSent(server, "POST", "/job/fish/99/stop");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testTermBuild() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus status = api.term(null, "fish", 99);
+            assertNotNull(status);
+            assertTrue(status.value());
+            assertTrue(status.errors().isEmpty());
+            assertSent(server, "POST", "/job/fish/99/term");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testKillBuild() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus status = api.kill(null, "fish", 99);
+            assertNotNull(status);
+            assertTrue(status.value());
+            assertTrue(status.errors().isEmpty());
+            assertSent(server, "POST", "/job/fish/99/kill");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testTermBuildReturns404() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse()
+            .setHeader("Location", server.getUrl("/") + "job/fish/99/term/")
+            .setResponseCode(302));
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus status = api.term(null, "fish", 99);
+            assertSent(server, "POST", "/job/fish/99/term");
+            assertNotNull(status);
+            assertFalse(status.value());
+            assertFalse(status.errors().isEmpty());
+            assertEquals(status.errors().size(), 1);
+            System.out.println("Mock Status: " + status);
+            assertEquals(status.errors().get(0).message(), "The term operation does not exist for " +
+                server.getUrl("/") +
+                "job/fish/99/term/, try stop instead.");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testKillBuildReturns404() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse()
+            .setHeader("Location", server.getUrl("/") + "job/fish/99/kill/")
+            .setResponseCode(302));
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus status = api.kill(null, "fish", 99);
+            assertSent(server, "POST", "/job/fish/99/kill");
+            assertNotNull(status);
+            assertFalse(status.value());
+            assertFalse(status.errors().isEmpty());
+            assertEquals(status.errors().size(), 1);
+            assertEquals(status.errors().get(0).message(), "The kill operation does not exist for " +
+                server.getUrl("/") +
+                "job/fish/99/kill/, try stop instead.");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 }

@@ -20,6 +20,7 @@ import static org.jclouds.util.Closeables2.closeQuietly;
 
 import com.cdancy.jenkins.rest.exception.ForbiddenException;
 import com.cdancy.jenkins.rest.exception.MethodNotAllowedException;
+import com.cdancy.jenkins.rest.exception.RedirectTo404Exception;
 import com.cdancy.jenkins.rest.exception.UnsupportedMediaTypeException;
 
 import java.io.IOException;
@@ -46,6 +47,7 @@ public class JenkinsErrorHandler implements HttpErrorHandler {
         Exception exception = null;
         try {
             final String message = parseMessage(command, response);
+
             switch (response.getStatusCode()) {
                 case 400:
                     if (command.getCurrentRequest().getMethod().equals("POST")) {
@@ -65,6 +67,18 @@ public class JenkinsErrorHandler implements HttpErrorHandler {
                     exception = new ForbiddenException(message);
                     break;
                 case 404:
+                    // When Jenkins replies to term or kill with a redirect to a non-existent URL
+                    // we want to return a custom error message and avoid an exception in the user code.
+                    if (command.getCurrentRequest().getMethod().equals("POST")) {
+                        final String path = command.getCurrentRequest().getEndpoint().getPath();
+                        if (path.endsWith("/term/")) {
+                            exception = new RedirectTo404Exception("The term operation does not exist for " + command.getCurrentRequest().getEndpoint().toString() + ", try stop instead.");
+                            break;
+                        } else if (path.endsWith("/kill/")) {
+                            exception = new RedirectTo404Exception("The kill operation does not exist for " + command.getCurrentRequest().getEndpoint().toString() + ", try stop instead.");
+                            break;
+                        }
+                    }
                     exception = new ResourceNotFoundException(message);
                     break;
                 case 405:

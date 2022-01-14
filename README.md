@@ -123,7 +123,7 @@ to http://127.0.0.1:8080/job/test-folder/job/test-folder-1/ `java.lang.NoClassDe
   - [CloudBees Folder](https://plugins.jenkins.io/cloudbees-folder) plugin installed
   - [OWASP Markup Formatter](https://plugins.jenkins.io/antisamy-markup-formatter) configured to use `Safe HTML`
   - [Configuration As Code](https://plugins.jenkins.io/configuration-as-code) plugin installed
-- No Jenkins Jobs configured, no folder. The instance must be empty.
+  - [Pipeline](https://plugins.jenkins.io/workflow-aggregator) plugin installed
 
 This project provides instructions to setup a [pre-configured Docker container](src/main/docker/README.md)
 
