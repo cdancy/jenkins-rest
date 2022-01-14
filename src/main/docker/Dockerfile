@@ -1,4 +1,4 @@
-ARG jenkins_tag=2.277.4-alpine
+ARG jenkins_tag=2.277.4-jdk11
 
 FROM jenkins/jenkins:$jenkins_tag
 
