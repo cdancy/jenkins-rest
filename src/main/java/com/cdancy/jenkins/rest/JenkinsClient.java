@@ -168,14 +168,15 @@ public final class JenkinsClient implements Closeable {
         }
 
         /**
-         * Optional token to use for authentication.
+         * Optional Api token to use for authentication.
+         * This is not a Bearer token, hence the name apiToken.
          *
-         * @param token authentication token.
+         * @param apiToken authentication token.
          * @return this Builder.
          */
-        public Builder token(final String token) {
+        public Builder apiToken(final String apiToken) {
             authBuilder = JenkinsAuthentication.builder()
-                    .token(token);
+                    .apiToken(apiToken);
             return this;
         }
 

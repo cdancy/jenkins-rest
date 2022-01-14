@@ -51,18 +51,37 @@ Setting the `endpoint` can be done with any of the following (searched in order)
 - `jenkinsRestEndpoint`
 - `JENKINS_REST_ENDPOINT`
 
+When none is found, the endpoint is set to `http://localhost:8080`.
+
 Setting the `credentials` can be done with any of the following (searched in order):
 
+- `jenkins.rest.api.token`
+- `jenkinsRestApiToken`
+- `JENKINS_REST_API_TOKEN`
 - `jenkins.rest.credentials`
 - `jenkinsRestCredentials`
 - `JENKINS_REST_CREDENTIALS`
 
+When none is found, no authentication is used (anonymous).
+
 ## Credentials
 
-jenkins-rest credentials can take 1 of 2 forms:
+jenkins-rest credentials can take 1 of 3 forms:
 
-- Colon delimited username and password: __admin:password__ 
-- Base64 encoded username and password: __YWRtaW46cGFzc3dvcmQ=__ 
+- Colon delimited username and api token: __admin:apiToken__
+  - use `JenkinsClient.builder().apiToken("admin:apiToken")`
+- Colon delimited username and password: __admin:password__
+  - use `JenkinsClient.builder().credentials("admin:password")`
+- Base64 encoded username followed by password __YWRtaW46cGFzc3dvcmQ=__ or api token __YWRtaW46YXBpVG9rZW4=__
+  - use `JenkinsClient.builder().credentials("YWRtaW46cGFzc3dvcmQ=")`
+  - use `JenkinsClient.builder().apiToken("YWRtaW46YXBpVG9rZW4=")`
+
+The Jenkins crumb is automatically requested when POSTing using the anonymous and the username:password authentication methods.
+It is not requested when you use the apiToken as it is not needed in this case.
+For more details, see
+
+* [CSRF Protection on jenkins.io](https://www.jenkins.io/doc/book/security/csrf-protection/)
+* [Cloudbees crumb documentation](https://support.cloudbees.com/hc/en-us/articles/219257077-CSRF-Protection-Explained).
 
 ## Examples
 
@@ -80,21 +99,28 @@ Running mock tests can be done like so:
 
 	./gradlew clean build mockTest
 	
-Running integration tests can be done like so (requires existing jenkins instance):
+Running integration tests require an existing jenkins instance which can be obtained with docker:
 
+        docker build -t jenkins-rest/jenkins src/main/docker
+        docker run -d --rm -p 8080:8080 --name jenkins-rest jenkins-rest/jenkins
 	./gradlew clean build integTest 
 
 ### Integration tests settings
+
+If you use the provided docker instance, there is no other preparation necessary.
+If you wish to run integration tests against your own Jenkins server, the requirements are outlined in the next section.
 
 #### Jenkins instance requirements
 
 - a running instance accessible on http://127.0.0.1:8080 (can be changed in the gradle.properties file)
 - Jenkins security
+  - Authorization: Anyone can do anything (to be able to test the crumb with the anonymous account)
   - an `admin` user (credentials used by the tests can be changed in the gradle.properties file) with `ADMIN` role (required as the tests install plugins)
   - [CSRF protection enabled](https://wiki.jenkins.io/display/JENKINS/CSRF+Protection). Not mandatory but [recommended by the Jenkins documentation](https://jenkins.io/doc/book/system-administration/security/#protect-users-of-jenkins-from-other-threats). The lib supports Jenkins instances with our without this protection (see #14)
 - Plugins
   - [CloudBees Credentials](https://plugins.jenkins.io/cloudbees-credentials): otherwise an http 500 error occurs when accessing
 to http://127.0.0.1:8080/job/test-folder/job/test-folder-1/ `java.lang.NoClassDefFoundError: com/cloudbees/hudson/plugins/folder/properties/FolderCredentialsProvider`
+  - [CloudBees Folder](https://plugins.jenkins.io/cloudbees-folder) plugin installed
   - [OWASP Markup Formatter](https://plugins.jenkins.io/antisamy-markup-formatter) configured to use `Safe HTML`
   - [Configuration As Code](https://plugins.jenkins.io/configuration-as-code) plugin installed
   - [Pipeline](https://plugins.jenkins.io/workflow-aggregator) plugin installed
@@ -104,14 +130,12 @@ This project provides instructions to setup a [pre-configured Docker container](
 #### Integration tests configuration
 
 - jenkins url and authentication method used by the tests are defined in the `gradle.properties` file
-- by default, tests use the `credentials` authentication but this can be changed to use the `token` authentication
-
+- by default, tests use the `credentials` (username:password) authentication method but this can be changed to use the API Token. See the `gradle.properties` file.
 
 #### Running integration tests from within your IDE
 
-- the `integTest` gradle tasks set various System Properties
+- the `integTest` gradle task sets various System Properties
 - if you don't want to use gradle as tests runner in your IDE, configure the tests with the same kind of System Properties
-
 
 
 # Additional Resources

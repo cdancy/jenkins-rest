@@ -38,7 +38,6 @@ import com.google.inject.Module;
 @Test(groups = "live")
 public class BaseJenkinsApiLiveTest extends BaseApiLiveTest<JenkinsApi> {
 
-    protected final String defaultBitbucketGroup = "stash-users";
     protected final JenkinsAuthentication jenkinsAuthentication;
 
     public BaseJenkinsApiLiveTest() {

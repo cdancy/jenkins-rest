@@ -25,10 +25,6 @@ instance.setCrumbIssuer(new DefaultCrumbIssuer(true))
 def jenkinsRealm = new HudsonPrivateSecurityRealm(false)
 jenkinsRealm.createAccount('admin', 'admin')
 instance.setSecurityRealm(jenkinsRealm)
-def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
-strategy.setAllowAnonymousRead(true)
-instance.setAuthorizationStrategy(strategy)
-
 
 // =====================================================================================================================
 // Save everything

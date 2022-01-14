@@ -33,8 +33,8 @@ dependencies {
 
     testImplementation ("org.apache.jclouds:jclouds-core:${jcloudsVersion}:tests")
     testImplementation ("org.apache.jclouds.driver:jclouds-slf4j:${jcloudsVersion}")
-    testImplementation ('org.testng:testng:7.4.0')
-    testImplementation ('org.assertj:assertj-core:3.21.0')
+    testImplementation ('org.assertj:assertj-core:3.22.0')
+    testImplementation ('org.testng:testng:7.5')
     testImplementation ('com.squareup.okhttp:mockwebserver:2.7.5')
     testImplementation ('ch.qos.logback:logback-core:1.2.9')
     testImplementation ('ch.qos.logback:logback-classic:1.2.9')
@@ -60,6 +60,8 @@ tasks.withType(JavaCompile) {
 }
 
 task mockTest(type: Test) {
+    group = "Verification"
+    description = "Mock tests"
     useTestNG()
     include '**/**MockTest*'
     maxParallelForks = 2
@@ -70,6 +72,8 @@ task mockTest(type: Test) {
 }
 
 task integTest(type: Test, dependsOn: mockTest) {
+    group = "Verification"
+    description = "Integration tests - Jenkins must be running. See the README."
     doFirst {
         def integProjectDir = project.file("${buildDir}/integ-projects")
         if (!integProjectDir.exists()) {
@@ -85,21 +89,15 @@ task integTest(type: Test, dependsOn: mockTest) {
         showStandardStreams = true
         events 'started', 'passed', 'failed'
     }
-    def authentication = [:]
-    def possibleAuth = project.findProperty('testJenkinsRestCredentials')
-    if (possibleAuth) {
-        authentication['test.jenkins.rest.credentials'] = possibleAuth
-    } else {
-        possibleAuth = project.findProperty('testJenkinsRestToken')
-        if (possibleAuth) {
-            authentication['test.jenkins.rest.token'] = possibleAuth
-        } else {
-            logger.quiet 'No authentication parameters found. Assuming anonymous...'
-        }
+
+    def possibleUsernameApiToken = project.findProperty("testJenkinsUsernameApiToken")
+    def usernameApiToken = [:]
+    if (possibleUsernameApiToken) {
+        usernameApiToken["test.jenkins.usernameApiToken"] = possibleUsernameApiToken
     }
 
-    // property 'test.bitbucket.endpoint' needs to be
-    // hard-coded in for jclouds test framework
-    systemProperties = ["test.jenkins.endpoint" : "${testJenkinsRestEndpoint}",
-                        "test.jenkins.basedir" : "${buildDir}/integ-projects"] << authentication
+    systemProperties = [
+        "test.jenkins.endpoint" : testJenkinsRestEndpoint,
+        "test.jenkins.usernamePassword" : testJenkinsUsernamePassword
+    ] << usernameApiToken
 }

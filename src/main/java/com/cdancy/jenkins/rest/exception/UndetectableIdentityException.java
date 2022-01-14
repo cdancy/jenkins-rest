@@ -18,29 +18,31 @@
 package com.cdancy.jenkins.rest.exception;
 
 /**
- * The request entity has a Content-Type that the server does not support.
- * Some Jenkins REST API accept application/json format, but
- * check the individual resource documentation for more details. Additionally,
- * double-check that you are setting the Content-Type header correctly on your
- * request (e.g. using -H "Content-Type: application/json" in cURL).
+ * The credential being passed cannot be processed.
+ *
+ * A valid credential is either
+ * <ol>
+ *     <li>a colon separated identity and password or token (tuple of )identity:password or identity:token); or</li>
+ *     <li>the base64 encoded form of identity:password or identity:token</li>
+ * </ol>
+ * When the credential does not contain a colon, an attempt is made at decoding it to extract the identity.
+ * When this fails, this exception is thrown.
+ *
  */
-public class UnsupportedMediaTypeException extends RuntimeException {
-
+public class UndetectableIdentityException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    public UnsupportedMediaTypeException() {
-      super();
+    public UndetectableIdentityException() { super(); }
+
+    public UndetectableIdentityException(final String arg0, final Throwable arg1) {
+            super(arg0, arg1);
     }
 
-    public UnsupportedMediaTypeException(final String arg0, final Throwable arg1) {
-      super(arg0, arg1);
+    public UndetectableIdentityException(final String arg0) {
+            super(arg0);
     }
 
-    public UnsupportedMediaTypeException(final String arg0) {
-      super(arg0);
-    }
-
-    public UnsupportedMediaTypeException(final Throwable arg0) {
-      super(arg0);
+    public UndetectableIdentityException(final Throwable arg0) {
+        super(arg0);
     }
 }
