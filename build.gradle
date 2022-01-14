@@ -37,7 +37,7 @@ dependencies {
     testImplementation ('org.testng:testng:7.5')
     testImplementation ('com.squareup.okhttp:mockwebserver:2.7.5')
     testImplementation ('ch.qos.logback:logback-core:1.2.9')
-    testImplementation ('ch.qos.logback:logback-classic:1.2.9')
+    testImplementation ('ch.qos.logback:logback-classic:1.2.10')
 }
 
 ext.compatibilityVersion = '1.8'
