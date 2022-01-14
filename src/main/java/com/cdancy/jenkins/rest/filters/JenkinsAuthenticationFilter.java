@@ -51,14 +51,18 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
 
     @Override
     public HttpRequest filter(final HttpRequest request) throws HttpException {
-        if (creds.authType() == AuthenticationType.Anonymous) {
-            return request;
-        } else {
-            final String authHeader = creds.authType() + " " + creds.authValue();
-            final HttpRequest.Builder<? extends HttpRequest.Builder<?>> builder = request.toBuilder();
-            builder.addHeader(HttpHeaders.AUTHORIZATION, authHeader);
+        final HttpRequest.Builder<? extends HttpRequest.Builder<?>> builder = request.toBuilder();
 
-            // whether to add crumb header or not
+        // Password and API Token are both Basic authentication (there is no Bearer authentication in Jenkins)
+        if (creds.authType() == AuthenticationType.UsernameApiToken || creds.authType() == AuthenticationType.UsernamePassword) {
+            final String authHeader = creds.authType().getAuthScheme() + " " + creds.authValue();
+            builder.addHeader(HttpHeaders.AUTHORIZATION, authHeader);
+        }
+
+        // Anon and Password need the crumb and the cookie when POSTing
+        if (request.getMethod().equals("POST") &&
+            (creds.authType() == AuthenticationType.UsernamePassword || creds.authType() == AuthenticationType.Anonymous)
+        ) {
             final Pair<Crumb, Boolean> localCrumb = getCrumb();
             if (localCrumb.getKey().value() != null) {
                 builder.addHeader(CRUMB_HEADER, localCrumb.getKey().value());
@@ -69,9 +73,8 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
                     throw new RuntimeException("Unexpected exception being thrown: error=" + localCrumb.getKey().errors().get(0));
                 }
             }
-
-            return builder.build();
         }
+        return builder.build();
     }
 
     private Pair<Crumb, Boolean> getCrumb() {

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.UUID;
 
+import com.cdancy.jenkins.rest.auth.AuthenticationType;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 import com.cdancy.jenkins.rest.features.QueueApi;
 import org.jclouds.Constants;
@@ -37,7 +38,6 @@ import com.google.inject.Module;
 @Test(groups = "live")
 public class BaseJenkinsApiLiveTest extends BaseApiLiveTest<JenkinsApi> {
 
-    protected final String defaultBitbucketGroup = "stash-users";
     protected final JenkinsAuthentication jenkinsAuthentication;
 
     public BaseJenkinsApiLiveTest() {

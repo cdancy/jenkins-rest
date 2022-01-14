@@ -17,34 +17,30 @@
 
 package com.cdancy.jenkins.rest.filters;
 
-import com.cdancy.jenkins.rest.JenkinsApi;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import com.cdancy.jenkins.rest.JenkinsAuthentication;
-import com.cdancy.jenkins.rest.auth.AuthenticationType;
-
 import org.jclouds.http.HttpException;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpRequestFilter;
-import com.google.common.net.HttpHeaders;
+
+import com.cdancy.jenkins.rest.JenkinsAuthentication;
+import static com.cdancy.jenkins.rest.JenkinsConstants.USER_IN_USER_API;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @Singleton
-public class JenkinsNoCrumbAuthenticationFilter implements HttpRequestFilter {
+public class JenkinsUserInjectionFilter implements HttpRequestFilter {
+
+    private static final String USER_PLACE_HOLDER = "%7B" + USER_IN_USER_API + "%7D";
     private final JenkinsAuthentication creds;
 
     @Inject
-    JenkinsNoCrumbAuthenticationFilter(final JenkinsAuthentication creds) {
+    public JenkinsUserInjectionFilter(final JenkinsAuthentication creds) {
         this.creds = creds;
     }
 
     @Override
     public HttpRequest filter(final HttpRequest request) throws HttpException {
-        if (creds.authType() == AuthenticationType.Anonymous) {
-            return request;
-        } else {
-            final String authHeader = creds.authType().getAuthScheme() + " " + creds.authValue();
-            return request.toBuilder().addHeader(HttpHeaders.AUTHORIZATION, authHeader).build();
-        }
+        final String requestPath = request.getEndpoint().getRawPath().replaceAll(USER_PLACE_HOLDER, creds.identity);
+        return request.toBuilder().fromHttpRequest(request).replacePath(requestPath).build();
     }
 }
