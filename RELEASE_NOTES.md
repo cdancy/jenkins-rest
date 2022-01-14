@@ -1,3 +1,7 @@
+### Version 1.0.0 (January 13, 2022)
+* ADDED: `JobsApi` gained endpoints `stop`, `term`, and `kill`. - [Pull Request 207](https://github.com/cdancy/jenkins-rest/pull/207)
+* ADDED: Fix `crumb` issue and create `UserApi` feature. - [Pull Request 195](https://github.com/cdancy/jenkins-rest/pull/195)
+
 ### Version 0.0.30 (November 1, 2021)
 * Publish project to maven central.
 
