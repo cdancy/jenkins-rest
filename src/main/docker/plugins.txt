@@ -1,5 +1,0 @@
-antisamy-markup-formatter:2.5
-cloudbees-credentials:3.3
-cloudbees-folder:6.16
-configuration-as-code:1.55
-workflow-aggregator:2.6
