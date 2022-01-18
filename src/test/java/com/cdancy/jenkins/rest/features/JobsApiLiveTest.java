@@ -204,20 +204,18 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test(dependsOnMethods = "testLastBuildTimestampOnJobWithNoBuilds")
-    public void testBuildJob() {
+    public void testBuildJob() throws InterruptedException {
         queueId = api().build(null, "DevTest");
         assertNotNull(queueId);
         assertTrue(queueId.value() > 0);
         assertTrue(queueId.errors().size() == 0);
+        // Before we exit the test, wait until the job runs
+        QueueItem queueItem = getRunningQueueItem(queueId.value());
+        BuildInfo buildInfo = getCompletedBuild("DevTest", queueItem);
     }
 
     @Test(dependsOnMethods = "testBuildJob")
     public void testLastBuildNumberOnJob() {
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         buildNumber = api().lastBuildNumber(null, "DevTest");
         assertNotNull(buildNumber);
         assertTrue(buildNumber == 1);
