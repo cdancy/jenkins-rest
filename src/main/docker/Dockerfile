@@ -2,7 +2,7 @@ ARG jenkins_tag=2.277.4-jdk11
 
 FROM jenkins/jenkins:$jenkins_tag
 
-COPY init.groovy.d/ /usr/share/jenkins/ref/init.groovy.d/
+COPY --chown=jenkins:jenkins init.groovy.d/ /usr/share/jenkins/ref/init.groovy.d/
 
 # Plugins
 COPY --chown=jenkins:jenkins plugins.yml /usr/share/jenkins/ref/plugins.yml
