@@ -17,6 +17,7 @@
 
 package com.cdancy.jenkins.rest.features;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -68,7 +69,7 @@ public interface JobsApi {
     JobInfo jobInfo(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                     @PathParam("name") String jobName);
 
-    @Named("jobs:build-info")
+    @Named("jobs:artifact")
     @Path("{optionalFolderPath}job/{name}/{number}/api/json")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -76,6 +77,16 @@ public interface JobsApi {
     BuildInfo buildInfo(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                         @PathParam("name") String jobName,
                         @PathParam("number") int buildNumber);
+
+    @Named("jobs:artifact")
+    @Path("{optionalFolderPath}job/{name}/{number}/artifact/{relativeArtifactPath}")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Consumes(MediaType.WILDCARD)
+    @GET
+    InputStream artifact(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                         @PathParam("name") String jobName,
+                         @PathParam("number") int buildNumber,
+                         @PathParam("relativeArtifactPath") String relativeArtifactPath);
 
     @Named("jobs:create")
     @Path("{optionalFolderPath}createItem")
