@@ -17,6 +17,7 @@
 
 package com.cdancy.jenkins.rest.features;
 
+import com.google.gson.JsonObject;
 import java.util.List;
 import java.util.Map;
 
@@ -282,5 +283,14 @@ public interface JobsApi {
     PipelineNodeLog pipelineNodeLog(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                               @PathParam("name") String jobName,
                               @PathParam("number") int buildNumber, @PathParam("nodeId") int nodeId);
+
+    @Named("jobs:testReport")
+    @Path("{optionalFolderPath}job/{name}/{number}/testReport/api/json")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    JsonObject testReport(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+        @PathParam("name") String jobName,
+        @PathParam("number") int buildNumber);
 
 }
