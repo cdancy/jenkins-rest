@@ -960,7 +960,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
-    public void testJobTestReport() throws Exception {
+    public void testJobTestReportExists() throws Exception {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setHeader("Content-Type", "application/json").setBody("{ \"empty\": false }").setResponseCode(200));
@@ -970,6 +970,21 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             JsonObject testReport = api.testReport(null,"DevTest",16);
             assertNotNull(testReport);
             assertFalse(testReport.get("empty").getAsBoolean());
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testJobTestReportNotExists() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            JsonObject testReport = api.testReport(null,"DevTest",16);
+            assertNull(testReport);
         } finally {
             jenkinsApi.close();
             server.shutdown();
