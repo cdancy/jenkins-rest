@@ -16,6 +16,7 @@
  */
 package com.cdancy.jenkins.rest.features;
 
+import com.google.gson.JsonObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -953,6 +954,37 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             PipelineNode success = api.pipelineNode(null,"DevTest",16, 17);
             assertNull(success);
             assertSent(server, "GET", "/job/DevTest/16/execution/node/17/wfapi/describe");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testJobTestReportExists() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setHeader("Content-Type", "application/json").setBody("{ \"empty\": false }").setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            JsonObject testReport = api.testReport(null,"DevTest",16);
+            assertNotNull(testReport);
+            assertFalse(testReport.get("empty").getAsBoolean());
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testJobTestReportNotExists() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            JsonObject testReport = api.testReport(null,"DevTest",16);
+            assertNull(testReport);
         } finally {
             jenkinsApi.close();
             server.shutdown();
