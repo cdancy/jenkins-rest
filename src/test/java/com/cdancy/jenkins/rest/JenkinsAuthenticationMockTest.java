@@ -17,23 +17,12 @@
 
 package com.cdancy.jenkins.rest;
 
-import javax.ws.rs.core.MediaType;
-
-import com.cdancy.jenkins.rest.JenkinsAuthentication;
 import com.cdancy.jenkins.rest.auth.AuthenticationType;
 import com.cdancy.jenkins.rest.exception.UndetectableIdentityException;
-
-import org.jclouds.http.HttpRequest;
-
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
-import com.google.common.collect.Multimap;
 import static com.google.common.io.BaseEncoding.base64;
-
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
+import static org.testng.Assert.assertEquals;
 
 public class JenkinsAuthenticationMockTest {
 
@@ -118,7 +107,7 @@ public class JenkinsAuthenticationMockTest {
     public void testUndetectableCredential() {
         String invalid = base64().encode("no_colon_here".getBytes());
         try {
-            JenkinsAuthentication ja = JenkinsAuthentication.builder()
+            JenkinsAuthentication.builder()
                 .apiToken(invalid)
                 .build();
         } catch (UndetectableIdentityException ex) {

@@ -20,12 +20,12 @@ import com.cdancy.jenkins.rest.config.JenkinsAuthenticationModule;
 import static org.jclouds.util.Strings2.toStringAndClose;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.UUID;
 
 import com.cdancy.jenkins.rest.domain.job.BuildInfo;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
-import com.cdancy.jenkins.rest.features.QueueApi;
 import org.jclouds.Constants;
 import org.jclouds.apis.BaseApiLiveTest;
 import org.testng.annotations.Test;
@@ -58,7 +58,7 @@ public class BaseJenkinsApiLiveTest extends BaseApiLiveTest<JenkinsApi> {
 
     public String payloadFromResource(String resource) {
         try {
-            return new String(toStringAndClose(getClass().getResourceAsStream(resource)).getBytes(Charsets.UTF_8));
+            return new String(toStringAndClose(Objects.requireNonNull(getClass().getResourceAsStream(resource))).getBytes(Charsets.UTF_8));
         } catch (IOException e) {
             throw Throwables.propagate(e);
         }
@@ -67,7 +67,7 @@ public class BaseJenkinsApiLiveTest extends BaseApiLiveTest<JenkinsApi> {
     @Override
     protected Iterable<Module> setupModules() {
         final JenkinsAuthenticationModule credsModule = new JenkinsAuthenticationModule(this.jenkinsAuthentication);
-        return ImmutableSet.<Module> of(getLoggingModule(), credsModule);
+        return ImmutableSet.of(getLoggingModule(), credsModule);
     }
 
     /**

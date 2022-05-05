@@ -87,7 +87,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
             System.getProperty("test.jenkins.endpoint") +
             "/job/"+FREESTYLE_JOB_NAME+"/"+queueItem.executable().number()+"/term/, try stop instead.");
         assertEquals(termStatus.errors().get(0).exceptionName(), "com.cdancy.jenkins.rest.exception.RedirectTo404Exception");
-        RequestStatus termStatusStop = api().stop(null, FREESTYLE_JOB_NAME, queueItem.executable().number());
+        api().stop(null, FREESTYLE_JOB_NAME, queueItem.executable().number());
         BuildInfo buildInfoStop = getCompletedBuild(FREESTYLE_JOB_NAME, queueItem);
         assertEquals(buildInfoStop.result(), "ABORTED");
     }
@@ -109,7 +109,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
             System.getProperty("test.jenkins.endpoint") +
             "/job/"+FREESTYLE_JOB_NAME+"/"+queueItem.executable().number()+"/kill/, try stop instead.");
         assertEquals(killStatus.errors().get(0).exceptionName(), "com.cdancy.jenkins.rest.exception.RedirectTo404Exception");
-        RequestStatus killStatusStop = api().stop(null, FREESTYLE_JOB_NAME, queueItem.executable().number());
+        api().stop(null, FREESTYLE_JOB_NAME, queueItem.executable().number());
         BuildInfo buildInfoStop = getCompletedBuild(FREESTYLE_JOB_NAME, queueItem);
         assertEquals(buildInfoStop.result(), "ABORTED");
 
@@ -185,7 +185,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testGetJobInfo() {
         JobInfo output = api().jobInfo(null, "DevTest");
         assertNotNull(output);
-        assertTrue(output.name().equals("DevTest"));
+        assertEquals(output.name(), "DevTest");
         assertNull(output.lastBuild());
         assertNull(output.firstBuild());
         assertTrue(output.builds().isEmpty());
@@ -208,17 +208,17 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         queueId = api().build(null, "DevTest");
         assertNotNull(queueId);
         assertTrue(queueId.value() > 0);
-        assertTrue(queueId.errors().size() == 0);
+        assertEquals(queueId.errors().size(), 0);
         // Before we exit the test, wait until the job runs
         QueueItem queueItem = getRunningQueueItem(queueId.value());
-        BuildInfo buildInfo = getCompletedBuild("DevTest", queueItem);
+        getCompletedBuild("DevTest", queueItem);
     }
 
     @Test(dependsOnMethods = "testBuildJob")
     public void testLastBuildNumberOnJob() {
         buildNumber = api().lastBuildNumber(null, "DevTest");
         assertNotNull(buildNumber);
-        assertTrue(buildNumber == 1);
+        assertEquals((int) buildNumber, 1);
     }
 
     @Test(dependsOnMethods = "testLastBuildNumberOnJob")
@@ -239,14 +239,14 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testGetBuildInfo() {
         BuildInfo output = api().buildInfo(null, "DevTest", buildNumber);
         assertNotNull(output);
-        assertTrue(output.fullDisplayName().equals("DevTest #" + buildNumber));
-        assertTrue(output.queueId() == queueId.value());
+        assertEquals("DevTest #" + buildNumber, output.fullDisplayName());
+        assertEquals((int) queueId.value(), output.queueId());
     }
 
     @Test(dependsOnMethods = "testGetBuildInfo")
     public void testGetBuildParametersOfLastJob() {
         List<Parameter> parameters = api().buildInfo(null, "DevTest", 1).actions().get(0).parameters();
-        assertTrue(parameters.size() == 0);
+        assertEquals(parameters.size(), 0);
     }
 
     @Test(dependsOnMethods = "testGetBuildParametersOfLastJob")
@@ -265,7 +265,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     @Test(dependsOnMethods = "testSetDescription")
     public void testGetDescription() {
         String output = api().description(null, "DevTest");
-        assertTrue(output.equals("RandomDescription"));
+        assertEquals(output, "RandomDescription");
     }
 
     @Test(dependsOnMethods = "testGetDescription")
@@ -288,7 +288,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         IntegerResponse output = api().buildWithParameters(null, "DevTest", params);
         assertNotNull(output);
         assertTrue(output.value() > 0);
-        assertTrue(output.errors().size() == 0);
+        assertEquals(output.errors().size(), 0);
     }
 
     @Test(dependsOnMethods = "testBuildJobWithParameters")
@@ -296,7 +296,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         IntegerResponse output = api().buildWithParameters(null, "DevTest", null);
         assertNotNull(output);
         assertTrue(output.value() > 0);
-        assertTrue(output.errors().size() == 0);
+        assertEquals(output.errors().size(), 0);
     }
 
     @Test(dependsOnMethods = "testBuildJobWithNullParametersMap")
@@ -304,7 +304,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         IntegerResponse output = api().buildWithParameters(null, "DevTest", new HashMap<>());
         assertNotNull(output);
         assertTrue(output.value() > 0);
-        assertTrue(output.errors().size() == 0);
+        assertEquals(output.errors().size(), 0);
     }
 
     @Test(dependsOnMethods = "testBuildJobWithEmptyParametersMap")
@@ -433,14 +433,14 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     @Test(dependsOnMethods = "testSetDescriptionOfJobInFolder")
     public void testGetDescriptionOfJobInFolder() {
         String output = api().description("test-folder/test-folder-1", "JobInFolder");
-        assertTrue(output.equals("RandomDescription"));
+        assertEquals(output, "RandomDescription");
     }
 
     @Test(dependsOnMethods = "testGetDescriptionOfJobInFolder")
     public void testGetJobInfoInFolder() {
         JobInfo output = api().jobInfo("test-folder/test-folder-1", "JobInFolder");
         assertNotNull(output);
-        assertTrue(output.name().equals("JobInFolder"));
+        assertEquals(output.name(), "JobInFolder");
         assertTrue(output.builds().isEmpty());
     }
 
@@ -474,15 +474,15 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         BuildInfo output = api().buildInfo("test-folder/test-folder-1", "JobInFolder", 1);
         assertNotNull(output);
         assertTrue(output.fullDisplayName().contains("JobInFolder #1"));
-        assertTrue(output.queueId() == queueIdForAnotherJob.value());
+        assertEquals((int) queueIdForAnotherJob.value(), output.queueId());
     }
 
     @Test(dependsOnMethods = "testGetProgressiveText")
     public void testGetBuildParametersofJob() {
         List<Parameter> parameters = api().buildInfo("test-folder/test-folder-1", "JobInFolder",1).actions().get(0).parameters();
         assertNotNull(parameters);
-        assertTrue(parameters.get(0).name().equals("SomeKey"));
-        assertTrue(parameters.get(0).value().equals("SomeVeryNewValue"));
+        assertEquals(parameters.get(0).name(), "SomeKey");
+        assertEquals(parameters.get(0).value(), "SomeVeryNewValue");
     }
 
     @Test(dependsOnMethods = "testGetProgressiveText")
@@ -518,7 +518,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         IntegerResponse job1 = api.jobsApi().buildWithParameters(null, "JobForEmptyAndNullParams", params);
         assertNotNull(job1);
         assertTrue(job1.value() > 0);
-        assertTrue(job1.errors().size() == 0);
+        assertEquals(job1.errors().size(), 0);
         QueueItem queueItem = getRunningQueueItem(job1.value());
         assertNotNull(queueItem);
     }
@@ -527,9 +527,9 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testGetBuildParametersOfJobForEmptyAndNullParams() {
         List<Parameter> parameters = api().buildInfo(null, "JobForEmptyAndNullParams", 1).actions().get(0).parameters();
         assertNotNull(parameters);
-        assertTrue(parameters.get(0).name().equals("SomeKey1"));
+        assertEquals(parameters.get(0).name(), "SomeKey1");
         assertTrue(parameters.get(0).value().isEmpty());
-        assertTrue(parameters.get(1).name().equals("SomeKey2"));
+        assertEquals(parameters.get(1).name(), "SomeKey2");
         assertTrue(parameters.get(1).value().isEmpty());
     }
 
@@ -611,7 +611,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertTrue(output.errors().size() > 0);
         assertNotNull(output.errors().get(0).context());
         assertNotNull(output.errors().get(0).message());
-        assertTrue(output.errors().get(0).exceptionName().equals("org.jclouds.rest.ResourceNotFoundException"));
+        assertEquals(output.errors().get(0).exceptionName(), "org.jclouds.rest.ResourceNotFoundException");
     }
 
     @Test
@@ -630,7 +630,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertTrue(output.errors().size() > 0);
         assertNotNull(output.errors().get(0).context());
         assertNotNull(output.errors().get(0).message());
-        assertTrue(output.errors().get(0).exceptionName().equals("org.jclouds.rest.ResourceNotFoundException"));
+        assertEquals(output.errors().get(0).exceptionName(), "org.jclouds.rest.ResourceNotFoundException");
     }
 
     private boolean isFolderPluginInstalled() {

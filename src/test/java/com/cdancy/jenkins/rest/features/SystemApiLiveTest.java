@@ -32,7 +32,7 @@ public class SystemApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testGetSystemInfo() {
         final SystemInfo version = api().systemInfo();
         assertNotNull(version);
-        assertTrue(version.jenkinsVersion() != null);
+        assertNotNull(version.jenkinsVersion());
     }
 
     @Test

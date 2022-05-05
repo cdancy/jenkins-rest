@@ -27,8 +27,9 @@ import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonParser;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
-import com.squareup.okhttp.mockwebserver.RecordedRequest;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
 
@@ -36,8 +37,6 @@ import static org.testng.Assert.assertEquals;
  * Base class for all Jenkins mock tests.
  */
 public class BaseJenkinsMockTest extends BaseJenkinsTest {
-
-    private final JsonParser parser = new JsonParser();
 
     /**
      * Create a MockWebServer with an initial bread-crumb response.
@@ -80,9 +79,9 @@ public class BaseJenkinsMockTest extends BaseJenkinsTest {
     }
 
     protected RecordedRequest assertSent(final MockWebServer server,
-            final String method,
-            final String expectedPath,
-            final Map<String, ?> queryParams) throws InterruptedException {
+                                         final String method,
+                                         final String expectedPath,
+                                         final Map<String, ?> queryParams) throws InterruptedException {
 
         RecordedRequest request = server.takeRequest();
         assertThat(request.getMethod()).isEqualTo(method);
@@ -150,13 +149,6 @@ public class BaseJenkinsMockTest extends BaseJenkinsTest {
         assertThat(request.getMethod()).isEqualTo(method);
         assertThat(request.getPath()).isEqualTo(path);
         assertThat(request.getHeader(HttpHeaders.ACCEPT)).isEqualTo(acceptType);
-        return request;
-    }
-
-    protected RecordedRequest assertSent(MockWebServer server, String method, String path, String json) throws InterruptedException {
-        RecordedRequest request = server.takeRequest();
-        assertEquals(request.getHeader("Content-Type"), MediaType.APPLICATION_JSON);
-        assertEquals(parser.parse(request.getUtf8Body()), parser.parse(json));
         return request;
     }
 }

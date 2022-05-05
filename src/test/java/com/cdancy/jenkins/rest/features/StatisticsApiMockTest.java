@@ -18,14 +18,13 @@ package com.cdancy.jenkins.rest.features;
 
 import static org.testng.Assert.assertNotNull;
 
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.domain.statistics.OverallLoad;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
-
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 /**
  * Mock tests for the {@link com.cdancy.jenkins.rest.features.StatisticsApi}
@@ -38,7 +37,7 @@ public class StatisticsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setBody(payloadFromResource("/overall-load.json")).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         StatisticsApi api = jenkinsApi.statisticsApi();
         try {
             OverallLoad load = api.overallLoad();

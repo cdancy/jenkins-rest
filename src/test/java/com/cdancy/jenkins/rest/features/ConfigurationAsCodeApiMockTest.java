@@ -19,8 +19,8 @@ package com.cdancy.jenkins.rest.features;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -32,36 +32,29 @@ import static org.testng.Assert.*;
 public class ConfigurationAsCodeApiMockTest extends BaseJenkinsMockTest {
 
     public void testCascCheck() throws Exception {
-        MockWebServer server = mockWebServer();
+        try (MockWebServer server = mockWebServer();
+             JenkinsApi jenkinsApi = api(server.url("/").url())) {
+            server.enqueue(new MockResponse().setResponseCode(200));
 
-        server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.url("/").url());
-        ConfigurationAsCodeApi api = jenkinsApi.configurationAsCodeApi();
-        try {
+            ConfigurationAsCodeApi api = jenkinsApi.configurationAsCodeApi();
             RequestStatus requestStatus = api.check("random");
+            System.out.println(requestStatus.errors());
             assertNotNull(requestStatus);
             assertTrue(requestStatus.value());
             assertEquals(requestStatus.errors().size(), 0);
-        } finally {
-            jenkinsApi.close();
-            server.shutdown();
         }
     }
 
     public void testCascApply() throws Exception {
-        MockWebServer server = mockWebServer();
+        try (MockWebServer server = mockWebServer();
+             JenkinsApi jenkinsApi = api(server.url("/").url())) {
+            server.enqueue(new MockResponse().setResponseCode(200));
 
-        server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.url("/").url());
-        ConfigurationAsCodeApi api = jenkinsApi.configurationAsCodeApi();
-        try {
+            ConfigurationAsCodeApi api = jenkinsApi.configurationAsCodeApi();
             RequestStatus requestStatus = api.apply("random");
             assertNotNull(requestStatus);
             assertTrue(requestStatus.value());
             assertEquals(requestStatus.errors().size(), 0);
-        } finally {
-            jenkinsApi.close();
-            server.shutdown();
         }
     }
 

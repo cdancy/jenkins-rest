@@ -17,24 +17,6 @@
 
 package com.cdancy.jenkins.rest;
 
-import static com.google.common.io.BaseEncoding.base64;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.cdancy.jenkins.rest.auth.AuthenticationType;
-
-import com.google.common.base.Throwables;
-import java.io.File;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-import org.jclouds.util.Strings2;
-
 /**
  * Static methods for generating test data.
  */
@@ -45,32 +27,6 @@ public class TestUtilities extends JenkinsUtils {
 
     public static final String TEST_API_TOKEN_SYSTEM_PROPERTY = "test.jenkins.usernameApiToken";
     public static final String TEST_API_TOKEN_ENVIRONMENT_VARIABLE = TEST_API_TOKEN_SYSTEM_PROPERTY.replaceAll("\\.", "_").toUpperCase();
-
-    private static final char[] CHARS = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-
-    /**
-     * Generate a random String with letters only.
-     *
-     * @return random String.
-     */
-    public static String randomStringLettersOnly() {
-        final StringBuilder sb = new StringBuilder();
-        final Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            final char randomChar = CHARS[random.nextInt(CHARS.length)];
-            sb.append(randomChar);
-        }
-        return sb.toString().toUpperCase();
-    }
-
-    /**
-     * Generate a random String with numbers and letters.
-     *
-     * @return random String.
-     */
-    public static String randomString() {
-        return UUID.randomUUID().toString().replaceAll("-", "");
-    }
 
     /**
      * Find credentials (ApiToken, UsernamePassword, or Anonymous) from system/environment.

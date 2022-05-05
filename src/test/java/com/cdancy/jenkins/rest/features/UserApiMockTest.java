@@ -20,8 +20,8 @@ import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.domain.user.ApiToken;
 import com.cdancy.jenkins.rest.domain.user.User;
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -38,9 +38,9 @@ public class UserApiMockTest extends BaseJenkinsMockTest {
 
         String body = payloadFromResource("/user.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.url("/").url());
-        UserApi api = jenkinsApi.userApi();
-        try {
+        //JenkinsApi jenkinsApi = api(server.url("/").url());
+        try (JenkinsApi jenkinsApi = api(server.url("/").url())) {
+            UserApi api = jenkinsApi.userApi();
             User output = api.get();
             assertNotNull(output);
             assertNotNull(output.absoluteUrl());
@@ -52,7 +52,6 @@ public class UserApiMockTest extends BaseJenkinsMockTest {
             assertEquals(output.id(), "admin");
             assertSent(server, "GET", "/user/user/api/json");
         } finally {
-            jenkinsApi.close();
             server.shutdown();
         }
     }
@@ -63,9 +62,8 @@ public class UserApiMockTest extends BaseJenkinsMockTest {
 
         String body = payloadFromResource("/api-token.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.url("/").url());
-        UserApi api = jenkinsApi.userApi();
-        try {
+        try (JenkinsApi jenkinsApi = api(server.url("/").url())) {
+            UserApi api = jenkinsApi.userApi();
             ApiToken output = api.generateNewToken("random");
             assertNotNull(output);
             assertNotNull(output.status());
@@ -79,7 +77,6 @@ public class UserApiMockTest extends BaseJenkinsMockTest {
             assertEquals(output.data().tokenValue(), "112fe6e9b1b94eb1ee58f0ea4f5a1ac7bf");
             assertSentWithFormData(server, "POST", "/user/user/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken", "newTokenName=random");
         } finally {
-            jenkinsApi.close();
             server.shutdown();
         }
     }

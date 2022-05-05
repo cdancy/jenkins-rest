@@ -25,13 +25,11 @@ import com.cdancy.jenkins.rest.domain.statistics.OverallLoad;
 
 @Test(groups = "live", testName = "StatisticsApiLiveTest", singleThreaded = true)
 public class StatisticsApiLiveTest extends BaseJenkinsApiLiveTest {
-
     @Test
     public void testOverallLoad() {
         OverallLoad load = api().overallLoad();
         assertNotNull(load);
     }
-
     private StatisticsApi api() {
         return api.statisticsApi();
     }

@@ -60,10 +60,10 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testGetQueue() {
         IntegerResponse job1 = api.jobsApi().build(null, "QueueTest");
         assertNotNull(job1);
-        assertTrue(job1.errors().size() == 0);
+        assertEquals(job1.errors().size(), 0);
         IntegerResponse job2 = api.jobsApi().build(null, "QueueTest");
         assertNotNull(job2);
-        assertTrue(job2.errors().size() == 0);
+        assertEquals(job2.errors().size(), 0);
         List<QueueItem> queueItems = api().queue();
         assertTrue(queueItems.size() > 0);
         boolean foundLastKickedJob = false;
@@ -80,10 +80,10 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testGetPendingQueueItem() {
         IntegerResponse job1 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job1);
-        assertTrue(job1.errors().size() == 0);
+        assertEquals(job1.errors().size(), 0);
         IntegerResponse job2 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job2);
-        assertTrue(job2.errors().size() == 0);
+        assertEquals(job2.errors().size(), 0);
 
         // job2 is queue after job1, so while job1 runs, job2 is pending in the queue
         QueueItem queueItem = api().queueItem(job2.value());
@@ -96,10 +96,10 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testGetRunningQueueItem() throws InterruptedException {
         IntegerResponse job1 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job1);
-        assertTrue(job1.errors().size() == 0);
+        assertEquals(job1.errors().size(), 0);
         IntegerResponse job2 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job2);
-        assertTrue(job2.errors().size() == 0);
+        assertEquals(job2.errors().size(), 0);
 
         // job1 runs first, so we get its queueItem
         QueueItem queueItem = getRunningQueueItem(job1.value());
@@ -124,7 +124,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         IntegerResponse job1 = api.jobsApi().buildWithParameters(null,"QueueTestSingleParam", params);
         assertNotNull(job1);
         assertTrue(job1.value() > 0);
-        assertTrue(job1.errors().size() == 0);
+        assertEquals(job1.errors().size(), 0);
 
         // Jenkins will reject two consecutive build requests when the build parameter values are the same
         // So we must set some different parameter values
@@ -133,7 +133,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         IntegerResponse job2 = api.jobsApi().buildWithParameters(null,"QueueTestSingleParam", params);
         assertNotNull(job2);
         assertTrue(job2.value() > 0);
-        assertTrue(job2.errors().size() == 0);
+        assertEquals(job2.errors().size(), 0);
 
         QueueItem queueItem = getRunningQueueItem(job1.value());
         assertNotNull(queueItem);
@@ -151,7 +151,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         IntegerResponse job1 = api.jobsApi().buildWithParameters(null, "QueueTestMultipleParams",params);
         assertNotNull(job1);
         assertTrue(job1.value() > 0);
-        assertTrue(job1.errors().size() == 0);
+        assertEquals(job1.errors().size(), 0);
 
         // Jenkins will reject two consecutive build requests when the build parameter values are the same
         // So we must set some different parameter values
@@ -160,7 +160,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         IntegerResponse job2 = api.jobsApi().buildWithParameters(null, "QueueTestMultipleParams", params);
         assertNotNull(job2);
         assertTrue(job2.value() > 0);
-        assertTrue(job2.errors().size() == 0);
+        assertEquals(job2.errors().size(), 0);
 
         QueueItem queueItem = getRunningQueueItem(job1.value());
         assertNotNull(queueItem);
@@ -180,7 +180,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         IntegerResponse job1 = api.jobsApi().buildWithParameters(null, "QueueTestMultipleParams",params);
         assertNotNull(job1);
         assertTrue(job1.value() > 0);
-        assertTrue(job1.errors().size() == 0);
+        assertEquals(job1.errors().size(), 0);
 
         QueueItem queueItem = getRunningQueueItem(job1.value());
         assertNotNull(queueItem);
@@ -193,13 +193,13 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test
-    public void testGetCancelledQueueItem() throws InterruptedException {
+    public void testGetCancelledQueueItem() {
         IntegerResponse job1 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job1);
-        assertTrue(job1.errors().size() == 0);
+        assertEquals(job1.errors().size(), 0);
         IntegerResponse job2 = api.jobsApi().build(null, "QueueTest");
         assertNotNull(job2);
-        assertTrue(job2.errors().size() == 0);
+        assertEquals(job2.errors().size(), 0);
 
         RequestStatus success = api().cancel(job2.value());
         assertNotNull(success);
@@ -213,7 +213,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test
-    public void testCancelNonExistentQueueItem() throws InterruptedException {
+    public void testCancelNonExistentQueueItem() {
         RequestStatus success = api().cancel(123456789);
         assertNotNull(success);
         assertTrue(success.value());

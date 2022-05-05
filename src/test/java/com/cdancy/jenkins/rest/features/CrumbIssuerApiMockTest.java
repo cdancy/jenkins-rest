@@ -16,19 +16,17 @@
  */
 package com.cdancy.jenkins.rest.features;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 import com.cdancy.jenkins.rest.domain.crumb.Crumb;
 
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
-
 import javax.ws.rs.core.MediaType;
+
+import static org.testng.Assert.*;
 
 /**
  * Mock tests for the {@link com.cdancy.jenkins.rest.features.CrumbIssuerApi} class.
@@ -41,12 +39,12 @@ public class CrumbIssuerApiMockTest extends BaseJenkinsMockTest {
 
         final String value = "04a1109fc2db171362c966ebe9fc87f0";
         server.enqueue(new MockResponse().setBody("Jenkins-Crumb:" + value).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         CrumbIssuerApi api = jenkinsApi.crumbIssuerApi();
         try {
             final Crumb instance = api.crumb();
             assertNotNull(instance);
-            assertTrue(instance.value().equals(value));
+            assertEquals(instance.value(), value);
             assertSentAccept(server, "GET", "/crumbIssuer/api/xml?xpath=concat%28//crumbRequestField,%22%3A%22,//crumb%29", MediaType.TEXT_PLAIN);
         } finally {
             jenkinsApi.close();

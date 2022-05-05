@@ -25,6 +25,8 @@ import static org.testng.Assert.assertTrue;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
@@ -33,9 +35,6 @@ import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 
 import com.google.common.collect.Maps;
-
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 /**
  * Mock tests for the {@link com.cdancy.jenkins.rest.features.QueueApi} class.
@@ -47,11 +46,11 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
         String body = payloadFromResource("/queue.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         QueueApi api = jenkinsApi.queueApi();
         try {
             List<QueueItem> output = api.queue();
-            assertTrue(output.size() == 2);
+            assertEquals(output.size(), 2);
             assertSent(server, "GET", "/queue/api/json");
         } finally {
             jenkinsApi.close();
@@ -63,7 +62,7 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
         String body = payloadFromResource("/queueItemPending.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         int queueItemId = 143;
         QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
         try {
@@ -81,7 +80,7 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
         String body = payloadFromResource("/queueItemCancelled.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         int queueItemId = 143;
         QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
         try {
@@ -99,7 +98,7 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
         String body = payloadFromResource("/queueItemRunning.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         int queueItemId = 143;
         int buildNumber = 14;
         QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
@@ -110,7 +109,7 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
             assertFalse(queueItem.cancelled());
             assertNull(queueItem.why());
             assertNotNull(queueItem.executable());
-            assertEquals((int) queueItem.executable().number(), (int) buildNumber);
+            assertEquals((int) queueItem.executable().number(), buildNumber);
             assertEquals(queueItem.executable().url(), "http://localhost:8082/job/test/" + buildNumber + "/");
             assertSent(server, "GET", "/queue/item/" + queueItemId + "/api/json");
         } finally {
@@ -123,9 +122,8 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
         String body = payloadFromResource("/queueItemMultipleParameters.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         int queueItemId = 143;
-        int buildNumber = 14;
         QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
         Map <String, String> map = Maps.newHashMap();
         map.put("a", "1");
@@ -143,9 +141,8 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
         String body = payloadFromResource("/queueItemEmptyParameterValue.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         int queueItemId = 143;
-        int buildNumber = 14;
         QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
         Map <String, String> map = Maps.newHashMap();
         map.put("a", "1");
@@ -162,7 +159,7 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
     public void testCancelQueueItem() throws Exception {
         MockWebServer server = mockWebServer();
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         int queueItemId = 143;
         RequestStatus result = jenkinsApi.queueApi().cancel(queueItemId);
         try {
@@ -179,7 +176,7 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
     public void testCancelNonExistentQueueItem() throws Exception {
         MockWebServer server = mockWebServer();
         server.enqueue(new MockResponse().setResponseCode(500));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         int queueItemId = 143;
         RequestStatus result = jenkinsApi.queueApi().cancel(queueItemId);
         try {
@@ -197,7 +194,7 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
         String body = payloadFromResource("/queueItemNullTaskName.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         int queueItemId = 143;
         QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
         try {
@@ -215,7 +212,7 @@ public class QueueApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
         String body = payloadFromResource("/queueItemMissingTaskUrl.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         int queueItemId = 143;
         QueueItem queueItem = jenkinsApi.queueApi().queueItem(queueItemId);
         try {

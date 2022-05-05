@@ -24,6 +24,8 @@ import com.cdancy.jenkins.rest.JenkinsAuthentication;
 import com.cdancy.jenkins.rest.auth.AuthenticationType;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import org.jclouds.http.HttpRequest;
 
 import org.testng.annotations.Test;
@@ -31,9 +33,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 import com.google.common.collect.Multimap;
-
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 public class JenkinsAuthenticationFilterMockTest extends BaseJenkinsMockTest {
 
@@ -43,14 +42,14 @@ public class JenkinsAuthenticationFilterMockTest extends BaseJenkinsMockTest {
 
         final String value = "04a1109fc2db171362c966ebe9fc87f0";
         server.enqueue(new MockResponse().setBody("Jenkins-Crumb:" + value).setResponseCode(200));
-        JenkinsApi jenkinsApi = anonymousAuthApi(server.getUrl("/"));
+        JenkinsApi jenkinsApi = anonymousAuthApi(server.url("/").url());
 
         JenkinsAuthentication creds = creds(AuthenticationType.Anonymous, null);
         JenkinsAuthenticationFilter filter = new JenkinsAuthenticationFilter(creds, jenkinsApi);
-        HttpRequest httpRequest = HttpRequest.builder().endpoint(server.getUrl("/").toString()).method("POST").build();
+        HttpRequest httpRequest = HttpRequest.builder().endpoint(server.url("/").url().toString()).method("POST").build();
         try {
             httpRequest = filter.filter(httpRequest);
-            assertEquals(httpRequest.getEndpoint().toString(), server.getUrl("/").toString());
+            assertEquals(httpRequest.getEndpoint().toString(), server.url("/").url().toString());
             assertSentAccept(server, "GET", "/crumbIssuer/api/xml?xpath=concat%28//crumbRequestField,%22%3A%22,//crumb%29", MediaType.TEXT_PLAIN);
             Multimap<String,String> headers = httpRequest.getHeaders();
             assertEquals(headers.size(), 2);
@@ -69,14 +68,14 @@ public class JenkinsAuthenticationFilterMockTest extends BaseJenkinsMockTest {
         final String value = "04a1109fc2db171362c966ebe9fc87f0";
         final String usernamePassword = "random_user:random_password";
         server.enqueue(new MockResponse().setBody("Jenkins-Crumb:" + value).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"), AuthenticationType.UsernamePassword, usernamePassword);
+        JenkinsApi jenkinsApi = api(server.url("/").url(), AuthenticationType.UsernamePassword, usernamePassword);
 
         JenkinsAuthentication creds = creds(AuthenticationType.UsernamePassword, usernamePassword);
         JenkinsAuthenticationFilter filter = new JenkinsAuthenticationFilter(creds, jenkinsApi);
-        HttpRequest httpRequest = HttpRequest.builder().endpoint(server.getUrl("/").toString()).method("POST").build();
+        HttpRequest httpRequest = HttpRequest.builder().endpoint(server.url("/").url().toString()).method("POST").build();
         try {
             httpRequest = filter.filter(httpRequest);
-            assertEquals(httpRequest.getEndpoint().toString(), server.getUrl("/").toString());
+            assertEquals(httpRequest.getEndpoint().toString(), server.url("/").url().toString());
             assertSentAccept(server, "GET", "/crumbIssuer/api/xml?xpath=concat%28//crumbRequestField,%22%3A%22,//crumb%29", MediaType.TEXT_PLAIN);
             Multimap<String,String> headers = httpRequest.getHeaders();
             assertEquals(headers.size(), 3);
@@ -93,14 +92,14 @@ public class JenkinsAuthenticationFilterMockTest extends BaseJenkinsMockTest {
     public void testUsernameApiTokenNeedsNoCrumb() throws Exception {
         MockWebServer server = mockWebServer();
 
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
 
         JenkinsAuthentication creds = creds(AuthenticationType.UsernameApiToken, "random_user:random_token");
         JenkinsAuthenticationFilter filter = new JenkinsAuthenticationFilter(creds, jenkinsApi);
-        HttpRequest httpRequest = HttpRequest.builder().endpoint(server.getUrl("/").toString()).method("POST").build();
+        HttpRequest httpRequest = HttpRequest.builder().endpoint(server.url("/").url().toString()).method("POST").build();
         try {
             httpRequest = filter.filter(httpRequest);
-            assertEquals(httpRequest.getEndpoint().toString(), server.getUrl("/").toString());
+            assertEquals(httpRequest.getEndpoint().toString(), server.url("/").url().toString());
             Multimap<String,String> headers = httpRequest.getHeaders();
             assertEquals(headers.size(), 1);
             assertTrue(headers.containsEntry("Authorization", creds.authType().getAuthScheme() + " " + creds.authValue()));
@@ -114,14 +113,14 @@ public class JenkinsAuthenticationFilterMockTest extends BaseJenkinsMockTest {
     public void getMethodNeedsNoCrumb() throws Exception {
         MockWebServer server = mockWebServer();
 
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
 
         JenkinsAuthentication creds = creds(AuthenticationType.UsernameApiToken, "random_user:random_token");
         JenkinsAuthenticationFilter filter = new JenkinsAuthenticationFilter(creds, jenkinsApi);
-        HttpRequest httpRequest = HttpRequest.builder().endpoint(server.getUrl("/").toString()).method("GET").build();
+        HttpRequest httpRequest = HttpRequest.builder().endpoint(server.url("/").url().toString()).method("GET").build();
         try {
             httpRequest = filter.filter(httpRequest);
-            assertEquals(httpRequest.getEndpoint().toString(), server.getUrl("/").toString());
+            assertEquals(httpRequest.getEndpoint().toString(), server.url("/").url().toString());
             Multimap<String,String> headers = httpRequest.getHeaders();
             assertEquals(headers.size(), 1);
             assertTrue(headers.containsEntry("Authorization", creds.authType().getAuthScheme() + " " + creds.authValue()));

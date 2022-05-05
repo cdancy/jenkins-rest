@@ -16,21 +16,22 @@
  */
 package com.cdancy.jenkins.rest.features;
 
-import com.google.gson.JsonObject;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.ws.rs.core.MediaType;
-
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.job.*;
 import com.google.common.collect.Lists;
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
+import com.google.gson.JsonObject;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import org.testng.annotations.Test;
+
+import javax.ws.rs.core.MediaType;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.testng.Assert.*;
 
@@ -84,13 +85,13 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String body = payloadFromResource("/job-info.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             JobInfo output = api.jobInfo(null,"fish");
             assertNotNull(output);
-            assertNotNull(output.name().equals("fish"));
-            assertTrue(output.builds().size() == 7);
+            assertEquals(output.name(), "fish");
+            assertEquals(output.builds().size(), 7);
             assertSent(server, "GET", "/job/fish/api/json");
         } finally {
             jenkinsApi.close();
@@ -102,7 +103,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             JobInfo output = api.jobInfo(null,"fish");
@@ -119,13 +120,13 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String body = payloadFromResource("/build-info.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             BuildInfo output = api.buildInfo(null,"fish", 10);
             assertNotNull(output);
-            assertNotNull(output.fullDisplayName().equals("fish #10"));
-            assertTrue(output.artifacts().size() == 1);
+            assertEquals(output.fullDisplayName(), "fish #10");
+            assertEquals(output.artifacts().size(), 1);
             assertSent(server, "GET", "/job/fish/10/api/json");
         } finally {
             jenkinsApi.close();
@@ -137,7 +138,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             BuildInfo output = api.buildInfo(null,"fish", 10);
@@ -154,7 +155,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String configXML = payloadFromResource("/freestyle-project.xml");
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             RequestStatus success = api.create(null, "DevTest", configXML);
@@ -173,7 +174,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String configXML = payloadFromResource("/freestyle-project.xml");
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             RequestStatus success = api.create("test-folder", "JobInFolder", configXML);
@@ -192,7 +193,8 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String configXML = payloadFromResource("/freestyle-project.xml");
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             RequestStatus success = api.create("/test-folder/test-folder-1/", "JobInFolder", configXML);
@@ -212,7 +214,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         String configXML = payloadFromResource("/freestyle-project.xml");
         server.enqueue(new MockResponse().setHeader("X-Error", "A job already exists with the name ?DevTest?")
             .setResponseCode(400));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             RequestStatus success = api.create(null, "DevTest", configXML);
@@ -230,12 +232,12 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setBody("whatever").setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             String output = api.description(null,"DevTest");
             assertNotNull(output);
-            assertTrue(output.equals("whatever"));
+            assertEquals(output, "whatever");
             assertSentAcceptText(server, "GET", "/job/DevTest/description");
         } finally {
             jenkinsApi.close();
@@ -247,7 +249,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             String output = api.description(null,"DevTest");
@@ -263,7 +265,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             boolean success = api.description(null,"DevTest", "whatever");
@@ -280,7 +282,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             boolean success = api.description(null,"DevTest", "whatever");
@@ -298,12 +300,12 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String configXML = payloadFromResource("/freestyle-project.xml");
         server.enqueue(new MockResponse().setBody(configXML).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             String output = api.config(null,"DevTest");
             assertNotNull(output);
-            assertTrue(configXML.equals(output));
+            assertEquals(output, configXML);
             assertSentAcceptText(server, "GET", "/job/DevTest/config.xml");
         } finally {
             jenkinsApi.close();
@@ -315,7 +317,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             String output = api.config(null,"DevTest");
@@ -332,7 +334,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String configXML = payloadFromResource("/freestyle-project.xml");
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             boolean success = api.config(null,"DevTest", configXML);
@@ -349,7 +351,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String configXML = payloadFromResource("/freestyle-project.xml");
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             boolean success = api.config(null,"DevTest", configXML);
@@ -365,12 +367,12 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             RequestStatus success = api.delete(null,"DevTest");
             assertNotNull(success);
-            assertTrue(success.value() == true);
+            assertTrue(success.value());
             assertTrue(success.errors().isEmpty());
             assertSentAccept(server, "POST", "/job/DevTest/doDelete", MediaType.TEXT_HTML);
         } finally {
@@ -383,7 +385,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(400));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             RequestStatus success = api.delete(null,"DevTest");
@@ -401,7 +403,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             boolean success = api.enable(null,"DevTest");
@@ -417,7 +419,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             boolean success = api.enable(null,"DevTest");
@@ -433,7 +435,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             boolean success = api.disable(null,"DevTest");
@@ -449,7 +451,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             boolean success = api.disable(null,"DevTest");
@@ -466,13 +468,13 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         server.enqueue(
             new MockResponse().setHeader("Location", "http://127.0.1.1:8080/queue/item/1/").setResponseCode(201));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             IntegerResponse output = api.build(null,"DevTest");
             assertNotNull(output);
-            assertTrue(output.value() == 1);
-            assertTrue(output.errors().size() == 0);
+            assertEquals((int) output.value(), 1);
+            assertEquals(output.errors().size(), 0);
             assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
         } finally {
             jenkinsApi.close();
@@ -485,16 +487,16 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         server.enqueue(
             new MockResponse().setResponseCode(201));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             IntegerResponse output = api.build(null,"DevTest");
             assertNotNull(output);
             assertNull(output.value());
-            assertTrue(output.errors().size() == 1);
+            assertEquals(output.errors().size(), 1);
             assertNull(output.errors().get(0).context());
-            assertTrue(output.errors().get(0).message().equals("No queue item Location header could be found despite getting a valid HTTP response."));
-            assertTrue(output.errors().get(0).exceptionName().equals(NumberFormatException.class.getCanonicalName()));
+            assertEquals(output.errors().get(0).message(), "No queue item Location header could be found despite getting a valid HTTP response.");
+            assertEquals(NumberFormatException.class.getCanonicalName(), output.errors().get(0).exceptionName());
             assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
         } finally {
             jenkinsApi.close();
@@ -506,15 +508,15 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             IntegerResponse output = api.build(null, "DevTest");
             assertNotNull(output);
             assertNull(output.value());
-            assertTrue(output.errors().size() == 1);
-            assertTrue(output.errors().get(0).message().equals(""));
-            assertTrue(output.errors().get(0).exceptionName().equals("org.jclouds.rest.ResourceNotFoundException"));
+            assertEquals(output.errors().size(), 1);
+            assertEquals(output.errors().get(0).message(), "");
+            assertEquals(output.errors().get(0).exceptionName(), "org.jclouds.rest.ResourceNotFoundException");
             assertNotNull(output.errors().get(0).context());
             assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
         } finally {
@@ -528,15 +530,15 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         server.enqueue(
             new MockResponse().setHeader("Location", "http://127.0.1.1:8080/queue/item/1/").setResponseCode(201));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             Map<String, List<String>> params = new HashMap<>();
             params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
             IntegerResponse output = api.buildWithParameters(null, "DevTest", params);
             assertNotNull(output);
-            assertTrue(output.value() == 1);
-            assertTrue(output.errors().size() == 0);
+            assertEquals((int) output.value(), 1);
+            assertEquals(output.errors().size(), 0);
             assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
         } finally {
             jenkinsApi.close();
@@ -549,13 +551,13 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         server.enqueue(
             new MockResponse().setHeader("Location", "http://127.0.1.1:8080/queue/item/1/").setResponseCode(201));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             IntegerResponse output = api.buildWithParameters(null, "DevTest", null);
             assertNotNull(output);
-            assertTrue(output.value() == 1);
-            assertTrue(output.errors().size() == 0);
+            assertEquals((int) output.value(), 1);
+            assertEquals(output.errors().size(), 0);
             assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
         } finally {
             jenkinsApi.close();
@@ -568,13 +570,13 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         server.enqueue(
             new MockResponse().setHeader("Location", "http://127.0.1.1:8080/queue/item/1/").setResponseCode(201));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             IntegerResponse output = api.buildWithParameters(null, "DevTest", new HashMap<>());
             assertNotNull(output);
-            assertTrue(output.value() == 1);
-            assertTrue(output.errors().size() == 0);
+            assertEquals((int) output.value(), 1);
+            assertEquals(output.errors().size(), 0);
             assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
         } finally {
             jenkinsApi.close();
@@ -586,7 +588,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             Map<String, List<String>> params = new HashMap<>();
@@ -594,9 +596,9 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             IntegerResponse output = api.buildWithParameters(null, "DevTest", params);
             assertNotNull(output);
             assertNull(output.value());
-            assertTrue(output.errors().size() == 1);
-            assertTrue(output.errors().get(0).message().equals(""));
-            assertTrue(output.errors().get(0).exceptionName().equals("org.jclouds.rest.ResourceNotFoundException"));
+            assertEquals(output.errors().size(), 1);
+            assertEquals(output.errors().get(0).message(), "");
+            assertEquals(output.errors().get(0).exceptionName(), "org.jclouds.rest.ResourceNotFoundException");
             assertNotNull(output.errors().get(0).context());
             assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
         } finally {
@@ -610,15 +612,15 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String body = payloadFromResource("/build-info.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             List<Parameter> output = api.buildInfo(null,"fish", 10).actions().get(0).parameters();
             assertNotNull(output);
-            assertTrue(output.get(0).name().equals("bear"));
-            assertTrue(output.get(0).value().equals("true"));
-            assertTrue(output.get(1).name().equals("fish"));
-            assertTrue(output.get(1).value().equals("salmon"));
+            assertEquals(output.get(0).name(), "bear");
+            assertEquals(output.get(0).value(), "true");
+            assertEquals(output.get(1).name(), "fish");
+            assertEquals(output.get(1).value(), "salmon");
             assertSent(server, "GET", "/job/fish/10/api/json");
         } finally {
             jenkinsApi.close();
@@ -631,18 +633,18 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String body = payloadFromResource("/build-info-git-commit.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             List<ChangeSet> changeSets = api.buildInfo(null,"fish", 10).changeSets().get(0).items();
             assertNotNull(changeSets);
-            assertTrue(changeSets.get(0).affectedPaths().get(0).equals("some/path/in/the/repository"));
-            assertTrue(changeSets.get(0).commitId().equals("d27afa0805201322d846d7defc29b82c88d9b5ce"));
-            assertTrue(changeSets.get(0).timestamp() == 1461091892486l);
-            assertTrue(changeSets.get(0).author().absoluteUrl().equals("http://localhost:8080/user/username"));
-            assertTrue(changeSets.get(0).author().fullName().equals("username"));
-            assertTrue(changeSets.get(0).authorEmail().equals("username@localhost"));
-            assertTrue(changeSets.get(0).comment().equals("Commit comment\n"));
+            assertEquals(changeSets.get(0).affectedPaths().get(0), "some/path/in/the/repository");
+            assertEquals(changeSets.get(0).commitId(), "d27afa0805201322d846d7defc29b82c88d9b5ce");
+            assertEquals(changeSets.get(0).timestamp(), 1461091892486L);
+            assertEquals(changeSets.get(0).author().absoluteUrl(), "http://localhost:8080/user/username");
+            assertEquals(changeSets.get(0).author().fullName(), "username");
+            assertEquals(changeSets.get(0).authorEmail(), "username@localhost");
+            assertEquals(changeSets.get(0).comment(), "Commit comment\n");
         } finally {
             jenkinsApi.close();
             server.shutdown();
@@ -654,11 +656,11 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String body = payloadFromResource("/build-info-no-params.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             List<Parameter> output = api.buildInfo(null,"fish", 10).actions().get(0).parameters();
-            assertTrue(output.size() == 0);
+            assertEquals(output.size(), 0);
             assertSent(server, "GET", "/job/fish/10/api/json");
         } finally {
             jenkinsApi.close();
@@ -671,14 +673,14 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String body = payloadFromResource("/build-info-empty-and-null-params.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             List<Parameter> output = api.buildInfo(null,"fish", 10).actions().get(0).parameters();
             assertNotNull(output);
-            assertTrue(output.get(0).name().equals("bear"));
-            assertTrue(output.get(0).value().equals("null"));
-            assertTrue(output.get(1).name().equals("fish"));
+            assertEquals(output.get(0).name(), "bear");
+            assertEquals(output.get(0).value(), "null");
+            assertEquals(output.get(1).name(), "fish");
             assertTrue(output.get(1).value().isEmpty());
             assertSent(server, "GET", "/job/fish/10/api/json");
         } finally {
@@ -692,14 +694,14 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String body = payloadFromResource("/build-info-no-params.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             List<Cause> output = api.buildInfo(null,"fish", 10).actions().get(0).causes();
             assertNotNull(output);
-            assertTrue(output.get(0).shortDescription().equals("Started by user anonymous"));
+            assertEquals(output.get(0).shortDescription(), "Started by user anonymous");
             assertNull(output.get(0).userId());
-            assertTrue(output.get(0).userName().equals("anonymous"));
+            assertEquals(output.get(0).userName(), "anonymous");
             assertSent(server, "GET", "/job/fish/10/api/json");
         } finally {
             jenkinsApi.close();
@@ -712,12 +714,12 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String body = payloadFromResource("/build-number.txt");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             Integer output = api.lastBuildNumber(null,"DevTest");
             assertNotNull(output);
-            assertTrue(output == 123);
+            assertEquals((int) output, 123);
             assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildNumber");
         } finally {
             jenkinsApi.close();
@@ -729,7 +731,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             Integer output = api.lastBuildNumber(null,"DevTest");
@@ -746,12 +748,12 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String body = payloadFromResource("/build-timestamp.txt");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             String output = api.lastBuildTimestamp(null,"DevTest");
             assertNotNull(output);
-            assertTrue(output.equals(body));
+            assertEquals(body, output);
             assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/buildTimestamp");
         } finally {
             jenkinsApi.close();
@@ -763,7 +765,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             String output = api.lastBuildTimestamp(null,"DevTest");
@@ -780,12 +782,12 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String body = payloadFromResource("/progressive-text.txt");
         server.enqueue(new MockResponse().setHeader("X-Text-Size", "123").setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             ProgressiveText output = api.progressiveText(null,"DevTest", 0);
             assertNotNull(output);
-            assertTrue(output.size() == 123);
+            assertEquals(output.size(), 123);
             assertFalse(output.hasMoreData());
             assertSentAcceptText(server, "GET", "/job/DevTest/lastBuild/logText/progressiveText?start=0");
         } finally {
@@ -799,12 +801,12 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
 
         String body = payloadFromResource("/progressive-text.txt");
         server.enqueue(new MockResponse().setHeader("X-Text-Size", "123").setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             ProgressiveText output = api.progressiveText(null,"DevTest", 1,0);
             assertNotNull(output);
-            assertTrue(output.size() == 123);
+            assertEquals(output.size(), 123);
             assertFalse(output.hasMoreData());
             assertSentAcceptText(server, "GET", "/job/DevTest/1/logText/progressiveText?start=0");
         } finally {
@@ -817,7 +819,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             ProgressiveText output = api.progressiveText(null,"DevTest", 0);
@@ -833,7 +835,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             boolean success = api.rename(null,"DevTest","NewDevTest");
@@ -849,7 +851,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             boolean success = api.rename(null,"DevTest","NewDevTest");
@@ -866,7 +868,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         String body = payloadFromResource("/runHistory.json");
 
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             List<Workflow> workflows = api.runHistory(null, "MockJob");
@@ -882,7 +884,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             List<Workflow> workflows = api.runHistory(null, "MockJob");
@@ -899,7 +901,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         String body = payloadFromResource("/workflow.json");
 
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             Workflow success = api.workflow(null,"DevTest",16);
@@ -915,7 +917,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             Workflow success = api.workflow(null,"DevTest",16);
@@ -932,7 +934,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         String body = payloadFromResource("/pipeline-node.json");
 
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             PipelineNode success = api.pipelineNode(null,"DevTest",16, 17);
@@ -948,7 +950,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             PipelineNode success = api.pipelineNode(null,"DevTest",16, 17);
@@ -964,7 +966,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setHeader("Content-Type", "application/json").setBody("{ \"empty\": false }").setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             JsonObject testReport = api.testReport(null,"DevTest",16);
@@ -980,7 +982,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             JsonObject testReport = api.testReport(null,"DevTest",16);
@@ -996,7 +998,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         String body = payloadFromResource("/pipelineNodeLog.json");
 
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             PipelineNodeLog pipelineNodeLog = api.pipelineNodeLog(null,"MockJob",16, 17);
@@ -1012,7 +1014,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             PipelineNodeLog pipelineNodeLog = api.pipelineNodeLog(null,"MockJob",16, 17);
@@ -1028,7 +1030,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             RequestStatus status = api.stop(null, "fish", 99);
@@ -1046,7 +1048,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             RequestStatus status = api.term(null, "fish", 99);
@@ -1064,7 +1066,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             RequestStatus status = api.kill(null, "fish", 99);
@@ -1082,10 +1084,10 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse()
-            .setHeader("Location", server.getUrl("/") + "job/fish/99/term/")
+            .setHeader("Location", server.url("/").url() + "job/fish/99/term/")
             .setResponseCode(302));
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             RequestStatus status = api.term(null, "fish", 99);
@@ -1096,7 +1098,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             assertEquals(status.errors().size(), 1);
             System.out.println("Mock Status: " + status);
             assertEquals(status.errors().get(0).message(), "The term operation does not exist for " +
-                server.getUrl("/") +
+                server.url("/").url() +
                 "job/fish/99/term/, try stop instead.");
         } finally {
             jenkinsApi.close();
@@ -1108,10 +1110,10 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse()
-            .setHeader("Location", server.getUrl("/") + "job/fish/99/kill/")
+            .setHeader("Location", server.url("/").url() + "job/fish/99/kill/")
             .setResponseCode(302));
         server.enqueue(new MockResponse().setResponseCode(404));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
             RequestStatus status = api.kill(null, "fish", 99);
@@ -1121,7 +1123,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             assertFalse(status.errors().isEmpty());
             assertEquals(status.errors().size(), 1);
             assertEquals(status.errors().get(0).message(), "The kill operation does not exist for " +
-                server.getUrl("/") +
+                server.url("/").url() +
                 "job/fish/99/kill/, try stop instead.");
         } finally {
             jenkinsApi.close();

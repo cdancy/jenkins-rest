@@ -21,15 +21,14 @@ import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.assertFalse;
 
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.JenkinsApiMetadata;
 import com.cdancy.jenkins.rest.domain.system.SystemInfo;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
-
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 import javax.ws.rs.core.MediaType;
 
@@ -48,7 +47,7 @@ public class SystemApiMockTest extends BaseJenkinsMockTest {
                 .setHeader("X-Jenkins-CLI-Port", "50000").setHeader("X-Jenkins-CLI2-Port", "50000")
                 .setHeader("X-Instance-Identity", "fdsa").setHeader("X-SSH-Endpoint", "127.0.1.1:46126")
                 .setHeader("Server", "Jetty(winstone-2.9)").setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         SystemApi api = jenkinsApi.systemApi();
         try {
             final SystemInfo version = api.systemInfo();
@@ -66,7 +65,7 @@ public class SystemApiMockTest extends BaseJenkinsMockTest {
 
         server.enqueue(
             new MockResponse().setBody("Not Authorized").setResponseCode(401));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         SystemApi api = jenkinsApi.systemApi();
         try {
             final SystemInfo version = api.systemInfo();
@@ -83,7 +82,7 @@ public class SystemApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         SystemApi api = jenkinsApi.systemApi();
         try {
             RequestStatus success = api.quietDown();
@@ -100,7 +99,7 @@ public class SystemApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(401));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         SystemApi api = jenkinsApi.systemApi();
         try {
             RequestStatus status = api.quietDown();
@@ -118,7 +117,7 @@ public class SystemApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(200));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         SystemApi api = jenkinsApi.systemApi();
         try {
             RequestStatus success = api.cancelQuietDown();
@@ -135,7 +134,7 @@ public class SystemApiMockTest extends BaseJenkinsMockTest {
         MockWebServer server = mockWebServer();
 
         server.enqueue(new MockResponse().setResponseCode(401));
-        JenkinsApi jenkinsApi = api(server.getUrl("/"));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
         SystemApi api = jenkinsApi.systemApi();
         try {
             RequestStatus status = api.cancelQuietDown();

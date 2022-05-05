@@ -35,10 +35,7 @@ public class JenkinsAuthenticationFilterLiveTest extends BaseJenkinsTest {
 
     @Test
     public void testAnonymousNeedsCrumb() throws Exception {
-        final String usernamePassword = System.getProperty("test.jenkins.usernamePassword");
-        JenkinsApi jenkinsApi = api(new URL(endPoint), AuthenticationType.Anonymous, null);
-
-        try {
+        try (JenkinsApi jenkinsApi = api(new URL(endPoint), AuthenticationType.Anonymous, null)) {
             // Do something that needs POST so the crumb logic is exercized
             String config = payloadFromResource("/freestyle-project-no-params.xml");
             RequestStatus success = jenkinsApi.jobsApi().create(null, "DevTest", config);
@@ -49,17 +46,14 @@ public class JenkinsAuthenticationFilterLiveTest extends BaseJenkinsTest {
             assertNotNull(success2);
             assertTrue(success2.value());
             // Debugging note: Jenkins returns 302 after POSTing the delete, causing JClouds to follow the redirect and POST again
-        } finally {
-            jenkinsApi.close();
         }
     }
 
     @Test
     public void testUsernamePasswordNeedsCrumb() throws Exception {
         final String usernamePassword = System.getProperty("test.jenkins.usernamePassword");
-        JenkinsApi jenkinsApi = api(new URL(endPoint), AuthenticationType.UsernamePassword, usernamePassword);
 
-        try {
+        try (JenkinsApi jenkinsApi = api(new URL(endPoint), AuthenticationType.UsernamePassword, usernamePassword)) {
             // Do something that needs POST so the crumb logic is exercized
             String config = payloadFromResource("/freestyle-project-no-params.xml");
             RequestStatus success = jenkinsApi.jobsApi().create(null, "DevTest", config);
@@ -70,8 +64,6 @@ public class JenkinsAuthenticationFilterLiveTest extends BaseJenkinsTest {
             assertNotNull(success2);
             assertTrue(success2.value());
             // Debugging note: Jenkins returns 302 after POSTing the delete, causing JClouds to follow the redirect and POST again
-        } finally {
-            jenkinsApi.close();
         }
     }
 
@@ -79,14 +71,13 @@ public class JenkinsAuthenticationFilterLiveTest extends BaseJenkinsTest {
     public void testUsernameApiTokenNeedsNoCrumb() throws Exception {
         // Generate an API Token
         final String usernamePassword = System.getProperty("test.jenkins.usernamePassword");
-        final ApiToken apiToken = generateNewApiToken(AuthenticationType.UsernamePassword, usernamePassword, "filter-test-token");
+        final ApiToken apiToken = generateNewApiToken(usernamePassword);
 
         // Create a Jenkins Client using the API Token
         System.out.println("Okay, we have the token: " + apiToken.data().tokenValue());
         final String usernameApiToken = usernamePassword.split(":")[0] + ":" + apiToken.data().tokenValue();
-        JenkinsApi jenkinsApi = api(new URL(endPoint), AuthenticationType.UsernameApiToken, usernameApiToken);
 
-        try {
+        try (JenkinsApi jenkinsApi = api(new URL(endPoint), AuthenticationType.UsernameApiToken, usernameApiToken)) {
             // Do something that needs POST so the crumb logic is exercized
             String config = payloadFromResource("/freestyle-project-no-params.xml");
             RequestStatus success = jenkinsApi.jobsApi().create(null, "DevTest", config);
@@ -98,20 +89,23 @@ public class JenkinsAuthenticationFilterLiveTest extends BaseJenkinsTest {
             assertTrue(success2.value());
             // Debugging note: Jenkins returns 302 after POSTing the delete, causing JClouds to follow the redirect and POST again
         } finally {
-            jenkinsApi.close();
-            revokeApiToken(AuthenticationType.UsernameApiToken, usernameApiToken, apiToken);
+            revokeApiToken(usernameApiToken, apiToken);
         }
     }
 
-    private ApiToken generateNewApiToken(final AuthenticationType authType, final String credStr, final String tokenName) throws Exception {
-        JenkinsApi api = api(new URL(endPoint), authType, credStr);
-        UserApi user = api.userApi();
-        return user.generateNewToken(tokenName);
+    private ApiToken generateNewApiToken(final String credStr) throws Exception {
+        UserApi user;
+        try (JenkinsApi api = api(new URL(endPoint), AuthenticationType.UsernamePassword, credStr)) {
+            user = api.userApi();
+        }
+        return user.generateNewToken("filter-test-token");
     }
 
-    private void revokeApiToken(final AuthenticationType authType, final String credStr, final ApiToken apiToken) throws Exception {
-        JenkinsApi api = api(new URL(endPoint), authType, credStr);
-        UserApi user = api.userApi();
+    private void revokeApiToken(final String credStr, final ApiToken apiToken) throws Exception {
+        UserApi user;
+        try (JenkinsApi api = api(new URL(endPoint), AuthenticationType.UsernameApiToken, credStr)) {
+            user = api.userApi();
+        }
         user.revoke(apiToken.data().tokenUuid());
     }
 

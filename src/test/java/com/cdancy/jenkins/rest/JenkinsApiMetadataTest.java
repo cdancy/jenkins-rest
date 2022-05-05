@@ -17,19 +17,14 @@
 
 package com.cdancy.jenkins.rest;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-
-import java.util.HashSet;
-
-import org.jclouds.View;
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.apis.Apis;
 import org.jclouds.apis.internal.BaseApiMetadataTest;
 import org.testng.annotations.Test;
 
-import com.google.common.reflect.TypeToken;
+import java.util.HashSet;
+
+import static org.testng.Assert.*;
 
 /**
  * Unit tests for the {@link JenkinsApiMetadata} class.
@@ -38,7 +33,7 @@ import com.google.common.reflect.TypeToken;
 public class JenkinsApiMetadataTest extends BaseApiMetadataTest {
 
    public JenkinsApiMetadataTest() {
-      super(new JenkinsApiMetadata(), new HashSet<TypeToken<? extends View>>());
+      super(new JenkinsApiMetadata(), new HashSet<>());
    }
 
    public void testEtcdApiRegistered() {

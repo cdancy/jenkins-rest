@@ -19,6 +19,7 @@ package com.cdancy.jenkins.rest;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.Properties;
 
 import org.jclouds.Constants;
@@ -37,9 +38,6 @@ import com.google.common.collect.Lists;
  * Base class for Jenkins mock tests and some Live tests.
  */
 public class BaseJenkinsTest {
-
-    // The test container has this admin user defined:
-    public static final String USERNAME_PASSWORD = "admin:admin";
 
     // This token can only be used by mock test as real tokens can only be obtained from jenkins itself
     public static final String USERNAME_APITOKEN = "user:token";
@@ -110,7 +108,7 @@ public class BaseJenkinsTest {
     protected Properties setupProperties() {
         final Properties properties = new Properties();
         properties.setProperty(Constants.PROPERTY_MAX_RETRIES, "0");
-        properties.setProperty(Constants.PROPERTY_CONNECTION_TIMEOUT, "1");
+        properties.setProperty(Constants.PROPERTY_CONNECTION_TIMEOUT, "60");
         return properties;
     }
 
@@ -123,7 +121,7 @@ public class BaseJenkinsTest {
      */
     public String payloadFromResource(String resource) {
         try {
-            return new String(toStringAndClose(getClass().getResourceAsStream(resource)).getBytes(Charsets.UTF_8));
+            return new String(toStringAndClose(Objects.requireNonNull(getClass().getResourceAsStream(resource))).getBytes(Charsets.UTF_8));
         } catch (IOException e) {
             throw Throwables.propagate(e);
         }
