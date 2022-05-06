@@ -8,7 +8,7 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>SomeKey</name>
-          <description>whatever</description>
+          <description>测试中文</description>
           <defaultValue>SomeValue</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
