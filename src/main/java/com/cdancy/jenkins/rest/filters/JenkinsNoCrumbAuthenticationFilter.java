@@ -17,7 +17,6 @@
 
 package com.cdancy.jenkins.rest.filters;
 
-import com.cdancy.jenkins.rest.JenkinsApi;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

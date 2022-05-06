@@ -38,6 +38,10 @@ public class CrumbParser implements Function<HttpResponse, Crumb> {
 
     @Override
     public Crumb apply(final HttpResponse input) {
+        if (input == null) {
+            throw new RuntimeException("Unexpected NULL HttpResponse object");
+        }
+
         final int statusCode = input.getStatusCode();
         if (statusCode >= 200 && statusCode < 400) {
             try {

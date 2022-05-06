@@ -110,12 +110,11 @@ public class JenkinsErrorHandler implements HttpErrorHandler {
             }
         } else {
             final String errorMessage = response.getFirstHeaderOrNull("X-Error");
-            return new StringBuffer(command.getCurrentRequest().getRequestLine())
-                    .append(" -> ")
-                    .append(response.getStatusLine())
-                    .append(" -> ")
-                    .append(errorMessage != null ? errorMessage : "")
-                    .toString();
+            return command.getCurrentRequest().getRequestLine() +
+                " -> " +
+                response.getStatusLine() +
+                " -> " +
+                (errorMessage != null ? errorMessage : "");
         }
     }
 }

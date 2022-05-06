@@ -48,8 +48,7 @@ public class JenkinsApiMetadata extends BaseHttpApiMetadata<JenkinsApi> {
     }
 
     public static Properties defaultProperties() {
-        Properties properties = BaseHttpApiMetadata.defaultProperties();
-        return properties;
+        return BaseHttpApiMetadata.defaultProperties();
     }
 
     public static class Builder extends BaseHttpApiMetadata.Builder<JenkinsApi, Builder> {
@@ -61,7 +60,7 @@ public class JenkinsApiMetadata extends BaseHttpApiMetadata<JenkinsApi> {
                 .documentation(URI.create("http://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API"))
                 .version(API_VERSION).buildVersion(BUILD_VERSION).defaultEndpoint("http://127.0.0.1:8080")
                 .defaultProperties(JenkinsApiMetadata.defaultProperties())
-                .defaultModules(ImmutableSet.<Class<? extends Module>> of(JenkinsHttpApiModule.class));
+                .defaultModules(ImmutableSet.of(JenkinsHttpApiModule.class));
         }
 
         @Override

@@ -43,6 +43,8 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
     private volatile Pair<Crumb, Boolean> crumbPair = null;
     private static final String CRUMB_HEADER = "Jenkins-Crumb";
 
+    private static final String RNFSimpleName = ResourceNotFoundException.class.getSimpleName();
+
     @Inject
     JenkinsAuthenticationFilter(final JenkinsAuthentication creds, final JenkinsApi jenkinsApi) {
         this.creds = creds;
@@ -69,7 +71,7 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
                 Optional.ofNullable(localCrumb.getKey().sessionIdCookie())
                         .ifPresent(sessionId -> builder.addHeader(HttpHeaders.COOKIE, sessionId));
             } else {
-                if (localCrumb.getValue() == false) {
+                if (!localCrumb.getValue()) {
                     throw new RuntimeException("Unexpected exception being thrown: error=" + localCrumb.getKey().errors().get(0));
                 }
             }
@@ -84,10 +86,8 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
                 crumbValueInit = this.crumbPair;
                 if (crumbValueInit == null) {
                     final Crumb crumb = jenkinsApi.crumbIssuerApi().crumb();
-                    final Boolean isRNFE = crumb.errors().isEmpty()
-                            ? true
-                            : crumb.errors().get(0).exceptionName().endsWith(ResourceNotFoundException.class.getSimpleName());
-                    this.crumbPair = crumbValueInit = new Pair(crumb, isRNFE);
+                    final Boolean isRNFE = crumb.errors().isEmpty() || crumb.errors().get(0).exceptionName().endsWith(RNFSimpleName);
+                    this.crumbPair = crumbValueInit = new Pair<>(crumb, isRNFE);
                 }
             }
         }
@@ -95,7 +95,7 @@ public class JenkinsAuthenticationFilter implements HttpRequestFilter {
     }
 
     // simple impl/copy of javafx.util.Pair
-    private class Pair<A, B> {
+    private static class Pair<A, B> {
         private final A a;
         private final B b;
         public Pair(final A a, final B b) {

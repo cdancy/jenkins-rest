@@ -20,7 +20,7 @@ public class OptionalFolderPathParser implements Function<Object,String> {
             return EMPTY_STRING;
         }
 
-        final StringBuilder path = new StringBuilder(String.class.cast(optionalFolderPath));
+        final StringBuilder path = new StringBuilder((String) optionalFolderPath);
         if (path.length() == 0) {
             return EMPTY_STRING;
         }

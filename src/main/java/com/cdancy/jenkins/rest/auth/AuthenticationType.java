@@ -29,7 +29,7 @@ public enum AuthenticationType {
     private final String authName;
     private final String authScheme;
 
-    private AuthenticationType(final String authName, final String authScheme) {
+    AuthenticationType(final String authName, final String authScheme) {
         this.authName = authName;
         this.authScheme = authScheme;
     }

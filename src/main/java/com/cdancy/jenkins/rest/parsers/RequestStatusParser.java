@@ -30,6 +30,10 @@ public class RequestStatusParser implements Function<HttpResponse, RequestStatus
 
     @Override
     public RequestStatus apply(final HttpResponse input) {
+        if (input == null) {
+            throw new RuntimeException("Unexpected NULL HttpResponse object");
+        }
+
         final int statusCode = input.getStatusCode();
         if (statusCode >= 200 && statusCode < 400) {
             return RequestStatus.create(true, null);

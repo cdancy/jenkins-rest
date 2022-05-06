@@ -67,7 +67,7 @@ public class JenkinsUtils {
      * @return ImmutableList or empty ImmutableList if `input` is null.
      */
     public static <T> List<T> nullToEmpty(final Iterable<? extends T> input) {
-        return (List<T>) (input == null ? ImmutableList.<T> of() : ImmutableList.copyOf(input));
+        return input == null ? ImmutableList.of() : ImmutableList.copyOf(input);
     }
 
     /**
@@ -79,7 +79,7 @@ public class JenkinsUtils {
      * @return ImmutableMap or empty ImmutableMap if `input` is null.
      */
     public static <K, V> Map<K, V> nullToEmpty(final Map<? extends K, ? extends V> input) {
-        return (Map<K, V>) (input == null ? ImmutableMap.<K, V> of() : ImmutableMap.copyOf(input));
+        return input == null ? ImmutableMap.of() : ImmutableMap.copyOf(input);
     }
 
     /**
@@ -135,7 +135,7 @@ public class JenkinsUtils {
         }
 
         if (environmentVariable != null) {
-            final String value = System.getenv(environmentVariable);
+            final String value = System.getenv().get(environmentVariable);
             if (value != null) {
                 return value;
             }

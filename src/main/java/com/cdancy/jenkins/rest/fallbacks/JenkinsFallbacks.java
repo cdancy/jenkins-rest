@@ -41,86 +41,74 @@ public final class JenkinsFallbacks {
 
     public static final class SystemInfoOnError implements Fallback<Object> {
         @Override
-        public Object createOrPropagate(final Throwable throwable) throws Exception {
-            if (checkNotNull(throwable, "throwable") != null) {
-                return createSystemInfoFromErrors(getErrors(throwable));
-            }
-            throw propagate(throwable);
+        public Object createOrPropagate(final Throwable throwable) {
+            checkNotNull(throwable, "throwable");
+            return createSystemInfoFromErrors(getErrors(throwable));
         }
     }
 
     public static final class RequestStatusOnError implements Fallback<Object> {
         @Override
-        public Object createOrPropagate(final Throwable throwable) throws Exception {
-            if (checkNotNull(throwable, "throwable") != null) {
-                try {
-                    return RequestStatus.create(false, getErrors(throwable));
-                } catch (JsonSyntaxException e) {
-                    return RequestStatus.create(false, getErrors(e));
-                }
+        public Object createOrPropagate(final Throwable throwable) {
+            checkNotNull(throwable, "throwable");
+            try {
+                return RequestStatus.create(false, getErrors(throwable));
+            } catch (JsonSyntaxException e) {
+                return RequestStatus.create(false, getErrors(e));
             }
-            throw propagate(throwable);
         }
     }
 
     public static final class IntegerResponseOnError implements Fallback<Object> {
         @Override
-        public Object createOrPropagate(final Throwable throwable) throws Exception {
-            if (checkNotNull(throwable, "throwable") != null) {
-                try {
-                    return IntegerResponse.create(null, getErrors(throwable));
-                } catch (JsonSyntaxException e) {
-                    return IntegerResponse.create(null, getErrors(e));
-                }
+        public Object createOrPropagate(final Throwable throwable) {
+            checkNotNull(throwable, "throwable");
+            try {
+                return IntegerResponse.create(null, getErrors(throwable));
+            } catch (JsonSyntaxException e) {
+                return IntegerResponse.create(null, getErrors(e));
             }
-            throw propagate(throwable);
         }
     }
 
     public static final class CrumbOnError implements Fallback<Object> {
         @Override
-        public Object createOrPropagate(final Throwable throwable) throws Exception {
-            if (checkNotNull(throwable, "throwable") != null) {
-                try {
-                    return Crumb.create(null, getErrors(throwable));
-                } catch (JsonSyntaxException e) {
-                    return Crumb.create(null, getErrors(e));
-                }
+        public Object createOrPropagate(final Throwable throwable) {
+            checkNotNull(throwable, "throwable");
+            try {
+                return Crumb.create(null, getErrors(throwable));
+            } catch (JsonSyntaxException e) {
+                return Crumb.create(null, getErrors(e));
             }
-            throw propagate(throwable);
         }
     }
 
     public static final class PluginsOnError implements Fallback<Object> {
         @Override
-        public Object createOrPropagate(final Throwable throwable) throws Exception {
-            if (checkNotNull(throwable, "throwable") != null) {
-                try {
-                    return Plugins.create(null, null, getErrors(throwable));
-                } catch (JsonSyntaxException e) {
-                    return Plugins.create(null, null, getErrors(e));
-                }
+        public Object createOrPropagate(final Throwable throwable) {
+            checkNotNull(throwable, "throwable");
+            try {
+                return Plugins.create(null, null, getErrors(throwable));
+            } catch (JsonSyntaxException e) {
+                return Plugins.create(null, null, getErrors(e));
             }
-            throw propagate(throwable);
         }
     }
 
     // fix/hack for Jenkins jira issue: JENKINS-21311
     public static final class JENKINS_21311 implements Fallback<Object> {
         @Override
-        public Object createOrPropagate(final Throwable throwable) throws Exception {
-            if (checkNotNull(throwable, "throwable") != null) {
-                try {
-                    if (throwable.getClass() == ResourceNotFoundException.class) {
-                        return RequestStatus.create(true, null);
-                    } else {
-                        return RequestStatus.create(false, getErrors(throwable));
-                    }
-                } catch (JsonSyntaxException e) {
-                    return RequestStatus.create(false, getErrors(e));
+        public Object createOrPropagate(final Throwable throwable) {
+            checkNotNull(throwable, "throwable");
+            try {
+                if (throwable.getClass() == ResourceNotFoundException.class) {
+                    return RequestStatus.create(true, null);
+                } else {
+                    return RequestStatus.create(false, getErrors(throwable));
                 }
+            } catch (JsonSyntaxException e) {
+                return RequestStatus.create(false, getErrors(e));
             }
-            throw propagate(throwable);
         }
     }
 

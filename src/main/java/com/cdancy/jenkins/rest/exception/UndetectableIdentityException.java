@@ -32,17 +32,7 @@ package com.cdancy.jenkins.rest.exception;
 public class UndetectableIdentityException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    public UndetectableIdentityException() { super(); }
-
-    public UndetectableIdentityException(final String arg0, final Throwable arg1) {
-            super(arg0, arg1);
-    }
-
     public UndetectableIdentityException(final String arg0) {
             super(arg0);
-    }
-
-    public UndetectableIdentityException(final Throwable arg0) {
-        super(arg0);
     }
 }

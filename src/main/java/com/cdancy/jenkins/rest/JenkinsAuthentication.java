@@ -113,9 +113,8 @@ public class JenkinsAuthentication extends Credentials {
          * Either way the identity is the username, and it can be extracted directly or by decoding.
          */
         private String extractIdentity(final String credentialString) {
-            String maybeEncoded = credentialString;
             String decoded;
-            if (!maybeEncoded.contains(":")) {
+            if (!credentialString.contains(":")) {
                 decoded = new String(base64().decode(credentialString),StandardCharsets.UTF_8);
             } else {
                 decoded = credentialString;

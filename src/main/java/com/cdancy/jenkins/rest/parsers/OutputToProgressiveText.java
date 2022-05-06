@@ -44,32 +44,23 @@ public class OutputToProgressiveText implements Function<HttpResponse, Progressi
    }
 
    public String getTextOutput(HttpResponse response) {
-      InputStream is = null;
-      try {
-         is = response.getPayload().openStream();
-         return CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));
-      } catch (Exception e) {
-         // ignore
-      } finally {
-         if (is != null) {
-            try {
-               is.close();
-            } catch (Exception e) {
-               // ignore
-            }
-         }
-      }
+       try (InputStream is = response.getPayload().openStream()) {
+           return CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));
+       } catch (Exception e) {
+           // ignore
+       }
+       // ignore
 
-      return null;
+       return null;
    }
 
    public int getTextSize(HttpResponse response) {
       String textSize = response.getFirstHeaderOrNull("X-Text-Size");
-      return textSize != null ? Integer.valueOf(textSize) : -1;
+      return textSize != null ? Integer.parseInt(textSize) : -1;
    }
 
    public boolean getMoreData(HttpResponse response) {
       String moreData = response.getFirstHeaderOrNull("X-More-Data");
-      return moreData != null ? Boolean.valueOf(moreData) : false;
+      return Boolean.parseBoolean(moreData);
    }
 }

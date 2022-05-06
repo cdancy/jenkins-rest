@@ -25,19 +25,7 @@ public class RedirectTo404Exception extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public RedirectTo404Exception() {
-      super();
-    }
-
-    public RedirectTo404Exception(final String arg0, final Throwable arg1) {
-      super(arg0, arg1);
-    }
-
     public RedirectTo404Exception(final String arg0) {
-      super(arg0);
-    }
-
-    public RedirectTo404Exception(final Throwable arg0) {
       super(arg0);
     }
 }

@@ -17,7 +17,6 @@
 
 package com.cdancy.jenkins.rest.parsers;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +39,9 @@ public class LocationToQueueId implements Function<HttpResponse, IntegerResponse
    private static final Pattern pattern = Pattern.compile("^.*/queue/item/(\\d+)/$");
 
    public IntegerResponse apply(HttpResponse response) {
+       if (response == null) {
+           throw new RuntimeException("Unexpected NULL HttpResponse object");
+       }
 
       String url = response.getFirstHeaderOrNull("Location");
       if (url != null) {
@@ -49,7 +51,7 @@ public class LocationToQueueId implements Function<HttpResponse, IntegerResponse
          }
       }
       final Error error = Error.create(null,
-         "No queue item Location header could be found despite getting a valid HTTP response.", 
+         "No queue item Location header could be found despite getting a valid HTTP response.",
          NumberFormatException.class.getCanonicalName());
       return IntegerResponse.create(null, Lists.newArrayList(error));
    }

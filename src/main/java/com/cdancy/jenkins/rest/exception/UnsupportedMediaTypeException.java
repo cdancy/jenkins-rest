@@ -28,19 +28,7 @@ public class UnsupportedMediaTypeException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public UnsupportedMediaTypeException() {
-      super();
-    }
-
-    public UnsupportedMediaTypeException(final String arg0, final Throwable arg1) {
-      super(arg0, arg1);
-    }
-
     public UnsupportedMediaTypeException(final String arg0) {
-      super(arg0);
-    }
-
-    public UnsupportedMediaTypeException(final Throwable arg0) {
       super(arg0);
     }
 }

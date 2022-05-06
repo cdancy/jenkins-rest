@@ -17,7 +17,6 @@
 
 package com.cdancy.jenkins.rest.parsers;
 
-import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import javax.inject.Singleton;
 
 import org.jclouds.http.HttpResponse;
@@ -34,6 +33,10 @@ public class SystemInfoFromJenkinsHeaders implements Function<HttpResponse, Syst
 
     @Override
     public SystemInfo apply(HttpResponse response) {
+        if (response == null) {
+            throw new RuntimeException("Unexpected NULL HttpResponse object");
+        }
+
         final int statusCode = response.getStatusCode();
         if (statusCode >= 200 && statusCode < 400) {
             return SystemInfo.create(response.getFirstHeaderOrNull("X-Hudson"), response.getFirstHeaderOrNull("X-Jenkins"),
