@@ -1,4 +1,6 @@
-### Version 1.0.1 (TBA)
+### Version 1.0.1 (May 17, 2022)
+* FIXED: Fix javadoc for all versions of Java. - [Pull Request 236](https://github.com/cdancy/jenkins-rest/pull/236)
+* FIXED: Add charset to JobsApi. - [Pull Request 233](https://github.com/cdancy/jenkins-rest/pull/233)
 
 ### Version 1.0.0 (January 13, 2022)
 * ADDED: `JobsApi` gained endpoints `stop`, `term`, and `kill`. - [Pull Request 207](https://github.com/cdancy/jenkins-rest/pull/207)
