@@ -40,6 +40,7 @@ dependencies {
 }
 
 ext.compatibilityVersion = JavaVersion.VERSION_1_8
+ext.javadocPath = compatibilityVersion.isJava8() ? '' : 'en/java/'
 sourceCompatibility = compatibilityVersion
 targetCompatibility = compatibilityVersion
 
@@ -104,8 +105,9 @@ task integTest(type: Test, dependsOn: mockTest) {
 javadoc {
     source = sourceSets.main.allJava
     options.with {
-        links "https://docs.oracle.com/en/java/javase/${compatibilityVersion}/docs/api"
+        links "https://docs.oracle.com/${javadocPath}javase/${compatibilityVersion.toString().replaceAll(/.*\./,"")}/docs/api"
         links "https://google.github.io/guice/api-docs/${dependencies.guiceVersion}/javadoc/"
         addStringOption('Xdoclint:none', '-quiet')
+        addStringOption('source', compatibilityVersion.toString().replaceAll(/.*\./,""))
     }
 }
