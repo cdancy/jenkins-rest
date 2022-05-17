@@ -112,7 +112,7 @@ public interface JobsApi {
     @Named("jobs:update-config")
     @Path("{optionalFolderPath}job/{name}/config.xml")
     @Fallback(Fallbacks.FalseOnNotFoundOr404.class)
-    @Produces(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML + ";charset=UTF-8")
     @Consumes(MediaType.TEXT_HTML)
     @Payload("{configXML}")
     @POST
