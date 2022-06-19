@@ -23,6 +23,7 @@ import com.cdancy.jenkins.rest.domain.crumb.Crumb;
 
 import com.google.common.base.Function;
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.inject.Singleton;
 import javax.ws.rs.core.HttpHeaders;
@@ -60,9 +61,18 @@ public class CrumbParser implements Function<HttpResponse, Crumb> {
     }
 
     private static String sessionIdCookie(HttpResponse input) {
-        return input.getHeaders().get(HttpHeaders.SET_COOKIE).stream()
+        return setCookieValues(input).stream()
             .filter(c -> c.startsWith(JENKINS_COOKIES_JSESSIONID))
             .findFirst()
             .orElse("");
+    }
+
+    private static Collection<String> setCookieValues(HttpResponse input) {
+        Collection<String> setCookieValues = input.getHeaders().get(HttpHeaders.SET_COOKIE);
+        if(setCookieValues.isEmpty()) {
+            return input.getHeaders().get(HttpHeaders.SET_COOKIE.toLowerCase());
+        } else {
+            return setCookieValues;
+        }
     }
 }
