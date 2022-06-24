@@ -304,4 +304,12 @@ public interface JobsApi {
         @PathParam("name") String jobName,
         @PathParam("number") int buildNumber);
 
+    @Named("jobs:list-artifacts")
+    @Path("{optionalFolderPath}job/{name}/{number}/api/json?tree=artifacts%5BrelativePath,fileName,displayPath%5D")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    Artifacts listArtifacts(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+        @PathParam("name") String jobName,
+        @PathParam("number") int buildNumber);
 }
