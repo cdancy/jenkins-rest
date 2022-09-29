@@ -43,6 +43,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     private static final String FREESTYLE_JOB_NAME = "FreeStyleSleep";
     private static final String PIPELINE_JOB_NAME = "PipelineSleep";
+    private static final String PIPELINE_WITH_ACTION_JOB_NAME = "PipelineAction";
 
     @Test
     public void testCreateJob() {
@@ -247,6 +248,39 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testGetBuildParametersOfLastJob() {
         List<Parameter> parameters = api().buildInfo(null, "DevTest", 1).actions().get(0).parameters();
         assertEquals(parameters.size(), 0);
+    }
+
+    @Test
+    public void testBuildInfoActions() throws InterruptedException {
+        String config = payloadFromResource("/pipeline-with-action.xml");
+        RequestStatus createStatus = api().create(null, PIPELINE_WITH_ACTION_JOB_NAME, config);
+        assertTrue(createStatus.value());
+        IntegerResponse qId = api().build(null, PIPELINE_WITH_ACTION_JOB_NAME);
+        assertNotNull(qId);
+        assertTrue(qId.value() > 0);
+        QueueItem queueItem = getRunningQueueItem(qId.value());
+        assertNotNull(queueItem);
+        assertNotNull(queueItem.executable());
+        assertNotNull(queueItem.executable().number());
+        BuildInfo buildInfo = getCompletedBuild(PIPELINE_WITH_ACTION_JOB_NAME, queueItem);
+        assertEquals(buildInfo.result(), "SUCCESS");
+        System.out.println(buildInfo);
+        boolean found = false;
+        for (int idx = 0; idx < buildInfo.actions().size(); idx++) {
+            if (buildInfo.actions().get(idx).text() != null) {
+                if (buildInfo.actions().get(idx).text().equals("Hudson, we have a problem.") &&
+                    buildInfo.actions().get(idx).iconPath().equals("error.svg") &&
+                    buildInfo.actions().get(idx)._class().equals("com.jenkinsci.plugins.badge.action.BadgeSummaryAction")) {
+                    found = true;
+                }
+            }
+        }
+        assertTrue(found);
+
+        // The Job is no longer needed, delete it.
+        RequestStatus success = api().delete(null, PIPELINE_WITH_ACTION_JOB_NAME);
+        assertNotNull(success);
+        assertTrue(success.value());
     }
 
     @Test(dependsOnMethods = "testGetBuildParametersOfLastJob")

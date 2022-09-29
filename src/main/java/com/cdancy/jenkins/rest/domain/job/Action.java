@@ -19,6 +19,7 @@ package com.cdancy.jenkins.rest.domain.job;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
 import java.util.List;
@@ -30,14 +31,24 @@ public abstract class Action {
 
     public abstract List<Parameter> parameters();
 
+    @Nullable
+    public abstract String text();
+
+    @Nullable
+    public abstract String iconPath();
+
+    @Nullable
+    public abstract String _class();
     Action() {
     }
 
-    @SerializedNames({"causes", "parameters"})
-    public static Action create(final List<Cause> causes, final List<Parameter> parameters) {
+    @SerializedNames({"causes", "parameters", "text", "iconPath", "_class"})
+    public static Action create(final List<Cause> causes, final List<Parameter> parameters, final String text, final String iconPath, final String _class) {
         return new AutoValue_Action(
             causes != null ? ImmutableList.copyOf(causes) : ImmutableList.<Cause>of(),
-            parameters != null ? ImmutableList.copyOf(parameters) : ImmutableList.<Parameter>of());
+            parameters != null ? ImmutableList.copyOf(parameters) : ImmutableList.<Parameter>of(),
+            text, iconPath, _class
+        );
     }
 }
 

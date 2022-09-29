@@ -4,3 +4,4 @@ plugins:
     - artifactId: cloudbees-folder
     - artifactId: configuration-as-code
     - artifactId: workflow-aggregator
+    - artifactId: badge

@@ -127,6 +127,12 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             assertNotNull(output);
             assertEquals(output.fullDisplayName(), "fish #10");
             assertEquals(output.artifacts().size(), 1);
+            assertEquals(output.actions().size(), 5);
+            assertEquals(output.actions().get(2).text(), "<strong>There could be HTML text here</strong>");
+            assertEquals(output.actions().get(2).iconPath(), "clipboard.png");
+            assertEquals(output.actions().get(2)._class(), "com.jenkinsci.plugins.badge.action.BadgeSummaryAction");
+            assertEquals(output.actions().get(3).text(), null);
+            assertEquals(output.actions().get(4)._class(), "org.jenkinsci.plugins.displayurlapi.actions.RunDisplayAction");
             assertSent(server, "GET", "/job/fish/10/api/json");
         } finally {
             jenkinsApi.close();

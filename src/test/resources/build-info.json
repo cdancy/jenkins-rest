@@ -20,6 +20,15 @@
           "userName" : "anonymous"
         }
       ]
+    },
+    {
+       "text" : "<strong>There could be HTML text here</strong>",
+       "iconPath" : "clipboard.png",
+       "_class" : "com.jenkinsci.plugins.badge.action.BadgeSummaryAction"
+    },
+    {},
+    {
+       "_class" : "org.jenkinsci.plugins.displayurlapi.actions.RunDisplayAction"
     }
   ],
   "artifacts" : [
