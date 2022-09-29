@@ -1,4 +1,5 @@
-### Version 1.0.2 (TBA)
+### Version 1.0.2 (September 29, 2022)
+* ADDED: extensive build info. - [Pull Request 259](https://github.com/cdancy/jenkins-rest/pull/259)
 
 ### Version 1.0.1 (May 17, 2022)
 * FIXED: Fix javadoc for all versions of Java. - [Pull Request 236](https://github.com/cdancy/jenkins-rest/pull/236)
