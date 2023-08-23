@@ -1,6 +1,6 @@
 name: Jenkins REST CI Build
 run-name: ${{ github.actor }} is running Jenkins REST CI Build on GitHub Actions 🚀
-on: [push]
+on: [push, pull_request_target]
 jobs:
   build:
     # You must use a Linux environment when using service containers or container jobs
