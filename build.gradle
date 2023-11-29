@@ -36,7 +36,7 @@ dependencies {
     testImplementation ('ch.qos.logback:logback-core:1.4.12')
     testImplementation ('com.squareup.okhttp3:mockwebserver:4.12.0')
     testImplementation ('org.testng:testng:7.8.0')
-    testImplementation ('ch.qos.logback:logback-classic:1.4.12')
+    testImplementation ('ch.qos.logback:logback-classic:1.4.13')
 }
 
 ext.compatibilityVersion = JavaVersion.VERSION_11
