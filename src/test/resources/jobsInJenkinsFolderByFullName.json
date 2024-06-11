@@ -1,0 +1,9 @@
+{
+  "_class" : "com.cloudbees.hudson.plugins.folder.Folder",
+  "jobs" : [
+    {
+      "_class" : "hudson.model.FreeStyleProject",
+      "fullName" : "Test Project"
+    }
+  ]
+}
