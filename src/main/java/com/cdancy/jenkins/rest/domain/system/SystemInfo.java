@@ -56,4 +56,5 @@ public abstract class SystemInfo implements ErrorsHolder {
                 hudsonVersion, jenkinsVersion, jenkinsSession, 
                 instanceIdentity, sshEndpoint, server);
     }
+   
 }

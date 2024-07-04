@@ -147,4 +147,21 @@ public class SystemApiMockTest extends BaseJenkinsMockTest {
             server.shutdown();
         }
     }
+    
+    public void testSafeExit() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
+        SystemApi api = jenkinsApi.systemApi();
+        try {
+            RequestStatus success = api.safeExit();
+            assertNotNull(success);
+            assertTrue(success.value());
+            assertSentAccept(server, "POST", "/safeExit", MediaType.TEXT_HTML);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
 }

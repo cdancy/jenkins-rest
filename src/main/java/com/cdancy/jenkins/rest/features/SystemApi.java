@@ -61,5 +61,13 @@ public interface SystemApi {
    @Consumes(MediaType.TEXT_HTML)
    @POST
    RequestStatus cancelQuietDown();
+   
+   @Named("system:safe-exit")
+   @Path("safeExit")
+   @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
+   @ResponseParser(RequestStatusParser.class)
+   @Consumes(MediaType.TEXT_HTML)
+   @POST
+   RequestStatus safeExit();
 
 }
