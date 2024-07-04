@@ -30,6 +30,9 @@ import com.google.common.base.Function;
  */
 @Singleton
 public class SystemInfoFromJenkinsHeaders implements Function<HttpResponse, SystemInfo> {
+	
+	private static final String DEFAULT_EMPTY_HEADER_STRING = "information not available";
+	
 
     @Override
     public SystemInfo apply(HttpResponse response) {
@@ -41,10 +44,15 @@ public class SystemInfoFromJenkinsHeaders implements Function<HttpResponse, Syst
         if (statusCode >= 200 && statusCode < 400) {
             return SystemInfo.create(response.getFirstHeaderOrNull("X-Hudson"), response.getFirstHeaderOrNull("X-Jenkins"),
                 response.getFirstHeaderOrNull("X-Jenkins-Session"),
-                response.getFirstHeaderOrNull("X-Instance-Identity"), response.getFirstHeaderOrNull("X-SSH-Endpoint"),
-                response.getFirstHeaderOrNull("Server"), null);
+                response.getFirstHeaderOrNull("X-Instance-Identity"), getFirstHeaderOrDefault(response, "X-SSH-Endpoint"),
+                getFirstHeaderOrDefault(response, "Server"), null);
         } else {
             throw new RuntimeException(response.getStatusLine());
         }
+    }
+    
+    private String getFirstHeaderOrDefault(HttpResponse response, String header) {
+    	String headerFromResponse = response.getFirstHeaderOrNull(header);
+    	return (headerFromResponse != null) ? headerFromResponse : DEFAULT_EMPTY_HEADER_STRING;    	
     }
 }
