@@ -31,7 +31,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
-import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
+import com.cdancy.jenkins.rest.domain.common.LongResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 
@@ -58,10 +58,10 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test
     public void testGetQueue() {
-        IntegerResponse job1 = api.jobsApi().build(null, "QueueTest");
+        LongResponse job1 = api.jobsApi().build(null, "QueueTest");
         assertNotNull(job1);
         assertEquals(job1.errors().size(), 0);
-        IntegerResponse job2 = api.jobsApi().build(null, "QueueTest");
+        LongResponse job2 = api.jobsApi().build(null, "QueueTest");
         assertNotNull(job2);
         assertEquals(job2.errors().size(), 0);
         List<QueueItem> queueItems = api().queue();
@@ -78,10 +78,10 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test
     public void testGetPendingQueueItem() {
-        IntegerResponse job1 = api.jobsApi().build(null,"QueueTest");
+        LongResponse job1 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job1);
         assertEquals(job1.errors().size(), 0);
-        IntegerResponse job2 = api.jobsApi().build(null,"QueueTest");
+        LongResponse job2 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job2);
         assertEquals(job2.errors().size(), 0);
 
@@ -94,10 +94,10 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test
     public void testGetRunningQueueItem() throws InterruptedException {
-        IntegerResponse job1 = api.jobsApi().build(null,"QueueTest");
+        LongResponse job1 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job1);
         assertEquals(job1.errors().size(), 0);
-        IntegerResponse job2 = api.jobsApi().build(null,"QueueTest");
+        LongResponse job2 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job2);
         assertEquals(job2.errors().size(), 0);
 
@@ -121,7 +121,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testQueueItemSingleParameters() throws InterruptedException {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue1"));
-        IntegerResponse job1 = api.jobsApi().buildWithParameters(null,"QueueTestSingleParam", params);
+        LongResponse job1 = api.jobsApi().buildWithParameters(null,"QueueTestSingleParam", params);
         assertNotNull(job1);
         assertTrue(job1.value() > 0);
         assertEquals(job1.errors().size(), 0);
@@ -130,7 +130,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         // So we must set some different parameter values
         params = new HashMap<>();
         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue2"));
-        IntegerResponse job2 = api.jobsApi().buildWithParameters(null,"QueueTestSingleParam", params);
+        LongResponse job2 = api.jobsApi().buildWithParameters(null,"QueueTestSingleParam", params);
         assertNotNull(job2);
         assertTrue(job2.value() > 0);
         assertEquals(job2.errors().size(), 0);
@@ -148,7 +148,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testQueueItemMultipleParameters() throws InterruptedException {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey1", Lists.newArrayList("SomeVeryNewValue1"));
-        IntegerResponse job1 = api.jobsApi().buildWithParameters(null, "QueueTestMultipleParams",params);
+        LongResponse job1 = api.jobsApi().buildWithParameters(null, "QueueTestMultipleParams",params);
         assertNotNull(job1);
         assertTrue(job1.value() > 0);
         assertEquals(job1.errors().size(), 0);
@@ -157,7 +157,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
         // So we must set some different parameter values
         params = new HashMap<>();
         params.put("SomeKey1", Lists.newArrayList("SomeVeryNewValue2"));
-        IntegerResponse job2 = api.jobsApi().buildWithParameters(null, "QueueTestMultipleParams", params);
+        LongResponse job2 = api.jobsApi().buildWithParameters(null, "QueueTestMultipleParams", params);
         assertNotNull(job2);
         assertTrue(job2.value() > 0);
         assertEquals(job2.errors().size(), 0);
@@ -177,7 +177,7 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testQueueItemEmptyParameterValue() throws InterruptedException {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey1", Lists.newArrayList(""));
-        IntegerResponse job1 = api.jobsApi().buildWithParameters(null, "QueueTestMultipleParams",params);
+        LongResponse job1 = api.jobsApi().buildWithParameters(null, "QueueTestMultipleParams",params);
         assertNotNull(job1);
         assertTrue(job1.value() > 0);
         assertEquals(job1.errors().size(), 0);
@@ -194,10 +194,10 @@ public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test
     public void testGetCancelledQueueItem() {
-        IntegerResponse job1 = api.jobsApi().build(null,"QueueTest");
+        LongResponse job1 = api.jobsApi().build(null,"QueueTest");
         assertNotNull(job1);
         assertEquals(job1.errors().size(), 0);
-        IntegerResponse job2 = api.jobsApi().build(null, "QueueTest");
+        LongResponse job2 = api.jobsApi().build(null, "QueueTest");
         assertNotNull(job2);
         assertEquals(job2.errors().size(), 0);
 

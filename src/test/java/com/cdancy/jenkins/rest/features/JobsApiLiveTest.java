@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
-import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
+import com.cdancy.jenkins.rest.domain.common.LongResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.job.*;
 import com.cdancy.jenkins.rest.domain.plugins.Plugin;
@@ -35,8 +35,8 @@ import static org.testng.Assert.*;
 @Test(groups = "live", testName = "JobsApiLiveTest", singleThreaded = true)
 public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
-    private IntegerResponse queueId;
-    private IntegerResponse queueIdForAnotherJob;
+    private LongResponse queueId;
+    private LongResponse queueIdForAnotherJob;
     private Integer buildNumber;
     private static final String FOLDER_PLUGIN_NAME = "cloudbees-folder";
     private static final String FOLDER_PLUGIN_VERSION = "latest";
@@ -58,7 +58,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         String config = payloadFromResource("/freestyle-project-sleep-10-task.xml");
         RequestStatus createStatus = api().create(null, FREESTYLE_JOB_NAME, config);
         assertTrue(createStatus.value());
-        IntegerResponse qId = api().build(null, FREESTYLE_JOB_NAME);
+        LongResponse qId = api().build(null, FREESTYLE_JOB_NAME);
         assertNotNull(qId);
         assertTrue(qId.value() > 0);
         QueueItem queueItem = getRunningQueueItem(qId.value());
@@ -73,7 +73,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test(dependsOnMethods = "testStopFreeStyleBuild")
     public void testTermFreeStyleBuild() throws InterruptedException {
-        IntegerResponse qId = api().build(null, FREESTYLE_JOB_NAME);
+        LongResponse qId = api().build(null, FREESTYLE_JOB_NAME);
         assertNotNull(qId);
         assertTrue(qId.value() > 0);
         QueueItem queueItem = getRunningQueueItem(qId.value());
@@ -95,7 +95,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test(dependsOnMethods = "testTermFreeStyleBuild")
     public void testKillFreeStyleBuild() throws InterruptedException {
-        IntegerResponse qId = api().build(null, FREESTYLE_JOB_NAME);
+        LongResponse qId = api().build(null, FREESTYLE_JOB_NAME);
         assertNotNull(qId);
         assertTrue(qId.value() > 0);
         QueueItem queueItem = getRunningQueueItem(qId.value());
@@ -126,7 +126,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         String config = payloadFromResource("/pipeline.xml");
         RequestStatus createStatus = api().create(null, PIPELINE_JOB_NAME, config);
         assertTrue(createStatus.value());
-        IntegerResponse qId = api().build(null, PIPELINE_JOB_NAME);
+        LongResponse qId = api().build(null, PIPELINE_JOB_NAME);
         assertNotNull(qId);
         assertTrue(qId.value() > 0);
         QueueItem queueItem = getRunningQueueItem(qId.value());
@@ -141,7 +141,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test(dependsOnMethods = "testStopPipelineBuild")
     public void testTermPipelineBuild() throws InterruptedException {
-        IntegerResponse qId = api().build(null, PIPELINE_JOB_NAME);
+        LongResponse qId = api().build(null, PIPELINE_JOB_NAME);
         assertNotNull(qId);
         assertTrue(qId.value() > 0);
         QueueItem queueItem = getRunningQueueItem(qId.value());
@@ -156,7 +156,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test(dependsOnMethods = "testTermPipelineBuild")
     public void testKillPipelineBuild() throws InterruptedException {
-        IntegerResponse qId = api().build(null, PIPELINE_JOB_NAME);
+        LongResponse qId = api().build(null, PIPELINE_JOB_NAME);
         assertNotNull(qId);
         assertTrue(qId.value() > 0);
         QueueItem queueItem = getRunningQueueItem(qId.value());
@@ -241,7 +241,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         BuildInfo output = api().buildInfo(null, "DevTest", buildNumber);
         assertNotNull(output);
         assertEquals("DevTest #" + buildNumber, output.fullDisplayName());
-        assertEquals((int) queueId.value(), output.queueId());
+        assertEquals((long) queueId.value(), output.queueId());
     }
 
     @Test(dependsOnMethods = "testGetBuildInfo")
@@ -255,7 +255,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         String config = payloadFromResource("/pipeline-with-action.xml");
         RequestStatus createStatus = api().create(null, PIPELINE_WITH_ACTION_JOB_NAME, config);
         assertTrue(createStatus.value());
-        IntegerResponse qId = api().build(null, PIPELINE_WITH_ACTION_JOB_NAME);
+        LongResponse qId = api().build(null, PIPELINE_WITH_ACTION_JOB_NAME);
         assertNotNull(qId);
         assertTrue(qId.value() > 0);
         QueueItem queueItem = getRunningQueueItem(qId.value());
@@ -319,7 +319,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testBuildJobWithParameters() {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-        IntegerResponse output = api().buildWithParameters(null, "DevTest", params);
+        LongResponse output = api().buildWithParameters(null, "DevTest", params);
         assertNotNull(output);
         assertTrue(output.value() > 0);
         assertEquals(output.errors().size(), 0);
@@ -327,7 +327,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test(dependsOnMethods = "testBuildJobWithParameters")
     public void testBuildJobWithNullParametersMap() {
-        IntegerResponse output = api().buildWithParameters(null, "DevTest", null);
+        LongResponse output = api().buildWithParameters(null, "DevTest", null);
         assertNotNull(output);
         assertTrue(output.value() > 0);
         assertEquals(output.errors().size(), 0);
@@ -335,7 +335,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test(dependsOnMethods = "testBuildJobWithNullParametersMap")
     public void testBuildJobWithEmptyParametersMap() {
-        IntegerResponse output = api().buildWithParameters(null, "DevTest", new HashMap<>());
+        LongResponse output = api().buildWithParameters(null, "DevTest", new HashMap<>());
         assertNotNull(output);
         assertNull(output.value());
         assertEquals(output.errors().size(), 1);
@@ -508,7 +508,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         BuildInfo output = api().buildInfo("test-folder/test-folder-1", "JobInFolder", 1);
         assertNotNull(output);
         assertTrue(output.fullDisplayName().contains("JobInFolder #1"));
-        assertEquals((int) queueIdForAnotherJob.value(), output.queueId());
+        assertEquals((long) queueIdForAnotherJob.value(), output.queueId());
     }
 
     @Test(dependsOnMethods = "testGetProgressiveText")
@@ -549,7 +549,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey1", Lists.newArrayList(""));
         params.put("SomeKey2", null);
-        IntegerResponse job1 = api.jobsApi().buildWithParameters(null, "JobForEmptyAndNullParams", params);
+        LongResponse job1 = api.jobsApi().buildWithParameters(null, "JobForEmptyAndNullParams", params);
         assertNotNull(job1);
         assertTrue(job1.value() > 0);
         assertEquals(job1.errors().size(), 0);
@@ -639,7 +639,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
 
     @Test
     public void testBuildNonExistentJob() {
-        IntegerResponse output = api().build(null, randomString());
+        LongResponse output = api().build(null, randomString());
         assertNotNull(output);
         assertNull(output.value());
         assertTrue(output.errors().size() > 0);
@@ -658,7 +658,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     public void testBuildNonExistentJobWithParams() {
         Map<String, List<String>> params = new HashMap<>();
         params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-        IntegerResponse output = api().buildWithParameters(null, randomString(), params);
+        LongResponse output = api().buildWithParameters(null, randomString(), params);
         assertNotNull(output);
         assertNull(output.value());
         assertTrue(output.errors().size() > 0);
