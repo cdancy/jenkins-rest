@@ -46,7 +46,7 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 
 import com.cdancy.jenkins.rest.binders.BindMapToForm;
-import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
+import com.cdancy.jenkins.rest.domain.common.LongResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
@@ -164,11 +164,11 @@ public interface JobsApi {
 
     @Named("jobs:build")
     @Path("{optionalFolderPath}job/{name}/build")
-    @Fallback(JenkinsFallbacks.IntegerResponseOnError.class)
+    @Fallback(JenkinsFallbacks.LongResponseOnError.class)
     @ResponseParser(LocationToQueueId.class)
     @Consumes("application/unknown")
     @POST
-    IntegerResponse build(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+    LongResponse build(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                   @PathParam("name") String jobName);
 
     @Named("jobs:stop-build")
@@ -203,11 +203,11 @@ public interface JobsApi {
 
     @Named("jobs:build-with-params")
     @Path("{optionalFolderPath}job/{name}/buildWithParameters")
-    @Fallback(JenkinsFallbacks.IntegerResponseOnError.class)
+    @Fallback(JenkinsFallbacks.LongResponseOnError.class)
     @ResponseParser(LocationToQueueId.class)
     @Consumes("application/unknown")
     @POST
-    IntegerResponse buildWithParameters(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+    LongResponse buildWithParameters(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                                 @PathParam("name") String jobName,
                                 @Nullable @BinderParam(BindMapToForm.class) Map<String, List<String>> properties);
 

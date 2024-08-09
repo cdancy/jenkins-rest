@@ -26,21 +26,21 @@ import com.cdancy.jenkins.rest.JenkinsUtils;
 import com.google.auto.value.AutoValue;
 
 /**
- * Integer response to be returned when an endpoint returns
- * an integer.
- * 
- * <p>When the HTTP response code is valid the `value` parameter will 
- * be set to the integer value while a non-valid response has the `value` set to
+ * Long response to be returned when an endpoint returns
+ * an long.
+ *
+ * <p>When the HTTP response code is valid the `value` parameter will
+ * be set to the long value while a non-valid response has the `value` set to
  * null along with any potential `error` objects returned from Jenkins.
  */
 @AutoValue
-public abstract class IntegerResponse implements Value<Integer>, ErrorsHolder {
-    
+public abstract class LongResponse implements Value<Long>, ErrorsHolder {
+
     @SerializedNames({ "value", "errors" })
-    public static IntegerResponse create(@Nullable final Integer value, 
+    public static LongResponse create(@Nullable final Long value,
             final List<Error> errors) {
-        
-        return new AutoValue_IntegerResponse(value, 
+
+        return new AutoValue_LongResponse(value,
                 JenkinsUtils.nullToEmpty(errors));
     }
 }
