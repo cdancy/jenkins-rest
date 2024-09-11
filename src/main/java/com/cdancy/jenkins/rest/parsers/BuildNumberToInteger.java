@@ -42,6 +42,7 @@ public class BuildNumberToInteger implements Function<HttpResponse, Integer> {
    public String getTextOutput(HttpResponse response) {
       InputStream is = null;
       try {
+
          is = response.getPayload().openStream();
          return CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8)).trim();
       } catch (Exception e) {

@@ -18,32 +18,21 @@
 package com.cdancy.jenkins.rest.features;
 
 import java.io.InputStream;
+
+import com.cdancy.jenkins.rest.exception.JobCreateFailException;
 import com.google.gson.JsonObject;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import com.cdancy.jenkins.rest.domain.job.*;
 import com.cdancy.jenkins.rest.parsers.*;
 import org.jclouds.Fallbacks;
 import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.rest.annotations.BinderParam;
-import org.jclouds.rest.annotations.Fallback;
-import org.jclouds.rest.annotations.ParamParser;
-import org.jclouds.rest.annotations.Payload;
-import org.jclouds.rest.annotations.PayloadParam;
-import org.jclouds.rest.annotations.RequestFilters;
-import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.annotations.*;
 
 import com.cdancy.jenkins.rest.binders.BindMapToForm;
 import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
@@ -89,6 +78,16 @@ public interface JobsApi {
                          @PathParam("number") int buildNumber,
                          @PathParam("relativeArtifactPath") String relativeArtifactPath);
 
+
+    @Named("jobs:check-job-name")
+    @Path("{optionalFolderPath}checkJobName")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Consumes(MediaType.APPLICATION_XHTML_XML)
+    @ResponseParser(JobExistedParser.class)
+    @GET
+    JobExisted checkJobName(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                        @QueryParam("value") String jobName);
+
     @Named("jobs:create")
     @Path("{optionalFolderPath}createItem")
     @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
@@ -100,6 +99,19 @@ public interface JobsApi {
     RequestStatus create(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
                          @QueryParam("name") String jobName,
                          @PayloadParam(value = "configXML") String configXML);
+
+
+
+
+    @Named("jobs:create-folder")
+    @Path("{optionalFolderPath}createItem")
+    @Fallback(JenkinsFallbacks.RequestStatusOnError.class)
+    @ResponseParser(RequestStatusParser.class)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @QueryParams(keys = "mode", values = "com.cloudbees.hudson.plugins.folder.Folder")
+    @POST
+    RequestStatus createFolder(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+                               @QueryParam("name") String name);
 
     @Named("jobs:get-config")
     @Path("{optionalFolderPath}job/{name}/config.xml")

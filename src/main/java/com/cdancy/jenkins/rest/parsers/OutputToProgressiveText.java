@@ -29,6 +29,8 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Function;
 import com.google.common.io.CharStreams;
 
+import static com.cdancy.jenkins.rest.JenkinsUtils.getTextOutput;
+
 /**
  * Created by dancc on 3/11/16.
  */
@@ -43,16 +45,7 @@ public class OutputToProgressiveText implements Function<HttpResponse, Progressi
       return ProgressiveText.create(text, size, hasMoreData);
    }
 
-   public String getTextOutput(HttpResponse response) {
-       try (InputStream is = response.getPayload().openStream()) {
-           return CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));
-       } catch (Exception e) {
-           // ignore
-       }
-       // ignore
 
-       return null;
-   }
 
    public int getTextSize(HttpResponse response) {
       String textSize = response.getFirstHeaderOrNull("X-Text-Size");

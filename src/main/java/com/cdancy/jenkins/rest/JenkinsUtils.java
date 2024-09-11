@@ -29,14 +29,18 @@ import static com.cdancy.jenkins.rest.JenkinsConstants.JCLOUDS_VARIABLE_ID;
 import static com.cdancy.jenkins.rest.JenkinsConstants.API_TOKEN_ENVIRONMENT_VARIABLE;
 import static com.cdancy.jenkins.rest.JenkinsConstants.API_TOKEN_SYSTEM_PROPERTY;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -47,6 +51,7 @@ import java.util.Enumeration;
 import java.util.Objects;
 import java.util.Properties;
 
+import org.jclouds.http.HttpResponse;
 import org.jclouds.javax.annotation.Nullable;
 
 /**
@@ -68,6 +73,26 @@ public class JenkinsUtils {
      */
     public static <T> List<T> nullToEmpty(final Iterable<? extends T> input) {
         return input == null ? ImmutableList.of() : ImmutableList.copyOf(input);
+    }
+
+    /**
+     * Retrieves the text content from an HttpResponse object.
+     *
+     * This method extracts the payload from the HttpResponse, converts the InputStream to a String using UTF-8 encoding,
+     * and returns the result. In case of any exception during the process, it returns null.
+     *
+     * @param response the HttpResponse object containing the payload to be read
+     * @return the text content of the HttpResponse payload as a String, or null if an error occurs
+     */
+    public static String getTextOutput(HttpResponse response) {
+        try (InputStream is = response.getPayload().openStream()) {
+            return CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));
+        } catch (Exception e) {
+            // ignore
+        }
+        // ignore
+
+        return null;
     }
 
     /**
