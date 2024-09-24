@@ -80,7 +80,7 @@ public class BaseJenkinsApiLiveTest extends BaseApiLiveTest<JenkinsApi> {
      *         The caller has to check the value of queueItem.executable, and if it is null, the queue item is still pending.
      *
      */
-    protected QueueItem getRunningQueueItem(int queueId) throws InterruptedException {
+    protected QueueItem getRunningQueueItem(long queueId) throws InterruptedException {
         int max = 10;
         QueueItem queueItem = api.queueApi().queueItem(queueId);
         while (max > 0) {

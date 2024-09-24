@@ -18,7 +18,7 @@ package com.cdancy.jenkins.rest.features;
 
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 import com.cdancy.jenkins.rest.JenkinsApi;
-import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
+import com.cdancy.jenkins.rest.domain.common.LongResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.job.*;
 import com.google.common.collect.Lists;
@@ -477,9 +477,9 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            IntegerResponse output = api.build(null,"DevTest");
+            LongResponse output = api.build(null,"DevTest");
             assertNotNull(output);
-            assertEquals((int) output.value(), 1);
+            assertEquals((long) output.value(), 1);
             assertEquals(output.errors().size(), 0);
             assertSentAccept(server, "POST", "/job/DevTest/build", "application/unknown");
         } finally {
@@ -496,7 +496,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            IntegerResponse output = api.build(null,"DevTest");
+            LongResponse output = api.build(null,"DevTest");
             assertNotNull(output);
             assertNull(output.value());
             assertEquals(output.errors().size(), 1);
@@ -517,7 +517,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            IntegerResponse output = api.build(null, "DevTest");
+            LongResponse output = api.build(null, "DevTest");
             assertNotNull(output);
             assertNull(output.value());
             assertEquals(output.errors().size(), 1);
@@ -541,9 +541,9 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         try {
             Map<String, List<String>> params = new HashMap<>();
             params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-            IntegerResponse output = api.buildWithParameters(null, "DevTest", params);
+            LongResponse output = api.buildWithParameters(null, "DevTest", params);
             assertNotNull(output);
-            assertEquals((int) output.value(), 1);
+            assertEquals((long) output.value(), 1);
             assertEquals(output.errors().size(), 0);
             assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
         } finally {
@@ -560,9 +560,9 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            IntegerResponse output = api.buildWithParameters(null, "DevTest", null);
+            LongResponse output = api.buildWithParameters(null, "DevTest", null);
             assertNotNull(output);
-            assertEquals((int) output.value(), 1);
+            assertEquals((long) output.value(), 1);
             assertEquals(output.errors().size(), 0);
             assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
         } finally {
@@ -579,9 +579,9 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         JenkinsApi jenkinsApi = api(server.url("/").url());
         JobsApi api = jenkinsApi.jobsApi();
         try {
-            IntegerResponse output = api.buildWithParameters(null, "DevTest", new HashMap<>());
+            LongResponse output = api.buildWithParameters(null, "DevTest", new HashMap<>());
             assertNotNull(output);
-            assertEquals((int) output.value(), 1);
+            assertEquals((long) output.value(), 1);
             assertEquals(output.errors().size(), 0);
             assertSentAccept(server, "POST", "/job/DevTest/buildWithParameters", "application/unknown");
         } finally {
@@ -599,7 +599,7 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         try {
             Map<String, List<String>> params = new HashMap<>();
             params.put("SomeKey", Lists.newArrayList("SomeVeryNewValue"));
-            IntegerResponse output = api.buildWithParameters(null, "DevTest", params);
+            LongResponse output = api.buildWithParameters(null, "DevTest", params);
             assertNotNull(output);
             assertNull(output.value());
             assertEquals(output.errors().size(), 1);

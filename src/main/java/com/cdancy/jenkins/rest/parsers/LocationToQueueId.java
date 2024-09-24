@@ -28,17 +28,17 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import com.cdancy.jenkins.rest.domain.common.Error;
-import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
+import com.cdancy.jenkins.rest.domain.common.LongResponse;
 
 /**
  * Created by dancc on 3/11/16.
  */
 @Singleton
-public class LocationToQueueId implements Function<HttpResponse, IntegerResponse> {
+public class LocationToQueueId implements Function<HttpResponse, LongResponse> {
 
    private static final Pattern pattern = Pattern.compile("^.*/queue/item/(\\d+)/$");
 
-   public IntegerResponse apply(HttpResponse response) {
+   public LongResponse apply(HttpResponse response) {
        if (response == null) {
            throw new RuntimeException("Unexpected NULL HttpResponse object");
        }
@@ -47,12 +47,12 @@ public class LocationToQueueId implements Function<HttpResponse, IntegerResponse
       if (url != null) {
          Matcher matcher = pattern.matcher(url);
          if (matcher.find() && matcher.groupCount() == 1) {
-            return IntegerResponse.create(Integer.valueOf(matcher.group(1)), null);
+            return LongResponse.create(Long.valueOf(matcher.group(1)), null);
          }
       }
       final Error error = Error.create(null,
          "No queue item Location header could be found despite getting a valid HTTP response.",
          NumberFormatException.class.getCanonicalName());
-      return IntegerResponse.create(null, Lists.newArrayList(error));
+      return LongResponse.create(null, Lists.newArrayList(error));
    }
 }

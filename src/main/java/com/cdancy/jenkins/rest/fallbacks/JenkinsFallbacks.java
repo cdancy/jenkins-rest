@@ -22,7 +22,7 @@ import static com.google.common.base.Throwables.propagate;
 
 import static org.jclouds.http.HttpUtils.returnValueOnCodeOrNull;
 
-import com.cdancy.jenkins.rest.domain.common.IntegerResponse;
+import com.cdancy.jenkins.rest.domain.common.LongResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.common.Error;
 import com.cdancy.jenkins.rest.domain.crumb.Crumb;
@@ -59,14 +59,14 @@ public final class JenkinsFallbacks {
         }
     }
 
-    public static final class IntegerResponseOnError implements Fallback<Object> {
+    public static final class LongResponseOnError implements Fallback<Object> {
         @Override
         public Object createOrPropagate(final Throwable throwable) {
             checkNotNull(throwable, "throwable");
             try {
-                return IntegerResponse.create(null, getErrors(throwable));
+                return LongResponse.create(null, getErrors(throwable));
             } catch (JsonSyntaxException e) {
-                return IntegerResponse.create(null, getErrors(e));
+                return LongResponse.create(null, getErrors(e));
             }
         }
     }
