@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     ext.jcloudsVersion = '2.5.0'
-    ext.autoValueVersion = '1.10.4'
+    ext.autoValueVersion = '1.11.0'
     ext.autoServiceVersion = '1.1.1'
     ext.guiceVersion = '5.1.0'
 
@@ -32,11 +32,11 @@ dependencies {
 
     testImplementation ("org.apache.jclouds:jclouds-core:${jcloudsVersion}:tests")
     testImplementation ("org.apache.jclouds.driver:jclouds-slf4j:${jcloudsVersion}")
-    testImplementation ('org.assertj:assertj-core:3.25.3')
+    testImplementation ('org.assertj:assertj-core:3.26.3')
     testImplementation ('ch.qos.logback:logback-core:1.5.7')
     testImplementation ('com.squareup.okhttp3:mockwebserver:4.12.0')
     testImplementation ('org.testng:testng:7.10.2')
-    testImplementation ('ch.qos.logback:logback-classic:1.5.6')
+    testImplementation ('ch.qos.logback:logback-classic:1.5.7')
 }
 
 ext.compatibilityVersion = JavaVersion.VERSION_11
