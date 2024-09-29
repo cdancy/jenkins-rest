@@ -1,4 +1,4 @@
-ARG jenkins_tag=2.401.3-lts-jdk17
+ARG jenkins_tag=2.414.3-lts-jdk17
 FROM jenkins/jenkins:$jenkins_tag
 
 COPY --chown=jenkins:jenkins init.groovy.d/ /usr/share/jenkins/ref/init.groovy.d/
