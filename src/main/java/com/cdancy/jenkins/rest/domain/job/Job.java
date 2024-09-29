@@ -11,7 +11,6 @@ public abstract class Job {
     public abstract String clazz();
 
     public abstract String name();
-
     public abstract String url();
 
     @Nullable

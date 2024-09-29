@@ -21,6 +21,7 @@ import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.domain.common.LongResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.job.*;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import okhttp3.mockwebserver.MockResponse;
@@ -57,6 +58,70 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             assertSent(server, "GET", "/job/Folder1/job/Folder%202/api/json");
         } finally {
             jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testGetJobListWithDepth() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String body = payloadFromResource("/getJobListByDepth.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
+        try (jenkinsApi) {
+            JobsApi api = jenkinsApi.jobsApi();
+            JobListTree output = api.jobList("", 0, null);
+            assertNotNull(output);
+            assertNotNull(output.jobs());
+            assertEquals(output.jobs().size(), 1);
+            assertEquals(output.jobs().get(0), JobListTree.create("hudson.model.FreeStyleProject", "DevTest", null, null, "notbuilt", "http://localhost:8080/job/DevTest/"));
+            assertSent(server, "GET", "/api/json", ImmutableMap.of("depth", "0"));
+        } finally {
+            server.shutdown();
+        }
+    }
+
+    public void testGetJobListWithTreeByFullName() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String body = payloadFromResource("/jobsInJenkinsFolderByFullName.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
+        Map<String, String> queryParams = ImmutableMap.of("tree", "jobs%5BfullName%5D");
+        try (jenkinsApi) {
+            JobsApi api = jenkinsApi.jobsApi();
+            JobListTree output = api.jobList("Folder1/Folder 2", null, "jobs[fullName]");
+            assertNotNull(output);
+            assertNotNull(output.jobs());
+            assertEquals(output.jobs().size(), 1);
+            assertEquals(output.jobs().get(0), JobListTree.create("hudson.model.FreeStyleProject", null, "Test Project", null, null, null));
+            assertSent(server, "GET", "/job/Folder1/job/Folder%202/api/json", queryParams);
+        } finally {
+            server.shutdown();
+        }
+    }
+
+    public void testGetNestedJobList() throws Exception {
+        MockWebServer server = mockWebServer();
+
+        String body = payloadFromResource("/nestedJobList.json");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
+        Map<String, String> queryParams = ImmutableMap.of("tree", "jobs%5BfullName,jobs%5BfullName%5D%5D");
+        try (jenkinsApi) {
+            JobsApi api = jenkinsApi.jobsApi();
+            JobListTree output = api.jobList("Folder1/Folder 2", null, "jobs[fullName,jobs[fullName]]");
+            assertNotNull(output);
+            assertNotNull(output.jobs());
+            assertEquals(output.jobs().size(), 2);
+            assertEquals(output.jobs().get(0), JobListTree.create("hudson.model.FreeStyleProject", null, "DevTest", null, null, null));
+            JobListTree actualFolder = output.jobs().get(1);
+            assertEquals(actualFolder.clazz(), "com.cloudbees.hudson.plugins.folder.Folder");
+            assertEquals(actualFolder.fullName(), "test-folder");
+            assertEquals(actualFolder.jobs().size(), 1);
+            assertEquals(actualFolder.jobs().get(0).fullName(), "test-folder/test-folder-1");
+            assertSent(server, "GET", "/job/Folder1/job/Folder%202/api/json", queryParams);
+        } finally {
             server.shutdown();
         }
     }

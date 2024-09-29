@@ -62,6 +62,15 @@ public interface JobsApi {
     @GET
     JobList jobList(@PathParam("folderPath") @ParamParser(FolderPathParser.class) String folderPath);
 
+    @Named("jobs:get-jobs-tree")
+    @Path("{folderPath}api/json")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    JobListTree jobList(@PathParam("folderPath") @ParamParser(FolderPathParser.class) String folderPath, @Nullable @QueryParam("depth") Integer depth,
+      @Nullable @QueryParam("tree") String tree);
+
+
     @Named("jobs:job-info")
     @Path("{optionalFolderPath}job/{name}/api/json")
     @Fallback(Fallbacks.NullOnNotFoundOr404.class)
