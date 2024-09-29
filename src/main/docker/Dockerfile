@@ -1,4 +1,4 @@
-ARG jenkins_tag=2.303.3-lts-jdk11
+ARG jenkins_tag=2.414.3-lts-jdk17
 
 FROM jenkins/jenkins:$jenkins_tag
 
