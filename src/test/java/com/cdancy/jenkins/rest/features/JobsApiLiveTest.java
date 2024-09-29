@@ -52,6 +52,12 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertTrue(success.value());
     }
 
+    @Test
+    public void testCreateFolder(){
+        RequestStatus success = api().createFolder(null,"DevTestFolder");
+        assertTrue(success.value());
+    }
+
     // The next 3 tests must run one after the other as they use the same Job
     @Test
     public void testStopFreeStyleBuild() throws InterruptedException {
@@ -190,6 +196,20 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertNull(output.lastBuild());
         assertNull(output.firstBuild());
         assertTrue(output.builds().isEmpty());
+    }
+
+    @Test(dependsOnMethods = "testCreateJob")
+    public void testCheckJobNameExisted() {
+        JobExisted output = api().checkJobName(null,"DevTest");
+        assertNotNull(output);
+        assertTrue(output.existed());
+    }
+
+    @Test(dependsOnMethods = "testCreateJob")
+    public void testCheckJobNameNotExisted() {
+        JobExisted output = api().checkJobName(null,"DevTest1");
+        assertNotNull(output);
+        assertFalse(output.existed());
     }
 
     @Test(dependsOnMethods = "testGetJobInfo")

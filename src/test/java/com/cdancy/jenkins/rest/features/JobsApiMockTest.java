@@ -29,6 +29,7 @@ import org.testng.annotations.Test;
 
 import javax.ws.rs.core.MediaType;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,9 +116,52 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
+    public void testCheckJobNameExisted() throws Exception {
+        MockWebServer server = mockWebServer();
+        String body = payloadFromResource("/checkJobNameExisted.txt");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            JobExisted output = api.checkJobName(null,"DevTest");
+            assertTrue(output.existed());
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testCheckJobNameNotExisted() throws Exception {
+        MockWebServer server = mockWebServer();
+        String body = payloadFromResource("/checkJobNameNotExisted.txt");
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            JobExisted output = api.checkJobName(null,"DevTest1");
+            assertFalse(output.existed());
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
+    public void testCheckJobNameNotFound() throws Exception {
+        MockWebServer server = mockWebServer();
+        server.enqueue(new MockResponse().setResponseCode(404));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            JobExisted output = api.checkJobName(null,"DevTest1");
+            assertNull(output);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
     public void testGetBuildInfo() throws Exception {
         MockWebServer server = mockWebServer();
-
         String body = payloadFromResource("/build-info.json");
         server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
         JenkinsApi jenkinsApi = api(server.url("/").url());
@@ -169,6 +213,21 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
             assertTrue(success.value());
             assertTrue(success.errors().isEmpty());
             assertSentWithXMLFormDataAccept(server, "POST", "/createItem?name=DevTest", configXML, MediaType.WILDCARD);
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+    public void testCreateFolder() throws Exception {
+        MockWebServer server = mockWebServer();
+        server.enqueue(new MockResponse().setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            RequestStatus success = api.createFolder(null, "DevTestFolder");
+            assertNotNull(success);
+            assertTrue(success.value());
+            assertTrue(success.errors().isEmpty());
         } finally {
             jenkinsApi.close();
             server.shutdown();
