@@ -16,9 +16,7 @@
  */
 package com.cdancy.jenkins.rest.features;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
 import com.cdancy.jenkins.rest.domain.common.LongResponse;
@@ -28,8 +26,10 @@ import com.cdancy.jenkins.rest.domain.plugins.Plugin;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 import com.google.common.collect.Lists;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.*;
 
 @Test(groups = "live", testName = "JobsApiLiveTest", singleThreaded = true)
@@ -44,6 +44,11 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     private static final String FREESTYLE_JOB_NAME = "FreeStyleSleep";
     private static final String PIPELINE_JOB_NAME = "PipelineSleep";
     private static final String PIPELINE_WITH_ACTION_JOB_NAME = "PipelineAction";
+
+    @AfterClass
+    public void removeJobs() {
+        api().delete(null, "DevTest");
+    }
 
     @Test
     public void testCreateJob() {
@@ -174,12 +179,18 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertTrue(success.value());
     }
 
-    @Test(dependsOnMethods = {"testCreateJob", "testCreateJobForEmptyAndNullParams", "testKillPipelineBuild", "testKillFreeStyleBuild", "testDeleteFolders"})
-    public void testGetJobListFromRoot() {
+    @Test(dependsOnMethods = {"testBuildJob", "testCreateJobForEmptyAndNullParams", "testKillFreeStyleBuild", "testKillPipelineBuild", "testCreateFoldersInJenkins"})
+    public void testGetJobListFromRootWithFolders() {
         JobList output = api().jobList("");
         assertNotNull(output);
-        assertFalse(output.jobs().isEmpty());
-        assertEquals(output.jobs().size(), 2);
+        assertThat(output.jobs())
+            .isNotEmpty()
+            .hasSize(3)
+            .contains(
+                Job.create("hudson.model.FreeStyleProject", "DevTest", "http://127.0.0.1:8080/job/DevTest/", "blue"),
+                Job.create("hudson.model.FreeStyleProject", "JobForEmptyAndNullParams", "http://127.0.0.1:8080/job/JobForEmptyAndNullParams/", "blue"),
+                Job.create("com.cloudbees.hudson.plugins.folder.Folder", "test-folder", "http://127.0.0.1:8080/job/test-folder/", null)
+            );
     }
 
     @Test(dependsOnMethods = "testCreateJob")
@@ -440,6 +451,75 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
     }
 
     @Test(dependsOnMethods = "testCreateJobInFolder")
+    public void testGetJobListByDepth2() {
+        JobListTree output = api().jobList("", 2, null);
+        assertNotNull(output);
+        assertFalse(output.jobs().isEmpty());
+        assertEquals(output.jobs().size(), 3);
+        JobListTree lastRootElement = output.jobs().get(2);
+        List<JobListTree> childJobs = lastRootElement.jobs();
+        assertThat(childJobs).isNotEmpty()
+          .hasSize(1);
+        assertThat(childJobs.get(0).jobs()).isNotEmpty()
+          .hasSize(1);
+    }
+
+    @Test(dependsOnMethods = "testCreateJobInFolder")
+    public void testGetJobListByDepth1() {
+        JobListTree output = api().jobList("", 1, null);
+        assertNotNull(output);
+        assertFalse(output.jobs().isEmpty());
+        assertEquals(output.jobs().size(), 3);
+        JobListTree lastRootElement = output.jobs().get(2);
+        List<JobListTree> childJobs = lastRootElement.jobs();
+        assertThat(childJobs).isNotEmpty()
+          .hasSize(1);
+        assertThat(childJobs.get(0).jobs()).isNull();
+    }
+
+    @Test(dependsOnMethods = "testCreateJobInFolder")
+    public void testGetJobListInSelectedFolderWithTreeOnlyGivingFullNameOnCurrentFolder() {
+        JobListTree output = api().jobList("test-folder/test-folder-1", null, "fullName");
+        assertNotNull(output);
+        assertNull(output.jobs());
+        assertEquals(output, JobListTree.create("com.cloudbees.hudson.plugins.folder.Folder", null, "test-folder/test-folder-1", null, null, null));
+    }
+
+    @Test(dependsOnMethods = "testCreateJobInFolder")
+    public void testGetJobListFromRootWithTreeCanReturnNestedJob() {
+        JobListTree output = api().jobList("", null, "jobs[fullName,jobs[fullName,jobs[fullName]]]");
+        assertNotNull(output);
+        List<JobListTree> grandChildJob = Lists.newArrayList(JobListTree.create("hudson.model.FreeStyleProject", null, "test-folder/test-folder-1/JobInFolder", null, null, null));
+        JobListTree childJob = JobListTree.create("com.cloudbees.hudson.plugins.folder.Folder", null, "test-folder/test-folder-1", grandChildJob, null, null);
+        assertThat(output.jobs())
+          .isNotEmpty()
+          .hasSize(3)
+          .contains(
+            JobListTree.create("hudson.model.FreeStyleProject", null, "DevTest", null, null, null),
+            JobListTree.create("hudson.model.FreeStyleProject", null, "JobForEmptyAndNullParams", null, null, null),
+            JobListTree.create("com.cloudbees.hudson.plugins.folder.Folder", null, "test-folder", Lists.newArrayList(childJob), null, null)
+          );
+    }
+
+    @Test(dependsOnMethods = "testCreateJobInFolder")
+    public void testGetJobListInFolderWithTreeReturnAll() {
+        JobListTree output = api().jobList("test-folder/test-folder-1", null, "jobs[*]");
+        assertNotNull(output);
+        assertFalse(output.jobs().isEmpty());
+        assertEquals(output.jobs().size(), 1);
+        assertEquals(output.jobs().get(0), JobListTree.create("hudson.model.FreeStyleProject", "JobInFolder", "test-folder/test-folder-1/JobInFolder", null, "notbuilt", "http://127.0.0.1:8080/job/test-folder/job/test-folder-1/job/JobInFolder/"));
+    }
+
+    @Test(dependsOnMethods = "testCreateJobInFolder")
+    public void testGetJobListInFolderWithTreeOnlyGivingNameAndColor() {
+        JobListTree output = api().jobList("test-folder/test-folder-1", null, "jobs[name,color]");
+        assertNotNull(output);
+        assertFalse(output.jobs().isEmpty());
+        assertEquals(output.jobs().size(), 1);
+        assertEquals(output.jobs().get(0), JobListTree.create("hudson.model.FreeStyleProject", "JobInFolder", null, null, "notbuilt", null));
+    }
+
+    @Test(dependsOnMethods = "testCreateJobInFolder")
     public void testUpdateJobConfigInFolder() {
         String config = payloadFromResource("/freestyle-project.xml");
         boolean success = api().config("test-folder/test-folder-1", "JobInFolder", config);
@@ -567,7 +647,7 @@ public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {
         assertTrue(parameters.get(1).value().isEmpty());
     }
 
-    @Test(dependsOnMethods = { "testGetBuildParametersOfJobForEmptyAndNullParams", "testGetJobListFromRoot"})
+    @Test(dependsOnMethods = { "testGetBuildParametersOfJobForEmptyAndNullParams", "testGetJobListFromRootWithFolders"})
     public void testDeleteJobForEmptyAndNullParams() {
         RequestStatus success = api().delete(null, "JobForEmptyAndNullParams");
         assertTrue(success.value());
