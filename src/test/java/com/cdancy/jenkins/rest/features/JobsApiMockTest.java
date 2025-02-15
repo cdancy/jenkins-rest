@@ -999,6 +999,23 @@ public class JobsApiMockTest extends BaseJenkinsMockTest {
         }
     }
 
+    public void testJobPluginReport() throws Exception {
+        MockWebServer server = mockWebServer();
+        String body = payloadFromResource("/warnings-ng.json");
+
+        server.enqueue(new MockResponse().setBody(body).setResponseCode(200));
+        JenkinsApi jenkinsApi = api(server.url("/").url());
+        JobsApi api = jenkinsApi.jobsApi();
+        try {
+            JsonObject pluginReport = api.pluginReport(null,"MockJob",16, "warnings-ng");
+            assertNotNull(pluginReport);
+            assertSent(server, "GET", "/job/MockJob/16/warnings-ng/api/json");
+        } finally {
+            jenkinsApi.close();
+            server.shutdown();
+        }
+    }
+
     public void testPipelineNodeLog() throws Exception {
         MockWebServer server = mockWebServer();
         String body = payloadFromResource("/pipelineNodeLog.json");
