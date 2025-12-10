@@ -19,7 +19,7 @@ package com.cdancy.jenkins.rest.parsers;
 
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.google.common.base.Function;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import org.jclouds.http.HttpResponse;
 
 /**

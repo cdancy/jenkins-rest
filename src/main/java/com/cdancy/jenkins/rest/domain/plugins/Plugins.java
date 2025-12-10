@@ -17,23 +17,21 @@
 
 package com.cdancy.jenkins.rest.domain.plugins;
 
-import com.cdancy.jenkins.rest.JenkinsUtils;
-import com.cdancy.jenkins.rest.domain.common.ErrorsHolder;
-import com.cdancy.jenkins.rest.domain.common.Error;
+import java.util.List;
 
+import com.cdancy.jenkins.rest.JenkinsUtils;
+import com.cdancy.jenkins.rest.domain.common.Error;
+import com.cdancy.jenkins.rest.domain.common.ErrorsHolder;
+import com.google.auto.value.AutoValue;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
-
-import com.google.auto.value.AutoValue;
-
-import java.util.List;
 
 @AutoValue
 public abstract class Plugins implements ErrorsHolder {
 
     @Nullable
     public abstract String clazz();
-    
+
     public abstract List<Plugin> plugins();
 
     Plugins() {

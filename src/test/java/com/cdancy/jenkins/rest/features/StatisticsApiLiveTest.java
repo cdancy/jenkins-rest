@@ -18,10 +18,9 @@ package com.cdancy.jenkins.rest.features;
 
 import static org.testng.Assert.assertNotNull;
 
-import org.testng.annotations.Test;
-
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
 import com.cdancy.jenkins.rest.domain.statistics.OverallLoad;
+import org.testng.annotations.Test;
 
 @Test(groups = "live", testName = "StatisticsApiLiveTest", singleThreaded = true)
 public class StatisticsApiLiveTest extends BaseJenkinsApiLiveTest {

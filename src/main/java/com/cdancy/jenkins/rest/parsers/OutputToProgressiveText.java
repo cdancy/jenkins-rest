@@ -20,7 +20,7 @@ package com.cdancy.jenkins.rest.parsers;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.jclouds.http.HttpResponse;
 

@@ -19,13 +19,12 @@ package com.cdancy.jenkins.rest.domain.crumb;
 
 import java.util.List;
 
-import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.json.SerializedNames;
-
+import com.cdancy.jenkins.rest.JenkinsUtils;
 import com.cdancy.jenkins.rest.domain.common.Error;
 import com.cdancy.jenkins.rest.domain.common.ErrorsHolder;
-import com.cdancy.jenkins.rest.JenkinsUtils;
 import com.google.auto.value.AutoValue;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
 @AutoValue
 public abstract class Crumb implements ErrorsHolder {

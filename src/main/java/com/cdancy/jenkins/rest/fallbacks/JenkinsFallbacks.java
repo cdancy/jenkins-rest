@@ -17,23 +17,17 @@
 package com.cdancy.jenkins.rest.fallbacks;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Predicates.equalTo;
-import static com.google.common.base.Throwables.propagate;
-
-import static org.jclouds.http.HttpUtils.returnValueOnCodeOrNull;
-
-import com.cdancy.jenkins.rest.domain.common.LongResponse;
-import com.cdancy.jenkins.rest.domain.common.RequestStatus;
-import com.cdancy.jenkins.rest.domain.common.Error;
-import com.cdancy.jenkins.rest.domain.crumb.Crumb;
-import com.cdancy.jenkins.rest.domain.plugins.Plugins;
-import com.cdancy.jenkins.rest.domain.system.SystemInfo;
-
-import com.google.common.collect.Lists;
-import com.google.gson.JsonSyntaxException;
 
 import java.util.List;
 
+import com.cdancy.jenkins.rest.domain.common.Error;
+import com.cdancy.jenkins.rest.domain.common.LongResponse;
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
+import com.cdancy.jenkins.rest.domain.crumb.Crumb;
+import com.cdancy.jenkins.rest.domain.plugins.Plugins;
+import com.cdancy.jenkins.rest.domain.system.SystemInfo;
+import com.google.common.collect.Lists;
+import com.google.gson.JsonSyntaxException;
 import org.jclouds.Fallback;
 import org.jclouds.rest.ResourceNotFoundException;
 

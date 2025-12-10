@@ -17,9 +17,10 @@
 
 package com.cdancy.jenkins.rest.config;
 
+import java.util.Objects;
+
 import com.cdancy.jenkins.rest.JenkinsAuthentication;
 import com.google.inject.AbstractModule;
-import java.util.Objects;
 
 /**
  * Configure the provider for JenkinsAuthentication.

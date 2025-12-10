@@ -19,11 +19,10 @@ package com.cdancy.jenkins.rest.features;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import com.cdancy.jenkins.rest.domain.common.RequestStatus;
-import org.testng.annotations.Test;
-
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.system.SystemInfo;
+import org.testng.annotations.Test;
 
 @Test(groups = "live", testName = "SystemApiLiveTest", singleThreaded = true)
 public class SystemApiLiveTest extends BaseJenkinsApiLiveTest {

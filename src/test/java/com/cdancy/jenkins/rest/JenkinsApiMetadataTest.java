@@ -17,14 +17,14 @@
 
 package com.cdancy.jenkins.rest;
 
+import static org.testng.Assert.*;
+
+import java.util.HashSet;
+
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.apis.Apis;
 import org.jclouds.apis.internal.BaseApiMetadataTest;
 import org.testng.annotations.Test;
-
-import java.util.HashSet;
-
-import static org.testng.Assert.*;
 
 /**
  * Unit tests for the {@link JenkinsApiMetadata} class.
