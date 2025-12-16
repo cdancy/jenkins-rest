@@ -10,12 +10,11 @@ shadowJar {
     relocate 'org.objectweb', "${newBasePackage}.shaded.org.objectweb"
     relocate 'com.google', "${newBasePackage}.shaded.com.google"
     relocate 'net.sf', "${newBasePackage}.shaded.net.sf"
-    relocate 'javax.inject', "${newBasePackage}.shaded.javax.inject"
+    relocate 'jakarta.inject', "${newBasePackage}.shaded.jakarta.inject"
     relocate 'org.jclouds', "${newBasePackage}.shaded.org.jclouds"
-    relocate 'javax.inject', "${newBasePackage}.shaded.javax.inject"
-    relocate 'javax.annotation', "${newBasePackage}.shaded.javax.annotation"
-    relocate 'javax.ws.rs', "${newBasePackage}.shaded.javax.ws.rs"
-    relocate 'javax.xml.bind', "${newBasePackage}.shaded.javax.xml.bind"
+    relocate 'jakarta.annotation', "${newBasePackage}.shaded.jakarta.annotation"
+    relocate 'jakarta.ws.rs', "${newBasePackage}.shaded.jakarta.ws.rs"
+    relocate 'jakarta.xml.bind', "${newBasePackage}.shaded.jakarta.xml.bind"
 }
 
 task sourcesJar(type: Jar) {

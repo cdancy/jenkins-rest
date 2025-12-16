@@ -17,27 +17,16 @@
 
 package com.cdancy.jenkins.rest.features;
 
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Produces;
-
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
 import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
-
-import org.jclouds.rest.annotations.RequestFilters;
+import jakarta.inject.Named;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.rest.annotations.Fallback;
-import org.jclouds.rest.annotations.Payload;
-import org.jclouds.rest.annotations.PayloadParam;
-import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.annotations.*;
 
 @RequestFilters(JenkinsAuthenticationFilter.class)
 @Consumes(MediaType.APPLICATION_JSON)

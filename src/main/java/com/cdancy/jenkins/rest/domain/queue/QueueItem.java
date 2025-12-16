@@ -19,11 +19,10 @@ package com.cdancy.jenkins.rest.domain.queue;
 
 import java.util.Map;
 
-import org.jclouds.json.SerializedNames;
-import org.jclouds.javax.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.Maps;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
 @AutoValue
 public abstract class QueueItem {

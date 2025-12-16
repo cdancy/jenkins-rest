@@ -17,15 +17,14 @@
 
 package com.cdancy.jenkins.rest.config;
 
+import com.cdancy.jenkins.rest.JenkinsApi;
+import com.cdancy.jenkins.rest.handlers.JenkinsErrorHandler;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
 import org.jclouds.rest.ConfiguresHttpApi;
 import org.jclouds.rest.config.HttpApiModule;
-
-import com.cdancy.jenkins.rest.JenkinsApi;
-import com.cdancy.jenkins.rest.handlers.JenkinsErrorHandler;
 
 @ConfiguresHttpApi
 public class JenkinsHttpApiModule extends HttpApiModule<JenkinsApi> {

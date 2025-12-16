@@ -19,11 +19,10 @@ package com.cdancy.jenkins.rest.domain.common;
 
 import java.util.List;
 
-import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.json.SerializedNames;
-
 import com.cdancy.jenkins.rest.JenkinsUtils;
 import com.google.auto.value.AutoValue;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
 /**
  * Long response to be returned when an endpoint returns

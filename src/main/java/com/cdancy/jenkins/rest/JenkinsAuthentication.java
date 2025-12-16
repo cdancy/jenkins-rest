@@ -19,12 +19,11 @@ package com.cdancy.jenkins.rest;
 
 import static com.google.common.io.BaseEncoding.base64;
 
-import com.cdancy.jenkins.rest.auth.AuthenticationType;
-import com.cdancy.jenkins.rest.exception.UndetectableIdentityException;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+import com.cdancy.jenkins.rest.auth.AuthenticationType;
+import com.cdancy.jenkins.rest.exception.UndetectableIdentityException;
 import org.jclouds.domain.Credentials;
 import org.jclouds.javax.annotation.Nullable;
 

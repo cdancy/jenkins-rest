@@ -18,23 +18,21 @@ package com.cdancy.jenkins.rest.handlers;
 
 import static org.jclouds.util.Closeables2.closeQuietly;
 
+import java.io.IOException;
+
 import com.cdancy.jenkins.rest.exception.ForbiddenException;
 import com.cdancy.jenkins.rest.exception.MethodNotAllowedException;
 import com.cdancy.jenkins.rest.exception.RedirectTo404Exception;
 import com.cdancy.jenkins.rest.exception.UnsupportedMediaTypeException;
-
-import java.io.IOException;
-
+import com.google.common.base.Throwables;
 import org.jclouds.http.HttpCommand;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
+import org.jclouds.rest.AuthorizationException;
 import org.jclouds.rest.ResourceAlreadyExistsException;
 import org.jclouds.rest.ResourceNotFoundException;
-import org.jclouds.rest.AuthorizationException;
 import org.jclouds.util.Strings2;
-
-import com.google.common.base.Throwables;
 
 /**
  * Handle errors and propagate exception

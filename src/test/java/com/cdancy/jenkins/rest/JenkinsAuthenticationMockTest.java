@@ -17,12 +17,12 @@
 
 package com.cdancy.jenkins.rest;
 
+import static com.google.common.io.BaseEncoding.base64;
+import static org.testng.Assert.assertEquals;
+
 import com.cdancy.jenkins.rest.auth.AuthenticationType;
 import com.cdancy.jenkins.rest.exception.UndetectableIdentityException;
 import org.testng.annotations.Test;
-
-import static com.google.common.io.BaseEncoding.base64;
-import static org.testng.Assert.assertEquals;
 
 public class JenkinsAuthenticationMockTest {
 

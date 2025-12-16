@@ -17,20 +17,14 @@
 
 package com.cdancy.jenkins.rest.features;
 
-import javax.inject.Named;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
-import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
-import org.jclouds.rest.annotations.RequestFilters;
-import org.jclouds.rest.annotations.ResponseParser;
-import org.jclouds.rest.annotations.Fallback;
-import org.jclouds.rest.annotations.Payload;
-import org.jclouds.rest.annotations.PayloadParam;
-
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
+import com.cdancy.jenkins.rest.parsers.RequestStatusParser;
+import jakarta.inject.Named;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import org.jclouds.rest.annotations.*;
 
 @RequestFilters(JenkinsAuthenticationFilter.class)
 @Path("/configuration-as-code")
@@ -43,7 +37,7 @@ public interface ConfigurationAsCodeApi {
     @Payload("{cascYml}")
     @POST
     RequestStatus check(@PayloadParam(value = "cascYml") String cascYml);
-    
+
     @Named("casc:apply")
     @Path("/apply")
     @Fallback(JenkinsFallbacks.RequestStatusOnError.class)

@@ -19,11 +19,10 @@ package com.cdancy.jenkins.rest.domain.job;
 
 import java.util.List;
 
-import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.json.SerializedNames;
-
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
 @AutoValue
 public abstract class ChangeSet {
@@ -48,7 +47,7 @@ public abstract class ChangeSet {
    @SerializedNames({ "affectedPaths", "commitId", "timestamp", "author", "authorEmail", "comment" })
    public static ChangeSet create(List<String> affectedPaths, String commitId, long timestamp, Culprit author, String authorEmail, String comment) {
       return new AutoValue_ChangeSet(
-         affectedPaths != null ? ImmutableList.copyOf(affectedPaths) : ImmutableList.<String> of(), 
+         affectedPaths != null ? ImmutableList.copyOf(affectedPaths) : ImmutableList.<String> of(),
          commitId, timestamp, author, authorEmail, comment);
    }
 }

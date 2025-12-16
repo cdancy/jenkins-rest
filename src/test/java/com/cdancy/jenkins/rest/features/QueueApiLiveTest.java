@@ -16,27 +16,21 @@
  */
 package com.cdancy.jenkins.rest.features;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
 import com.cdancy.jenkins.rest.domain.common.LongResponse;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 @Test(groups = "live", testName = "QueueApiLiveTest", singleThreaded = true)
 public class QueueApiLiveTest extends BaseJenkinsApiLiveTest {
