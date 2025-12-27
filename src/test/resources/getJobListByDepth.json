@@ -1,0 +1,43 @@
+{
+  "_class": "hudson.model.Hudson",
+  "assignedLabels": [
+    {
+      "name": "built-in"
+    }
+  ],
+  "mode": "NORMAL",
+  "nodeDescription": "the Jenkins controller's built-in node",
+  "nodeName": "",
+  "numExecutors": 2,
+  "description": "Jenkins REST API Configuration as code test",
+  "jobs": [
+    {
+      "_class": "hudson.model.FreeStyleProject",
+      "name": "DevTest",
+      "url": "http://localhost:8080/job/DevTest/",
+      "color": "notbuilt"
+    }
+  ],
+  "overallLoad": {},
+  "primaryView": {
+    "_class": "hudson.model.AllView",
+    "name": "all",
+    "url": "http://localhost:8080/"
+  },
+  "quietDownReason": null,
+  "quietingDown": false,
+  "slaveAgentPort": 50000,
+  "unlabeledLoad": {
+    "_class": "jenkins.model.UnlabeledLoadStatistics"
+  },
+  "url": null,
+  "useCrumbs": true,
+  "useSecurity": true,
+  "views": [
+    {
+      "_class": "hudson.model.AllView",
+      "name": "all",
+      "url": "http://localhost:8080/"
+    }
+  ]
+}

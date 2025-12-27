@@ -1,0 +1,19 @@
+{
+  "_class": "hudson.model.Hudson",
+  "jobs": [
+    {
+      "_class": "hudson.model.FreeStyleProject",
+      "fullName": "DevTest"
+    },
+    {
+      "_class": "com.cloudbees.hudson.plugins.folder.Folder",
+      "fullName": "test-folder",
+      "jobs": [
+        {
+          "_class": "com.cloudbees.hudson.plugins.folder.Folder",
+          "fullName": "test-folder/test-folder-1"
+        }
+      ]
+    }
+  ]
+}
