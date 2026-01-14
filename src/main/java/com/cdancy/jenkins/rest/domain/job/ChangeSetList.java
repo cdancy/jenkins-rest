@@ -19,11 +19,10 @@ package com.cdancy.jenkins.rest.domain.job;
 
 import java.util.List;
 
-import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.json.SerializedNames;
-
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
 @AutoValue
 public abstract class ChangeSetList {
@@ -39,7 +38,7 @@ public abstract class ChangeSetList {
    @SerializedNames({ "items", "kind" })
    public static ChangeSetList create(List<ChangeSet> items, String kind) {
       return new AutoValue_ChangeSetList(
-         items != null ? ImmutableList.copyOf(items) : ImmutableList.<ChangeSet> of(), 
+         items != null ? ImmutableList.copyOf(items) : ImmutableList.<ChangeSet> of(),
          kind);
    }
 }

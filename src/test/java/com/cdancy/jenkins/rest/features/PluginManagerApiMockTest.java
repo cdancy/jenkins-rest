@@ -16,22 +16,18 @@
  */
 package com.cdancy.jenkins.rest.features;
 
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.*;
 
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import org.testng.annotations.Test;
+import java.util.Map;
 
-import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
+import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
 import com.google.common.collect.Maps;
-
-import java.util.Map;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import org.testng.annotations.Test;
 
 /**
  * Mock tests for the {@link com.cdancy.jenkins.rest.features.PluginManagerApi} class.

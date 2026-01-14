@@ -16,12 +16,13 @@
  */
 package com.cdancy.jenkins.rest.features;
 
+import static org.testng.Assert.*;
+
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
-import com.cdancy.jenkins.rest.domain.user.*;
+import com.cdancy.jenkins.rest.domain.user.ApiToken;
+import com.cdancy.jenkins.rest.domain.user.User;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.*;
 
 @Test(groups = "live", testName = "UserApiLiveTest", singleThreaded = true)
 public class UserApiLiveTest extends BaseJenkinsApiLiveTest {

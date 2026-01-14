@@ -19,12 +19,11 @@ package com.cdancy.jenkins.rest.domain.job;
 
 import java.util.List;
 
-import org.jclouds.javax.annotation.Nullable;
-import org.jclouds.json.SerializedNames;
-
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
 @AutoValue
 public abstract class JobInfo {

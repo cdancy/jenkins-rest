@@ -16,21 +16,17 @@
  */
 package com.cdancy.jenkins.rest.features;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.*;
 
+import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
+import com.cdancy.jenkins.rest.JenkinsApi;
+import com.cdancy.jenkins.rest.JenkinsApiMetadata;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
+import com.cdancy.jenkins.rest.domain.system.SystemInfo;
+import jakarta.ws.rs.core.MediaType;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.testng.annotations.Test;
-
-import com.cdancy.jenkins.rest.JenkinsApi;
-import com.cdancy.jenkins.rest.JenkinsApiMetadata;
-import com.cdancy.jenkins.rest.domain.system.SystemInfo;
-import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
-
-import javax.ws.rs.core.MediaType;
 
 /**
  * Mock tests for the {@link com.cdancy.jenkins.rest.features.SystemApi} class.

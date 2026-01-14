@@ -15,13 +15,13 @@ repositories {
 }
 
 dependencies {
-    ext.jcloudsVersion = '2.5.0'
+    ext.jcloudsVersion = '2.7.0'
     ext.autoValueVersion = '1.11.0'
     ext.autoServiceVersion = '1.1.1'
-    ext.guiceVersion = '5.1.0'
+    ext.guiceVersion = '7.0.0'
 
-    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
-    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
+    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
     implementation ("org.apache.jclouds:jclouds-core:${jcloudsVersion}")
     implementation ("com.google.inject:guice:${guiceVersion}")
     implementation ("com.google.inject.extensions:guice-assistedinject:${guiceVersion}")

@@ -16,6 +16,8 @@
  */
 package com.cdancy.jenkins.rest.features;
 
+import static org.testng.Assert.*;
+
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.domain.user.ApiToken;
@@ -23,8 +25,6 @@ import com.cdancy.jenkins.rest.domain.user.User;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.*;
 
 /**
  * Mock tests for the {@link com.cdancy.jenkins.rest.features.JobsApi} class.

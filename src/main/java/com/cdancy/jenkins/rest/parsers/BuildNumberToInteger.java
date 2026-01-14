@@ -20,14 +20,12 @@ package com.cdancy.jenkins.rest.parsers;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import javax.inject.Singleton;
-
-import org.jclouds.http.HttpResponse;
-
 import com.google.common.base.Charsets;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.io.CharStreams;
+import jakarta.inject.Singleton;
+import org.jclouds.http.HttpResponse;
 
 /**
  * Created by dancc on 3/11/16.

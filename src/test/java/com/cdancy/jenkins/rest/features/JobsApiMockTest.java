@@ -16,6 +16,12 @@
  */
 package com.cdancy.jenkins.rest.features;
 
+import static org.testng.Assert.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.domain.common.LongResponse;
@@ -23,17 +29,10 @@ import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.job.*;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
+import jakarta.ws.rs.core.MediaType;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.testng.annotations.Test;
-
-import javax.ws.rs.core.MediaType;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.testng.Assert.*;
 
 /**
  * Mock tests for the {@link com.cdancy.jenkins.rest.features.JobsApi} class.

@@ -17,9 +17,8 @@
 
 package com.cdancy.jenkins.rest.domain.queue;
 
-import org.jclouds.json.SerializedNames;
-
 import com.google.auto.value.AutoValue;
+import org.jclouds.json.SerializedNames;
 
 @AutoValue
 public abstract class Executable {

@@ -16,13 +16,12 @@
  */
 package com.cdancy.jenkins.rest.features;
 
-import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.assertFalse;
-
-import com.cdancy.jenkins.rest.domain.common.RequestStatus;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertTrue;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
+import com.cdancy.jenkins.rest.domain.common.RequestStatus;
+import org.testng.annotations.Test;
 
 @Test(groups = "live", testName = "ConfigurationAsCodeApiLiveTest", singleThreaded = true)
 public class ConfigurationAsCodeApiLiveTest extends BaseJenkinsApiLiveTest {

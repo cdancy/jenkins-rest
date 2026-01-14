@@ -19,16 +19,8 @@ package com.cdancy.jenkins.rest;
 
 import java.io.Closeable;
 
+import com.cdancy.jenkins.rest.features.*;
 import org.jclouds.rest.annotations.Delegate;
-
-import com.cdancy.jenkins.rest.features.ConfigurationAsCodeApi;
-import com.cdancy.jenkins.rest.features.CrumbIssuerApi;
-import com.cdancy.jenkins.rest.features.JobsApi;
-import com.cdancy.jenkins.rest.features.PluginManagerApi;
-import com.cdancy.jenkins.rest.features.QueueApi;
-import com.cdancy.jenkins.rest.features.StatisticsApi;
-import com.cdancy.jenkins.rest.features.SystemApi;
-import com.cdancy.jenkins.rest.features.UserApi;
 
 public interface JenkinsApi extends Closeable {
 

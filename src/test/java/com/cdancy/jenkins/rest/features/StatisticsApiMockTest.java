@@ -18,13 +18,12 @@ package com.cdancy.jenkins.rest.features;
 
 import static org.testng.Assert.assertNotNull;
 
+import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
+import com.cdancy.jenkins.rest.JenkinsApi;
+import com.cdancy.jenkins.rest.domain.statistics.OverallLoad;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.testng.annotations.Test;
-
-import com.cdancy.jenkins.rest.JenkinsApi;
-import com.cdancy.jenkins.rest.domain.statistics.OverallLoad;
-import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
 
 /**
  * Mock tests for the {@link com.cdancy.jenkins.rest.features.StatisticsApi}

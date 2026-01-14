@@ -17,22 +17,19 @@
 
 package com.cdancy.jenkins.rest.filters;
 
-import javax.ws.rs.core.MediaType;
-
-import com.cdancy.jenkins.rest.JenkinsApi;
-import com.cdancy.jenkins.rest.JenkinsAuthentication;
-import com.cdancy.jenkins.rest.auth.AuthenticationType;
-import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
-
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import org.jclouds.http.HttpRequest;
-
-import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
+import com.cdancy.jenkins.rest.BaseJenkinsMockTest;
+import com.cdancy.jenkins.rest.JenkinsApi;
+import com.cdancy.jenkins.rest.JenkinsAuthentication;
+import com.cdancy.jenkins.rest.auth.AuthenticationType;
 import com.google.common.collect.Multimap;
+import jakarta.ws.rs.core.MediaType;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import org.jclouds.http.HttpRequest;
+import org.testng.annotations.Test;
 
 public class JenkinsAuthenticationFilterMockTest extends BaseJenkinsMockTest {
 

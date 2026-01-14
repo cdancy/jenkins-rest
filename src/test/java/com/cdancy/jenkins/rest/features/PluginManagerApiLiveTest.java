@@ -16,15 +16,12 @@
  */
 package com.cdancy.jenkins.rest.features;
 
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-
-import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 import com.cdancy.jenkins.rest.BaseJenkinsApiLiveTest;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.plugins.Plugins;
+import org.testng.annotations.Test;
 
 @Test(groups = "live", testName = "PluginManagerApiLiveTest", singleThreaded = true)
 public class PluginManagerApiLiveTest extends BaseJenkinsApiLiveTest {

@@ -16,18 +16,18 @@
  */
 package com.cdancy.jenkins.rest.filters;
 
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
+
+import java.net.URL;
+
 import com.cdancy.jenkins.rest.BaseJenkinsTest;
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.auth.AuthenticationType;
 import com.cdancy.jenkins.rest.domain.common.RequestStatus;
 import com.cdancy.jenkins.rest.domain.user.ApiToken;
 import com.cdancy.jenkins.rest.features.UserApi;
-
-import java.net.URL;
-
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertNotNull;
 
 @Test(groups = "live", testName = "FilterApiLiveTest", singleThreaded = true)
 public class JenkinsAuthenticationFilterLiveTest extends BaseJenkinsTest {

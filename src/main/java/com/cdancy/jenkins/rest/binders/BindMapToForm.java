@@ -21,9 +21,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Singleton;
-
 import com.google.common.collect.Lists;
+import jakarta.inject.Singleton;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpRequest.Builder;
 import org.jclouds.rest.Binder;

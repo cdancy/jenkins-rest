@@ -18,10 +18,9 @@
 package com.cdancy.jenkins.rest.domain.plugins;
 
 
-import org.jclouds.json.SerializedNames;
-
 import com.google.auto.value.AutoValue;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
 @AutoValue
 public abstract class Plugin {
@@ -31,8 +30,8 @@ public abstract class Plugin {
 
     @Nullable
     public abstract String backupVersion();
-    
-    @Nullable    
+
+    @Nullable
     public abstract Boolean bundled();
 
     @Nullable
@@ -44,28 +43,28 @@ public abstract class Plugin {
     @Nullable
     public abstract Boolean enabled();
 
-    @Nullable    
+    @Nullable
     public abstract Boolean hasUpdate();
 
-    @Nullable    
+    @Nullable
     public abstract String longName();
 
-    @Nullable    
+    @Nullable
     public abstract Boolean pinned();
 
-    @Nullable    
+    @Nullable
     public abstract String requiredCoreVersion();
 
-    @Nullable    
+    @Nullable
     public abstract String shortName();
 
-    @Nullable    
+    @Nullable
     public abstract String supportsDynamicLoad();
 
-    @Nullable    
+    @Nullable
     public abstract String url();
 
-    @Nullable    
+    @Nullable
     public abstract String version();
 
     Plugin() {
@@ -73,7 +72,7 @@ public abstract class Plugin {
 
     @SerializedNames({ "active", "backupVersion", "bundled",
         "deleted", "downgradable", "enabled",
-        "hasUpdate", "longName", "pinned", 
+        "hasUpdate", "longName", "pinned",
         "requiredCoreVersion", "shortName", "supportsDynamicLoad",
         "url", "version"})
     public static Plugin create(Boolean active, String backupVersion, Boolean bundled,

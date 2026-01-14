@@ -17,36 +17,18 @@
 
 package com.cdancy.jenkins.rest;
 
-import static com.cdancy.jenkins.rest.JenkinsConstants.JENKINS_REST_PROPERTY_ID;
-import static com.cdancy.jenkins.rest.JenkinsConstants.JENKINS_REST_VARIABLE_ID;
-import static com.cdancy.jenkins.rest.JenkinsConstants.CREDENTIALS_ENVIRONMENT_VARIABLE;
-import static com.cdancy.jenkins.rest.JenkinsConstants.CREDENTIALS_SYSTEM_PROPERTY;
-import static com.cdancy.jenkins.rest.JenkinsConstants.DEFAULT_ENDPOINT;
-import static com.cdancy.jenkins.rest.JenkinsConstants.ENDPOINT_ENVIRONMENT_VARIABLE;
-import static com.cdancy.jenkins.rest.JenkinsConstants.ENDPOINT_SYSTEM_PROPERTY;
-import static com.cdancy.jenkins.rest.JenkinsConstants.JCLOUDS_PROPERTY_ID;
-import static com.cdancy.jenkins.rest.JenkinsConstants.JCLOUDS_VARIABLE_ID;
-import static com.cdancy.jenkins.rest.JenkinsConstants.API_TOKEN_ENVIRONMENT_VARIABLE;
-import static com.cdancy.jenkins.rest.JenkinsConstants.API_TOKEN_SYSTEM_PROPERTY;
+import static com.cdancy.jenkins.rest.JenkinsConstants.*;
+
+import java.lang.reflect.Field;
+import java.util.*;
 
 import com.google.common.base.Throwables;
-
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Objects;
-import java.util.Properties;
-
 import org.jclouds.javax.annotation.Nullable;
 
 /**

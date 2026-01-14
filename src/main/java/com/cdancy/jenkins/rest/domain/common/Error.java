@@ -17,10 +17,9 @@
 
 package com.cdancy.jenkins.rest.domain.common;
 
+import com.google.auto.value.AutoValue;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
-
-import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class Error {
@@ -32,17 +31,17 @@ public abstract class Error {
     public abstract String message();
 
     public abstract String exceptionName();
-    
+
     Error() {
     }
 
     @SerializedNames({ "context", "message", "exceptionName" })
-    public static Error create(final String context, 
-            final String message, 
+    public static Error create(final String context,
+            final String message,
             final String exceptionName) {
-        
-        return new AutoValue_Error(context, 
-                message, 
+
+        return new AutoValue_Error(context,
+                message,
                 exceptionName);
     }
 }

@@ -17,21 +17,19 @@
 
 package com.cdancy.jenkins.rest.features;
 
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.MediaType;
-
-import org.jclouds.rest.annotations.Fallback;
-import org.jclouds.rest.annotations.ResponseParser;
-import org.jclouds.rest.annotations.RequestFilters;
-import org.jclouds.rest.annotations.QueryParams;
-
 import com.cdancy.jenkins.rest.domain.crumb.Crumb;
 import com.cdancy.jenkins.rest.fallbacks.JenkinsFallbacks;
 import com.cdancy.jenkins.rest.filters.JenkinsNoCrumbAuthenticationFilter;
 import com.cdancy.jenkins.rest.parsers.CrumbParser;
+import jakarta.inject.Named;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.MediaType;
+import org.jclouds.rest.annotations.Fallback;
+import org.jclouds.rest.annotations.QueryParams;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
 
 @RequestFilters(JenkinsNoCrumbAuthenticationFilter.class)
 @Path("/crumbIssuer/api/xml")

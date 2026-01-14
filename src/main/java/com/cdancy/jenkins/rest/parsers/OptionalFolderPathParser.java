@@ -2,7 +2,7 @@ package com.cdancy.jenkins.rest.parsers;
 
 import com.google.common.base.Function;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /*
  * Turn the optionalFolderPath param to jenkins URL style

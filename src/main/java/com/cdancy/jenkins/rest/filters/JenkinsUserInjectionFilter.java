@@ -17,15 +17,14 @@
 
 package com.cdancy.jenkins.rest.filters;
 
+import static com.cdancy.jenkins.rest.JenkinsConstants.USER_IN_USER_API;
+
+import com.cdancy.jenkins.rest.JenkinsAuthentication;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.jclouds.http.HttpException;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpRequestFilter;
-
-import com.cdancy.jenkins.rest.JenkinsAuthentication;
-import static com.cdancy.jenkins.rest.JenkinsConstants.USER_IN_USER_API;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Singleton
 public class JenkinsUserInjectionFilter implements HttpRequestFilter {

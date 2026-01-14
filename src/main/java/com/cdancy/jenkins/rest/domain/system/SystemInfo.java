@@ -17,16 +17,14 @@
 
 package com.cdancy.jenkins.rest.domain.system;
 
-import com.cdancy.jenkins.rest.JenkinsUtils;
-import com.cdancy.jenkins.rest.domain.common.ErrorsHolder;
-import com.cdancy.jenkins.rest.domain.common.Error;
-
-import org.jclouds.json.SerializedNames;
-import org.jclouds.javax.annotation.Nullable;
-
-import com.google.auto.value.AutoValue;
-
 import java.util.List;
+
+import com.cdancy.jenkins.rest.JenkinsUtils;
+import com.cdancy.jenkins.rest.domain.common.Error;
+import com.cdancy.jenkins.rest.domain.common.ErrorsHolder;
+import com.google.auto.value.AutoValue;
+import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.json.SerializedNames;
 
 @AutoValue
 public abstract class SystemInfo implements ErrorsHolder {
@@ -53,7 +51,7 @@ public abstract class SystemInfo implements ErrorsHolder {
             String instanceIdentity,
             String sshEndpoint, String server, final List<Error> errors) {
         return new AutoValue_SystemInfo(JenkinsUtils.nullToEmpty(errors),
-                hudsonVersion, jenkinsVersion, jenkinsSession, 
+                hudsonVersion, jenkinsVersion, jenkinsSession,
                 instanceIdentity, sshEndpoint, server);
     }
 }

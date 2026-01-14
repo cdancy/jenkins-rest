@@ -17,13 +17,10 @@
 
 package com.cdancy.jenkins.rest.parsers;
 
-import javax.inject.Singleton;
-
-import org.jclouds.http.HttpResponse;
-
 import com.cdancy.jenkins.rest.domain.system.SystemInfo;
-
 import com.google.common.base.Function;
+import jakarta.inject.Singleton;
+import org.jclouds.http.HttpResponse;
 
 /**
  * Created by dancc on 3/11/16.

@@ -16,6 +16,8 @@
  */
 package com.cdancy.jenkins.rest.features;
 
+import static org.testng.Assert.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +31,6 @@ import com.cdancy.jenkins.rest.domain.plugins.Plugins;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
 import com.google.common.collect.Lists;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.*;
 
 @Test(groups = "live", testName = "JobsApiLiveTest", singleThreaded = true)
 public class JobsApiLiveTest extends BaseJenkinsApiLiveTest {

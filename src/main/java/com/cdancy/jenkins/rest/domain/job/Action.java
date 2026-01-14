@@ -17,12 +17,12 @@
 
 package com.cdancy.jenkins.rest.domain.job;
 
+import java.util.List;
+
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
-
-import java.util.List;
 
 @AutoValue
 public abstract class Action {

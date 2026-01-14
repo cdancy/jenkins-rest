@@ -17,16 +17,14 @@
 
 package com.cdancy.jenkins.rest.features;
 
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.MediaType;
-
-import org.jclouds.rest.annotations.RequestFilters;
-
 import com.cdancy.jenkins.rest.domain.statistics.OverallLoad;
 import com.cdancy.jenkins.rest.filters.JenkinsAuthenticationFilter;
+import jakarta.inject.Named;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.MediaType;
+import org.jclouds.rest.annotations.RequestFilters;
 
 @RequestFilters(JenkinsAuthenticationFilter.class)
 @Consumes(MediaType.APPLICATION_JSON)

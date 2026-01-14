@@ -16,7 +16,6 @@
  */
 package com.cdancy.jenkins.rest;
 
-import com.cdancy.jenkins.rest.config.JenkinsAuthenticationModule;
 import static org.jclouds.util.Strings2.toStringAndClose;
 
 import java.io.IOException;
@@ -24,16 +23,16 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.UUID;
 
+import com.cdancy.jenkins.rest.config.JenkinsAuthenticationModule;
 import com.cdancy.jenkins.rest.domain.job.BuildInfo;
 import com.cdancy.jenkins.rest.domain.queue.QueueItem;
-import org.jclouds.Constants;
-import org.jclouds.apis.BaseApiLiveTest;
-import org.testng.annotations.Test;
-
 import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
+import org.jclouds.Constants;
+import org.jclouds.apis.BaseApiLiveTest;
+import org.testng.annotations.Test;
 
 @Test(groups = "live")
 public class BaseJenkinsApiLiveTest extends BaseApiLiveTest<JenkinsApi> {

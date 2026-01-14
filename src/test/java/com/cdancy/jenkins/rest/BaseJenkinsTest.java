@@ -17,22 +17,21 @@
 
 package com.cdancy.jenkins.rest;
 
+import static org.jclouds.util.Strings2.toStringAndClose;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.Properties;
 
-import org.jclouds.Constants;
-import org.jclouds.ContextBuilder;
-import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
-import static org.jclouds.util.Strings2.toStringAndClose;
-
-import com.cdancy.jenkins.rest.config.JenkinsAuthenticationModule;
 import com.cdancy.jenkins.rest.auth.AuthenticationType;
-
+import com.cdancy.jenkins.rest.config.JenkinsAuthenticationModule;
 import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
+import org.jclouds.Constants;
+import org.jclouds.ContextBuilder;
+import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 
 /**
  * Base class for Jenkins mock tests and some Live tests.

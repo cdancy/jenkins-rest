@@ -19,10 +19,9 @@ package com.cdancy.jenkins.rest.domain.statistics;
 
 import java.util.Map;
 
+import com.google.auto.value.AutoValue;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
-
-import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class OverallLoad {

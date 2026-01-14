@@ -20,13 +20,11 @@ package com.cdancy.jenkins.rest;
 import java.net.URI;
 import java.util.Properties;
 
-import org.jclouds.apis.ApiMetadata;
-import org.jclouds.rest.internal.BaseHttpApiMetadata;
-
 import com.cdancy.jenkins.rest.config.JenkinsHttpApiModule;
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
-import com.google.inject.Module;
+import org.jclouds.apis.ApiMetadata;
+import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 @AutoService(ApiMetadata.class)
 public class JenkinsApiMetadata extends BaseHttpApiMetadata<JenkinsApi> {

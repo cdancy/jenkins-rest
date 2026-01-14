@@ -20,7 +20,7 @@ package com.cdancy.jenkins.rest.parsers;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.jclouds.http.HttpResponse;
 

@@ -18,20 +18,17 @@
 package com.cdancy.jenkins.rest.filters;
 
 import java.util.Optional;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import com.cdancy.jenkins.rest.JenkinsApi;
 import com.cdancy.jenkins.rest.JenkinsAuthentication;
 import com.cdancy.jenkins.rest.auth.AuthenticationType;
 import com.cdancy.jenkins.rest.domain.crumb.Crumb;
-
+import com.google.common.net.HttpHeaders;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.jclouds.http.HttpException;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpRequestFilter;
-
-import com.google.common.net.HttpHeaders;
-
 import org.jclouds.rest.ResourceNotFoundException;
 
 @Singleton

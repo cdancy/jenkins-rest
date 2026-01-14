@@ -17,17 +17,16 @@
 
 package com.cdancy.jenkins.rest;
 
-import com.cdancy.jenkins.rest.auth.AuthenticationType;
-import com.cdancy.jenkins.rest.config.JenkinsAuthenticationModule;
-import com.google.common.collect.Lists;
-import com.google.inject.Module;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import com.cdancy.jenkins.rest.auth.AuthenticationType;
+import com.cdancy.jenkins.rest.config.JenkinsAuthenticationModule;
+import com.google.common.collect.Lists;
+import com.google.inject.Module;
 import org.jclouds.ContextBuilder;
 import org.jclouds.javax.annotation.Nullable;
 
