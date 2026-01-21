@@ -1,0 +1,45 @@
+{
+  "_class": "io.jenkins.plugins.analysis.core.restapi.AggregationApi",
+  "tools": [
+    {
+      "errorSize": 0,
+      "highSize": 0,
+      "id": "clang-format",
+      "latestUrl": "https://jenkins.instance/job/MockJob/16/clang-format",
+      "lowSize": 0,
+      "name": "Clang Format Parser Warnings",
+      "normalSize": 0,
+      "size": 0
+    },
+    {
+      "errorSize": 0,
+      "highSize": 0,
+      "id": "pylint",
+      "latestUrl": "https://jenkins.instance/job/MockJob/16/pylint",
+      "lowSize": 0,
+      "name": "Pylint Warnings",
+      "normalSize": 0,
+      "size": 0
+    },
+    {
+      "errorSize": 0,
+      "highSize": 0,
+      "id": "valgrind",
+      "latestUrl": "https://jenkins.instance/job/MockJob/16/valgrind",
+      "lowSize": 0,
+      "name": "Valgrind Warnings",
+      "normalSize": 0,
+      "size": 0
+    },
+    {
+      "errorSize": 0,
+      "highSize": 0,
+      "id": "sphinx",
+      "latestUrl": "https://jenkins.instance/job/MockJob/16/sphinx",
+      "lowSize": 0,
+      "name": "Sphinx Build Warnings",
+      "normalSize": 1,
+      "size": 1
+    }
+  ]
+}

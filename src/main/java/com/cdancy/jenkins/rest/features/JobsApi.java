@@ -304,4 +304,14 @@ public interface JobsApi {
         @PathParam("name") String jobName,
         @PathParam("number") int buildNumber);
 
+    @Named("jobs:pluginReport")
+    @Path("{optionalFolderPath}job/{name}/{number}/{plugin}/api/json")
+    @Fallback(Fallbacks.NullOnNotFoundOr404.class)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    JsonObject pluginReport(@Nullable @PathParam("optionalFolderPath") @ParamParser(OptionalFolderPathParser.class) String optionalFolderPath,
+        @PathParam("name") String jobName,
+        @PathParam("number") int buildNumber,
+        @PathParam("plugin") String Plugin);
+
 }
